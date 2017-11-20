@@ -8,6 +8,12 @@
  * transactions between bank and auction house.
  */
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
 public class AuctionCentral
 {
+  private static Map<String, AuctionHouse> auctionHouses = Collections.synchronizedMap(new HashMap<String, AuctionHouse>());
+  private static String[] houseNames;
 }
