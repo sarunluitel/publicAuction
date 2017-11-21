@@ -18,16 +18,16 @@ public class AuctionCentralThread extends Thread
     try (PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
          BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream())))
     {
-      String inputLine, outputLine;
-      AuctionCentralProtocol acp = new AuctionCentralProtocol();
-      outputLine = acp.processInput(null);
-      out.println(outputLine);
+      String input, output;
+      AuctionCentralProtocol auctionCentralProtocol = new AuctionCentralProtocol();
+      output = auctionCentralProtocol.processInput("");
+      out.println(output);
       
-      while ((inputLine = in.readLine()) != null)
+      while ((input = in.readLine()) != null)
       {
-        outputLine = acp.processInput(inputLine);
-        out.println(outputLine);
-        if(outputLine.equals("EXIT"))
+        output = auctionCentralProtocol.processInput(input);
+        out.println(output);
+        if(output.equals("EXIT"))
           break;
       }
       socket.close();

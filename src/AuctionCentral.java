@@ -15,22 +15,16 @@ public class AuctionCentral
 {
   public static void main(String[] args) throws IOException
   {
-    if (args.length != 1)
-    {
-      System.err.println("Usage: java AuctionCentral <port number>");
-      System.exit(1);
-    }
-    
-    int portNumber = Integer.parseInt(args[0]);
-    boolean listening = true;
+    int portNumber = 1111;
+    boolean open = true;
     
     try (ServerSocket serverSocket = new ServerSocket(portNumber))
     {
-      while (listening) new AuctionCentralThread(serverSocket.accept()).start();
+      while (open) new AuctionCentralThread(serverSocket.accept()).start();
     }
     catch (IOException e)
     {
-      System.err.println("Could not listen on port " + portNumber);
+      System.err.println("Port " + portNumber + " may be in use.");
       System.exit(-1);
     }
   }
