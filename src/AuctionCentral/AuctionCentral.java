@@ -31,16 +31,4 @@ public class AuctionCentral
       System.exit(-1);
     }
   }
-  
-  /*
-  houseProtocol
-  agentProtocol
-  bankProtocol
-  
-  while(true)
-  {
-    accept a connection;
-    create a thread to deal with the client;
-  }
-   */
 }
