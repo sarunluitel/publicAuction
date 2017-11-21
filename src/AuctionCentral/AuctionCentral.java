@@ -22,6 +22,7 @@ public class AuctionCentral
     
     try (ServerSocket serverSocket = new ServerSocket(portNumber))
     {
+      System.out.println("[AuctionCentral]: Port=" + portNumber);
       while (open) new AuctionCentralThread(serverSocket.accept()).start();
     }
     catch (IOException e)
