@@ -31,12 +31,13 @@ public class AuctionCentralThread extends Thread
          BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream())))
     {
       String input, output;
-      AuctionCentralProtocol auctionCentralProtocol = new AuctionCentralProtocol();
+      AuctionCentralProtocol auctionCentralProtocol = new AuctionCentralProtocol(socket, "Socket");
       output = auctionCentralProtocol.handleRequest("");
       out.println(output);
       
-      while ((input = in.readLine()) != null)
+      while (!(input = in.readLine()).equals("EXIT"))
       {
+        System.out.println(input);
         output = auctionCentralProtocol.handleRequest(input);
         out.println(output);
         if(output.equals("EXIT"))

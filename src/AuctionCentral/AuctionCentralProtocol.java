@@ -9,6 +9,7 @@
 package AuctionCentral;
 
 import AuctionHouse.AuctionHouse;
+import Bank.Bank;
 
 import java.net.Socket;
 import java.util.Collections;
@@ -19,32 +20,39 @@ public class AuctionCentralProtocol {
   private Socket socket = null;
   private String name = null;
   
-  private static Map<String, AuctionHouse> auctionHouses = Collections.synchronizedMap(new HashMap<String, AuctionHouse>());
+  private static Map<String, AuctionHouse> auctionRepository = Collections.synchronizedMap(new HashMap<String, AuctionHouse>());
   
   private static final int WAITING = 0;
   private int state = WAITING;
+  private String[] requests = {"register", "de-register", "transaction"};
   
   public AuctionCentralProtocol(Socket socket, String name)
   {
     this.socket = socket;
     this.name = name;
-    System.out.println("AuctionCentralProtocol-Constructor");
+    System.out.println("[AuctionCentral]: Protocol-Constructor");
   }
   
   public String handleRequest(String request) {
-    return "AuctionCentralProtocol-Request";
+    String result = "[AuctionCentral-" + this + "]: echo request = NOT RECOGNIZED";
+    for(int i = 0; i < requests.length; i++)
+    {
+      if(request.equals(requests[i])) result = "[AuctionCentral-" + this + "]: echo request = " + request;
+    }
+    System.out.println(result);
+    return result;
   }
   
-  public void handleTransaction()
+  public void handleTransaction(Bank bank, AuctionHouse auctionHouse)
   {
   }
   
-  public void registerAuctionHouse(AuctionHouse auctionHouse)
+  public void registerAuctionHouse(String name, AuctionHouse auctionHouse)
   {
   
   }
   
-  public void deregisterAuctionHouse(AuctionHouse auctionHouse)
+  public void deregisterAuctionHouse(String name, AuctionHouse auctionHouse)
   {
   }
 }
