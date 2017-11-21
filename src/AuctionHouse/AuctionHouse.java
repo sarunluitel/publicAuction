@@ -25,5 +25,6 @@ public class AuctionHouse
     DataInputStream input = new DataInputStream(socket.getInputStream());
     DataOutputStream output = new DataOutputStream(socket.getOutputStream());
     while(true) output.writeUTF("Hello from AuctionHouse!");
+    //socket.close();
   }
 }

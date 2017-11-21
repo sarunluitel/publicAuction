@@ -19,8 +19,13 @@ public class AuctionCentralProtocol {
   private static final int WAITING = 0;
   private int state = WAITING;
   
+  public AuctionCentralProtocol()
+  {
+    System.out.println("AuctionCentralProtocol-Constructor");
+  }
+  
   public String handleRequest(String request) {
-    return "AuctionCentralProtocol";
+    return "AuctionCentralProtocol-Request";
   }
   
   public void handleTransaction()
