@@ -21,6 +21,7 @@ public class AuctionCentralThread extends Thread
   public AuctionCentralThread(Socket socket) {
     super("AuctionCentralThread");
     this.socket = socket;
+    System.out.println("[AuctionCentral]: " + socket.toString() + " connected!");
   }
   
   public void run() {

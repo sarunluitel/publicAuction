@@ -11,6 +11,19 @@
 
 package AuctionHouse;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.Socket;
+
 public class AuctionHouse
 {
+  public static void main(String args[]) throws IOException
+  {
+    Socket socket = new Socket(InetAddress.getLocalHost(),1111);
+    DataInputStream input = new DataInputStream(socket.getInputStream());
+    DataOutputStream output = new DataOutputStream(socket.getOutputStream());
+    while(true) output.writeUTF("Hello from AuctionHouse!");
+  }
 }
