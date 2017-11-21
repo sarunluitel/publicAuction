@@ -27,7 +27,7 @@ public class AuctionCentral
     }
     catch (IOException e)
     {
-      System.err.println("Port " + portNumber + " may be in use.");
+      System.err.println("[AuctionCentral]: Port " + portNumber + " may be busy.");
       System.exit(-1);
     }
   }
