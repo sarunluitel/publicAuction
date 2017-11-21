@@ -11,7 +11,6 @@
 package AuctionCentral;
 
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.ServerSocket;
 
 public class AuctionCentral

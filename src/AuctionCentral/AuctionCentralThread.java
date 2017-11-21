@@ -25,8 +25,8 @@ public class AuctionCentralThread extends Thread
     System.out.println("[AuctionCentral]: " + socket.toString() + " connected!");
   }
   
-  public void run() {
-    
+  public void run()
+  {
     try (PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
          BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream())))
     {
