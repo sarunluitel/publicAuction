@@ -1,3 +1,11 @@
+/*
+ * CS351L Project #4: PublicAuction.
+ * Jacob Hurst, Jaehee Shin, Sarun Luitel, Vincent Huber.
+ * 11/20/17
+ *
+ * AuctionCentralThread.java - Threading to handle multiple client requests.
+ */
+
 package AuctionCentral;
 
 import java.io.BufferedReader;
@@ -22,12 +30,12 @@ public class AuctionCentralThread extends Thread
     {
       String input, output;
       AuctionCentralProtocol auctionCentralProtocol = new AuctionCentralProtocol();
-      output = auctionCentralProtocol.processInput("");
+      output = auctionCentralProtocol.handleRequest("");
       out.println(output);
       
       while ((input = in.readLine()) != null)
       {
-        output = auctionCentralProtocol.processInput(input);
+        output = auctionCentralProtocol.handleRequest(input);
         out.println(output);
         if(output.equals("EXIT"))
           break;
