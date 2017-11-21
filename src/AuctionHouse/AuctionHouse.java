@@ -20,6 +20,17 @@ import java.util.Scanner;
 
 public class AuctionHouse
 {
+  private String name;
+  
+  public AuctionHouse(int publicID)
+  {
+  }
+ 
+  public String getName()
+  {
+    return this.name;
+  }
+  
   public static void main(String args[]) throws IOException
   {
     Socket socket = new Socket(InetAddress.getLocalHost(),1111);

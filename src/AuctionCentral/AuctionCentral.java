@@ -24,7 +24,7 @@ public class AuctionCentral
     {
       System.out.println("[AuctionCentral]: " + serverSocket.toString());
       while (open) new AuctionCentralThread(serverSocket.accept()).start();
-    }
+      }
     catch (IOException e)
     {
       System.err.println("[AuctionCentral]: Port " + portNumber + " may be busy.");

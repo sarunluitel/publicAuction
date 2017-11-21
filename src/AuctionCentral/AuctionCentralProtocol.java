@@ -12,10 +12,12 @@ import Agent.Agent;
 import AuctionHouse.AuctionHouse;
 import Bank.Bank;
 
+import java.io.IOException;
 import java.net.Socket;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 public class AuctionCentralProtocol {
   private Socket socket = null;
@@ -24,6 +26,7 @@ public class AuctionCentralProtocol {
   private static Map<String, AuctionHouse> auctionRepository = Collections.synchronizedMap(new HashMap<String, AuctionHouse>());
   private static int clientCount = 0;
   private static final int WAITING = 0;
+  
   private int state = WAITING;
   private String[] requests = {"register", "de-register", "repository", "transaction"};
   
@@ -33,6 +36,8 @@ public class AuctionCentralProtocol {
     this.name = name;
     
     clientCount++;
+    
+    for(int i = 0; i < 5; i++) registerAuctionHouse();
     
     System.out.println("[AuctionCentral]: Protocol-Constructor");
     System.out.println(clientCount + " clients connected!");
@@ -50,19 +55,29 @@ public class AuctionCentralProtocol {
   
   public void handleTransaction(Agent agent, AuctionHouse auctionHouse, Bank bank)
   {
-//    bank.send("block:"+agent.getBid(), agent);
-//    bank.send("unblock:"+agent.getBid(), agent);
-//    bank.send("move:"+agent.getBid()+":"+auctionHouse.getName());
+//    bank.handleRequest("block:"+agent.getBid(), agent);
+//    bank.handleRequest("unblock:"+agent.getBid(), agent);
+//    bank.handleRequest("move:"+agent.getBid()+":"+auctionHouse.getName());
   }
   
-  public void registerAuctionHouse(AuctionHouse auctionHouse)
+  public void registerAuctionHouse()
   {
-//    auctionRepository.put(auctionHouse.getName(), auctionHouse);
+    int publicID = (int)(Math.random()*100000);
+    AuctionHouse auctionHouse = new AuctionHouse(publicID);
+    auctionRepository.put(auctionHouse.getName(), auctionHouse);
   }
   
-  public void deregisterAuctionHouse(AuctionHouse auctionHouse)
+  private void deregisterAuctionHouse(AuctionHouse auctionHouse)
   {
-//    auctionRepository.remove(auctionHouse.getName());
-//    socket.close();
+    auctionRepository.remove(auctionHouse.getName());
+    
+    try
+    {
+      socket.close();
+    }
+    catch(IOException e)
+    {
+      System.err.println("Socket already closed.");
+    }
   }
 }
