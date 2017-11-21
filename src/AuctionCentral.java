@@ -10,20 +10,29 @@
 
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 
 public class AuctionCentral
 {
-  private static Map<String, AuctionHouse> auctionHouses = Collections.synchronizedMap(new HashMap<String, AuctionHouse>());
-  private static String[] houseNames;
-  
-  public static void main(String args[]) throws IOException
+  public static void main(String[] args) throws IOException
   {
-    ServerSocket serverSocket = new ServerSocket(1234);
-    Socket clientSocket = serverSocket.accept();
+    if (args.length != 1)
+    {
+      System.err.println("Usage: java AuctionCentral <port number>");
+      System.exit(1);
+    }
+    
+    int portNumber = Integer.parseInt(args[0]);
+    boolean listening = true;
+    
+    try (ServerSocket serverSocket = new ServerSocket(portNumber))
+    {
+      while (listening) new AuctionCentralThread(serverSocket.accept()).start();
+    }
+    catch (IOException e)
+    {
+      System.err.println("Could not listen on port " + portNumber);
+      System.exit(-1);
+    }
   }
   
   /*
