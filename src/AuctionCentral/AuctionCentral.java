@@ -8,6 +8,8 @@
  * transactions between bank and auction house.
  */
 
+package AuctionCentral;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 

@@ -1,3 +1,5 @@
+package AuctionCentral;
+
 public class AuctionCentralProtocol
 {
   private static final int WAITING = 0;
