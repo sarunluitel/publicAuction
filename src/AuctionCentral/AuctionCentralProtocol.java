@@ -23,15 +23,15 @@ public class AuctionCentralProtocol {
     return "AuctionCentralProtocol";
   }
   
+  public void handleTransaction()
+  {
+  }
+  
   public void registerAuctionHouse(AuctionHouse auctionHouse)
   {
   }
   
   public void deregisterAuctionHouse(AuctionHouse auctionHouse)
-  {
-  }
-  
-  public void handleTransaction()
   {
   }
 }
