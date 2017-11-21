@@ -22,7 +22,7 @@ public class AuctionCentralProtocol {
   private String name = null;
   
   private static Map<String, AuctionHouse> auctionRepository = Collections.synchronizedMap(new HashMap<String, AuctionHouse>());
-  
+  private static int clientCount = 0;
   private static final int WAITING = 0;
   private int state = WAITING;
   private String[] requests = {"register", "de-register", "repository", "transaction"};
@@ -31,7 +31,11 @@ public class AuctionCentralProtocol {
   {
     this.socket = socket;
     this.name = name;
+    
+    clientCount++;
+    
     System.out.println("[AuctionCentral]: Protocol-Constructor");
+    System.out.println(clientCount + " clients connected!");
   }
   
   public String handleRequest(String request) {
