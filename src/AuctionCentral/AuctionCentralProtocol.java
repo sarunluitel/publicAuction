@@ -8,6 +8,7 @@
 
 package AuctionCentral;
 
+import Agent.Agent;
 import AuctionHouse.AuctionHouse;
 import Bank.Bank;
 
@@ -24,7 +25,7 @@ public class AuctionCentralProtocol {
   
   private static final int WAITING = 0;
   private int state = WAITING;
-  private String[] requests = {"register", "de-register", "transaction"};
+  private String[] requests = {"register", "de-register", "repository", "transaction"};
   
   public AuctionCentralProtocol(Socket socket, String name)
   {
@@ -43,16 +44,21 @@ public class AuctionCentralProtocol {
     return result;
   }
   
-  public void handleTransaction(Bank bank, AuctionHouse auctionHouse)
+  public void handleTransaction(Agent agent, AuctionHouse auctionHouse, Bank bank)
   {
+//    bank.send("block:"+agent.getBid(), agent);
+//    bank.send("unblock:"+agent.getBid(), agent);
+//    bank.send("move:"+agent.getBid()+":"+auctionHouse.getName());
   }
   
-  public void registerAuctionHouse(String name, AuctionHouse auctionHouse)
+  public void registerAuctionHouse(AuctionHouse auctionHouse)
   {
-  
+//    auctionRepository.put(auctionHouse.getName(), auctionHouse);
   }
   
-  public void deregisterAuctionHouse(String name, AuctionHouse auctionHouse)
+  public void deregisterAuctionHouse(AuctionHouse auctionHouse)
   {
+//    auctionRepository.remove(auctionHouse.getName());
+//    socket.close();
   }
 }
