@@ -10,6 +10,7 @@ package AuctionCentral;
 
 import java.io.*;
 import java.net.Socket;
+import java.net.SocketException;
 
 public class AuctionCentralThread extends Thread
 {
@@ -20,6 +21,14 @@ public class AuctionCentralThread extends Thread
     this.socket = socket;
     
     System.out.println("[AuctionCentral]: " + socket.toString() + " connected!");
+    try
+    {
+      socket.setSoTimeout(5 * 60 * 1000);
+    }
+    catch(SocketException e)
+    {
+      e.printStackTrace();
+    }
   }
   
   public void run()
