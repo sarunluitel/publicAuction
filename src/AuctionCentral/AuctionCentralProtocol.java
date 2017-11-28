@@ -64,6 +64,7 @@ class AuctionCentralProtocol {
     String segments[] = request.split(":");
     for(String temp : segments)
     {
+      //splitting messages
       System.out.println(temp);
     }
     
