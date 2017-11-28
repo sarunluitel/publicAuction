@@ -60,7 +60,8 @@ class AuctionCentralProtocol {
   
   String handleRequest(String request) {
     String result = "[AuctionCentral]: echo request = NOT RECOGNIZED";
-    
+  
+    System.out.println("Splitting messages");
     String segments[] = request.split(":");
     for(String temp : segments)
     {
@@ -88,6 +89,7 @@ class AuctionCentralProtocol {
   //to de-register auction houses, get public ID and de-register there.
   private String handleTransaction(String agentBid, String agentID, String houseID) throws IOException
   {
+    //don't allow bid if it has not yet been accepted by bank
     bankO.writeUTF("block:"+agentBid+":"+agentID);
     bankO.writeUTF("unblock:"+agentBid+":"+agentID);
     bankO.writeUTF("move:"+agentBid+":"+agentID+":"+houseID);
