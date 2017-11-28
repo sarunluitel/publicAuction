@@ -10,6 +10,7 @@ package AuctionCentral;
 
 import Agent.Agent;
 import AuctionHouse.AuctionHouse;
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -65,6 +66,11 @@ public class AuctionCentralProtocol {
     result += "[From socket: " + this.socket + "]";
     System.out.println(result);
     if(request.equals(requests[3])) System.out.println(auctionRepository);
+    try
+    {
+      if(request.equals(requests[4])) handleTransaction("$100.00", "Dummy Agent", "Dummy House");
+    }
+    catch(IOException e) {}
     return result;
   }
   
@@ -77,9 +83,11 @@ public class AuctionCentralProtocol {
     bankO.writeUTF("move:"+agentBid+":"+agentID+":"+houseID);
   }
   
+  private int tempID;
   public void registerAuctionHouse()
   {
     int publicID = (int)(Math.random()*100000);
+    tempID = publicID;
     AuctionHouse auctionHouse = new AuctionHouse(publicID);
     auctionRepository.put(auctionHouse.getName(), auctionHouse);
   }

@@ -59,6 +59,7 @@ public class Agent implements Serializable
     while(!(message = scan.nextLine()).equals("EXIT"))
     {
       bankO.writeUTF(message);
+      auctionCentralO.writeUTF(message);
       System.out.println(bankI.readUTF());
     }
 
