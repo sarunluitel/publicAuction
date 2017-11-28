@@ -52,8 +52,9 @@ public class Agent implements Serializable
     
     Scanner scan = new Scanner(System.in);
     String message;
-  
+
     System.out.println(agent.name + " LOGGED IN");
+    bankO.writeUTF("name:"+agent.getName());
     auctionCentralObj.writeObject(agent);
     
     while(!(message = scan.nextLine()).equals("EXIT"))

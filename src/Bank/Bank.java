@@ -14,14 +14,44 @@ package Bank;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.util.ArrayList;
 
 public class Bank
 {
+  private static ArrayList<BankAccount> accounts = new ArrayList<>();
+
+  public static void addAccounts(BankAccount account)
+  {
+    accounts.add(account);
+  }
+
+  public static boolean contains(BankAccount account)
+  {
+    return accounts.contains(account);
+  }
+
+  public static int getNumAccounts()
+  {
+    return accounts.size();
+  }
+
+  public static BankAccount getAccount(String name)
+  {
+    for (BankAccount account : accounts)
+    {
+      if(account.getName().equals(name)) return account;
+    }
+
+    return null;
+  }
+
+
   public static void main(String[] args) throws IOException
   {
     int portNumber = 2222;
     boolean open = true;
 
+    
     try (ServerSocket serverSocket = new ServerSocket(portNumber))
     {
       System.out.println("[Bank]: " + serverSocket.toString());

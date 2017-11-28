@@ -24,11 +24,18 @@ public class BankProtocol
 
   public String handleRequest(String request) {
     String result = "[Bank-" + this + "]: echo request = NOT RECOGNIZED";
-//    for(int i = 0; i < requests.length; i++)
-//    {
-//      if(request.equals(requests[i])) result = "[AuctionCentral-" + this + "]: echo request = " + request;
-//    }
-    System.out.println(result);
+
+    if (request.equals("")) return result;
+    else if (request.length() < 5) return result;
+    else if (request.substring(0,5).equals("name:"))
+    {
+      BankAccount account = new BankAccount(request.substring(5),
+              Integer.parseInt(request.substring(request.length()-1))*1000);
+      Bank.addAccounts(account);
+      System.out.println("Added this account: " + account.getName() + "," + account.getBalance());
+      System.out.println("Number of accounts: " + Bank.getNumAccounts());
+    }
+
     return result;
   }
 }
