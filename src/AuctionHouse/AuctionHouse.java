@@ -24,7 +24,7 @@ public class AuctionHouse
   
   public AuctionHouse(int publicID)
   {
-    name = "[HOUSE:" + publicID + "]";
+    name = "[House-" + publicID + "]";
   }
  
   public String getName()

@@ -29,31 +29,33 @@ class AuctionCentralProtocol {
   private Object object = null;
   
   private static Map<String, AuctionHouse> auctionRepository = Collections.synchronizedMap(new HashMap<String, AuctionHouse>());
-  private static int clientCount = 0;
-  private static final int WAITING = 0;
+  private static int agentCount = 0;
   
-  private int state = WAITING;
   private String[] requests = {"START", "register", "de-register", "repository", "transaction"};
   private Agent agent;
   
   AuctionCentralProtocol(Socket socket, Object object) throws IOException
   {
     this.socket = socket;
-    if(object == null) System.out.println("Cannot identify socket endpoint.");
-    this.object = object;
-    if(object instanceof Agent) agent = ((Agent)object);
-    System.out.println(object);
-    if(agent != null) System.out.println(agent.getName());
-    clientCount++;
+    if(object instanceof Agent)
+    {
+      agent = ((Agent)object);
+      agentCount++;
+  
+      System.out.println(agent.getName() + " CONNECTED TO AUCTION CENTRAL");
+      System.out.println(agentCount + " agent(s) are connected!");
+    }
+    else this.object = object;
     
     for(int i = 0; i < 5; i++) registerAuctionHouse();
     
-    System.out.println("[AuctionCentral]: Protocol-Constructor");
-    System.out.println(clientCount + " clients connected!");
-  
-    bankSocket = new Socket(InetAddress.getLocalHost(),2222);
-    bankI = new DataInputStream(bankSocket.getInputStream());
-    bankO = new DataOutputStream(bankSocket.getOutputStream());
+    if(bankSocket == null)
+    {
+      System.out.println("[AuctionCentral] CONNECTED TO BANK");
+      bankSocket = new Socket(InetAddress.getLocalHost(),2222);
+      bankI = new DataInputStream(bankSocket.getInputStream());
+      bankO = new DataOutputStream(bankSocket.getOutputStream());
+    }
   }
   
   String handleRequest(String request) {
@@ -62,16 +64,15 @@ class AuctionCentralProtocol {
     {
       if(request.equals(requests[i])) result = "[AuctionCentral-" + this + "]: echo request = " + request;
     }
-    result += "[From socket: " + this.socket + "]";
     System.out.println(result);
     if(request.equals(requests[3])) System.out.println(auctionRepository);
-    String response = "[BANK]:";
+    String response = null;
     try
     {
-      if(request.equals(requests[4])) response+=handleTransaction("$100.00", "Dummy Agent", "Dummy House");
+      if(request.equals(requests[4])) response = "[Bank]:" + handleTransaction("$100.00", "Dummy Agent", "Dummy House");
     }
     catch(IOException e) {e.printStackTrace();}
-    System.out.println(response);
+    if(response != null) System.out.println(response);
     return result;
   }
   
@@ -82,6 +83,7 @@ class AuctionCentralProtocol {
     bankO.writeUTF("block:"+agentBid+":"+agentID);
     bankO.writeUTF("unblock:"+agentBid+":"+agentID);
     bankO.writeUTF("move:"+agentBid+":"+agentID+":"+houseID);
+    //if item is sold check if house is empty de-register house if so.
     return bankI.readUTF();
   }
   
