@@ -21,9 +21,10 @@ public class Agent
 {
   public static void main(String args[]) throws IOException
   {
-    Socket socket = new Socket(InetAddress.getLocalHost(),2222);
-    DataInputStream in = new DataInputStream(socket.getInputStream());
-    DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+    Socket bankSocket = new Socket(InetAddress.getLocalHost(),2222);
+    Socket auctionCentralSocket = new Socket(InetAddress.getLocalHost(), 1111);
+    DataInputStream in = new DataInputStream(bankSocket.getInputStream());
+    DataOutputStream out = new DataOutputStream(bankSocket.getOutputStream());
     Scanner scan = new Scanner(System.in);
     String message;
 
@@ -36,7 +37,8 @@ public class Agent
     out.writeUTF("EXIT");
     in.close();
     out.close();
-    socket.close();
+    bankSocket.close();
+    auctionCentralSocket.close();
   }
 }
 
