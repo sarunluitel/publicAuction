@@ -59,10 +59,17 @@ class AuctionCentralProtocol {
   }
   
   String handleRequest(String request) {
-    String result = "[AuctionCentral-" + this + "]: echo request = NOT RECOGNIZED";
+    String result = "[AuctionCentral]: echo request = NOT RECOGNIZED";
+    
+    String segments[] = request.split(":");
+    for(String temp : segments)
+    {
+      System.out.println(temp);
+    }
+    
     for(int i = 0; i < requests.length; i++)
     {
-      if(request.contains(requests[i])) result = "[AuctionCentral-" + this + "]: echo request = " + request;
+      if(request.contains(requests[i])) result = "[AuctionCentral]: echo request = " + request;
     }
     System.out.println(result);
     if(request.equals(requests[3])) System.out.println(auctionRepository);
