@@ -69,9 +69,9 @@ public class AuctionCentralProtocol {
     auctionRepository.put(auctionHouse.getName(), auctionHouse);
   }
   
-  private void deregisterAuctionHouse(AuctionHouse auctionHouse)
+  private void deregisterAuctionHouse(int publicID)
   {
-    auctionRepository.remove(auctionHouse.getName());
+    AuctionHouse auctionHouse = auctionRepository.remove("[HOUSE:" + publicID + "]");
     
     try
     {
