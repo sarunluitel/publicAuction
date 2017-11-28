@@ -9,6 +9,7 @@ import java.net.Socket;
 public class BankThread extends Thread
 {
   private Socket socket = null;
+  private Bank bank;
 
   public BankThread(Socket socket)
   {

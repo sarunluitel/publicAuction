@@ -20,22 +20,22 @@ public class Bank
 {
   private static ArrayList<BankAccount> accounts = new ArrayList<>();
 
-  public static void addAccounts(BankAccount account)
+  static void addAccounts(BankAccount account)
   {
     accounts.add(account);
   }
 
-  public static boolean contains(BankAccount account)
+  static boolean contains(BankAccount account)
   {
     return accounts.contains(account);
   }
 
-  public static int getNumAccounts()
+  static int getNumAccounts()
   {
     return accounts.size();
   }
 
-  public static BankAccount getAccount(String name)
+  static BankAccount getAccount(String name)
   {
     for (BankAccount account : accounts)
     {
@@ -50,12 +50,12 @@ public class Bank
   {
     int portNumber = 2222;
     boolean open = true;
+    Bank bank = new Bank();
 
-    
     try (ServerSocket serverSocket = new ServerSocket(portNumber))
     {
       System.out.println("[Bank]: " + serverSocket.toString());
-      while (open) new BankThread(serverSocket.accept()).start();
+      while (open) new BankThread(serverSocket.accept(), bank).start();
     }
     catch (IOException e)
     {
