@@ -21,22 +21,29 @@ public class Agent
 {
   public static void main(String args[]) throws IOException
   {
+    //Not too sure how we should handle the agent connecting to both the bank and the auction central socket
+    //and eventually the auction houses but this seems like a start
+    
     Socket bankSocket = new Socket(InetAddress.getLocalHost(),2222);
+    DataInputStream bankI = new DataInputStream(bankSocket.getInputStream());
+    DataOutputStream bankO = new DataOutputStream(bankSocket.getOutputStream());
+    
     Socket auctionCentralSocket = new Socket(InetAddress.getLocalHost(), 1111);
-    DataInputStream in = new DataInputStream(bankSocket.getInputStream());
-    DataOutputStream out = new DataOutputStream(bankSocket.getOutputStream());
+    DataInputStream auctionCentralI = new DataInputStream(bankSocket.getInputStream());
+    DataOutputStream auctionCentralO = new DataOutputStream(bankSocket.getOutputStream());
+    
     Scanner scan = new Scanner(System.in);
     String message;
 
     while(!(message = scan.nextLine()).equals("EXIT"))
     {
-      out.writeUTF(message);
-      System.out.println(in.readUTF());
+      bankO.writeUTF(message);
+      System.out.println(bankI.readUTF());
     }
 
-    out.writeUTF("EXIT");
-    in.close();
-    out.close();
+    bankO.writeUTF("EXIT");
+    bankI.close();
+    bankO.close();
     bankSocket.close();
     auctionCentralSocket.close();
   }
