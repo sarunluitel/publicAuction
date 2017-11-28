@@ -55,7 +55,7 @@ public class Bank
     try (ServerSocket serverSocket = new ServerSocket(portNumber))
     {
       System.out.println("[Bank]: " + serverSocket.toString());
-      while (open) new BankThread(serverSocket.accept(), bank).start();
+      while (open) new BankThread(serverSocket.accept()).start();
     }
     catch (IOException e)
     {
