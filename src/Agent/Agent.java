@@ -25,7 +25,7 @@ public class Agent implements Serializable
   public Agent()
   {
     publicID = (int)(Math.random()*1000000);
-    name = "Agent:" + publicID;
+    name = "[Agent-" + publicID + "]";
     agentBankKey = (int)(Math.random()*1000000);
     agentCentralKey = (int)(Math.random()*1000000);
   }
@@ -58,6 +58,7 @@ public class Agent implements Serializable
     
     while(!(message = scan.nextLine()).equals("EXIT"))
     {
+      message = agent.name + ":" + message;
       bankO.writeUTF(message);
       auctionCentralO.writeUTF(message);
       System.out.println(bankI.readUTF());
