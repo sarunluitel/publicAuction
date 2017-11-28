@@ -40,6 +40,9 @@ public class AuctionCentralThread extends Thread
         if(output.equals("EXIT"))
           break;
       }
+
+      in.close();
+      out.close();
       socket.close();
     }
     catch (IOException e)

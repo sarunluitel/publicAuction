@@ -34,14 +34,18 @@ public class AuctionHouse
   public static void main(String args[]) throws IOException
   {
     Socket socket = new Socket(InetAddress.getLocalHost(), 1111);
-    DataInputStream input = new DataInputStream(socket.getInputStream());
-    DataOutputStream output = new DataOutputStream(socket.getOutputStream());
+    DataInputStream in = new DataInputStream(socket.getInputStream());
+    DataOutputStream out = new DataOutputStream(socket.getOutputStream());
     Scanner scan = new Scanner(System.in);
     String message;
     while (!(message = scan.nextLine()).equals("EXIT"))
     {
-      output.writeUTF(message);
+      out.writeUTF(message);
     }
+
+    out.writeUTF("EXIT");
+    in.close();
+    out.close();
     socket.close();
   }
 }
