@@ -8,7 +8,6 @@
 
 package AuctionCentral;
 
-import Agent.Agent;
 import AuctionHouse.AuctionHouse;
 import Bank.Bank;
 
@@ -17,7 +16,6 @@ import java.net.Socket;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 public class AuctionCentralProtocol {
   private Socket socket = null;
