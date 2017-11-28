@@ -29,8 +29,8 @@ public class BankProtocol
     else if (request.length() < 5) return result;
     else if (request.substring(0,5).equals("name:"))
     {
-      BankAccount account = new BankAccount(request.substring(5),
-              Integer.parseInt(request.substring(request.length()-1))*1000);
+      BankAccount account = new BankAccount(request.substring(12),
+              Integer.parseInt(request.substring(request.length()-2,request.length()-1))*1000);
       Bank.addAccounts(account);
       System.out.println("Added this account: " + account.getName() + "," + account.getBalance());
       System.out.println("Number of accounts: " + Bank.getNumAccounts());
