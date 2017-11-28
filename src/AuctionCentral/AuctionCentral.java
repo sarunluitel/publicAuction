@@ -16,18 +16,16 @@ import java.net.ServerSocket;
 
 public class AuctionCentral
 {
-  private static String ip = "";
   private static InetAddress address;
   private static int port = 0;
   private static boolean open = false;
   
   public static void main(String[] args) throws IOException
   {
-    if(args.length != 3) System.exit(-1);
+    if(args.length != 2) System.exit(-1);
     try
     {
-      ip = args[0];
-      address = InetAddress.getByName(ip);
+      address = InetAddress.getByName(args[0]);
       port = 1111;
       open = true;
     }
