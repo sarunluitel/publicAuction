@@ -107,7 +107,7 @@ class AuctionCentralProtocol {
   private void deregisterAuctionHouse(int publicID)
   {
     //not sure if anything extra should be done on auction house - could just be left as remove
-     AuctionHouse auctionHouse = auctionRepository.remove("[HOUSE:" + publicID + "]");
+     AuctionHouse auctionHouse = auctionRepository.remove("[House-" + publicID + "]");
     
     try
     {
