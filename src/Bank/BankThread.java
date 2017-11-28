@@ -39,7 +39,7 @@ public class BankThread extends Thread
       in.close();
       out.close();
       socket.close();
-      System.out.println("BANK IS CLOSED");
+      System.out.println("Who's gonna be my next customer?");
     }
     catch (IOException e)
     {

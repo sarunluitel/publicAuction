@@ -23,7 +23,10 @@ public class AuctionCentral
     try (ServerSocket serverSocket = new ServerSocket(portNumber))
     {
       System.out.println("[AuctionCentral]: " + serverSocket.toString());
-      while (open) new AuctionCentralThread(serverSocket.accept()).start();
+      while (open)
+      {
+        new AuctionCentralThread(serverSocket.accept()).start();
+      }
     }
     catch (IOException e)
     {
