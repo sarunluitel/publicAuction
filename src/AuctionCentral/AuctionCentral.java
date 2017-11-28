@@ -22,20 +22,11 @@ public class AuctionCentral
   
   public static void main(String[] args) throws IOException
   {
+    System.out.println("This is my IP -"+ InetAddress.getLocalHost());
     if(args.length != 2) System.exit(-1);
-    try
-    {
-      address = InetAddress.getByName(args[0]);
-      port = 1111;
-      open = true;
-    }
-    catch(Exception e)
-    {
-      e.printStackTrace();
-      System.exit(-1);
-    }
+
     
-    try (ServerSocket serverSocket = new ServerSocket(port, 50, address))
+    try (ServerSocket serverSocket = new ServerSocket(1111,50,InetAddress.getLocalHost()))
     {
       System.out.println("[AuctionCentral]:" + serverSocket.toString());
       while (open) new AuctionCentralThread(serverSocket.accept()).start();

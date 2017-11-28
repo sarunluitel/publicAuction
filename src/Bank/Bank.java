@@ -13,6 +13,7 @@ package Bank;
 
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.util.ArrayList;
 
@@ -48,6 +49,8 @@ public class Bank
 
   public static void main(String[] args) throws IOException
   {
+    System.out.println("This is my IP -"+ InetAddress.getLocalHost());
+
     int portNumber = 2222;
     boolean open = true;
     Bank bank = new Bank();

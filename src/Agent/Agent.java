@@ -23,6 +23,12 @@ public class Agent implements Serializable
   private int agentBankKey;
   private int agentCentralKey;
   private String name;
+
+  private static InetAddress address;
+  private static int port = 0;
+  private static boolean open = false;
+
+
   
   public Agent()
   {
@@ -42,12 +48,25 @@ public class Agent implements Serializable
     //Not too sure how we should handle the agent connecting to both the bank and the auction central socket
     //and eventually the auction houses but this seems like a start
     Agent agent = new Agent();
+    Scanner in= new Scanner(System.in);
+    System.out.println("Enter the bank and auction central IP");
+    try
+    {
+      address = InetAddress.getByName(in.nextLine());
+
+
+    }
+    catch(Exception e)
+    {
+      e.printStackTrace();
+      System.exit(-1);
+    }
     
-    Socket bankSocket = new Socket(InetAddress.getLocalHost(),2222);
+    Socket bankSocket = new Socket(address,2222);
     DataInputStream bankI = new DataInputStream(bankSocket.getInputStream());
     DataOutputStream bankO = new DataOutputStream(bankSocket.getOutputStream());
     
-    Socket auctionCentralSocket = new Socket(InetAddress.getLocalHost(), 1111);
+    Socket auctionCentralSocket = new Socket(address, 1111);
     ObjectOutputStream auctionCentralObj = new ObjectOutputStream(auctionCentralSocket.getOutputStream());
     DataInputStream auctionCentralI = new DataInputStream(auctionCentralSocket.getInputStream());
     DataOutputStream auctionCentralO = new DataOutputStream(auctionCentralSocket.getOutputStream());
