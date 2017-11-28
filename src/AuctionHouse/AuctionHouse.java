@@ -41,6 +41,7 @@ public class AuctionHouse
     while (!(message = scan.nextLine()).equals("EXIT"))
     {
       out.writeUTF(message);
+      System.out.println(in.readUTF());
     }
 
     out.writeUTF("EXIT");
