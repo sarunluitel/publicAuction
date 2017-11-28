@@ -25,7 +25,7 @@ public class BankThread extends Thread
     {
       String input, output;
       BankProtocol bankProtocol = new BankProtocol(socket, "Socket");
-      output = bankProtocol.handleRequest("");
+      output = bankProtocol.handleRequest("START");
       out.writeUTF(output);
 
       while (!(input = in.readUTF()).equals("EXIT"))
@@ -39,7 +39,7 @@ public class BankThread extends Thread
       in.close();
       out.close();
       socket.close();
-      System.out.println("Who's gonna be my next customer?");
+      System.out.println("Bank's socket is closed");
     }
     catch (IOException e)
     {
