@@ -51,6 +51,7 @@ public class Bank
     int portNumber = 2222;
     boolean open = true;
 
+    
     try (ServerSocket serverSocket = new ServerSocket(portNumber))
     {
       System.out.println("[Bank]: " + serverSocket.toString());
