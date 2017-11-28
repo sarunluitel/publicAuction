@@ -39,7 +39,7 @@ public class AuctionCentral
     
     try (ServerSocket serverSocket = new ServerSocket(port, 50, address))
     {
-      System.out.println("[AuctionCentral]: " + serverSocket.toString());
+      System.out.println("[AuctionCentral]:" + serverSocket.toString());
       while (open) new AuctionCentralThread(serverSocket.accept()).start();
     }
     catch (IOException e)
