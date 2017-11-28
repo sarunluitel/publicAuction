@@ -33,12 +33,13 @@ public class BankThread extends Thread
         System.out.println(input);
         output = bankProtocol.handleRequest(input);
         out.writeUTF(output);
-        if(output.equals("EXIT"))
-          break;
+        if(output.equals("EXIT")) break;
       }
 
+      in.close();
+      out.close();
       socket.close();
-      System.out.println("BANK IS CLOSED");
+      System.out.println("Who's gonna be my next customer?");
     }
     catch (IOException e)
     {

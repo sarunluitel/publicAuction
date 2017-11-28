@@ -37,10 +37,13 @@ public class AuctionCentralThread extends Thread
         System.out.println(input);
         output = auctionCentralProtocol.handleRequest(input);
         out.writeUTF(output);
-        if(output.equals("EXIT"))
-          break;
+        if(output.equals("EXIT")) break;
       }
+
+      in.close();
+      out.close();
       socket.close();
+      System.out.println("What's next?");
     }
     catch (IOException e)
     {
