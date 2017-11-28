@@ -45,6 +45,10 @@ public class Agent
     bankI.close();
     bankO.close();
     bankSocket.close();
+    
+    auctionCentralO.writeUTF("EXIT");
+    auctionCentralI.close();
+    auctionCentralO.close();
     auctionCentralSocket.close();
   }
 }
