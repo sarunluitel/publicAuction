@@ -24,11 +24,23 @@ public class AuctionCentralThread extends Thread
   
   public void run()
   {
-    try (DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+    try (ObjectInputStream object = new ObjectInputStream(socket.getInputStream());
+         DataOutputStream out = new DataOutputStream(socket.getOutputStream());
          DataInputStream in = new DataInputStream(socket.getInputStream()))
     {
       String input, output;
-      AuctionCentralProtocol auctionCentralProtocol = new AuctionCentralProtocol(socket, "Socket");
+      Object socketClass = null;
+      
+      try
+      {
+        socketClass = object.readObject();
+      }
+      catch(ClassNotFoundException e)
+      {
+        System.out.println(e.getMessage());
+      }
+      
+      AuctionCentralProtocol auctionCentralProtocol = new AuctionCentralProtocol(socket, socketClass);
       output = auctionCentralProtocol.handleRequest("START");
       out.writeUTF(output);
       

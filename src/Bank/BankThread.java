@@ -20,7 +20,8 @@ public class BankThread extends Thread
 
   public void run()
   {
-    try (DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+    try (ObjectInputStream object = new ObjectInputStream(socket.getInputStream());
+         DataOutputStream out = new DataOutputStream(socket.getOutputStream());
          DataInputStream in = new DataInputStream(socket.getInputStream()))
     {
       String input, output;

@@ -8,8 +8,8 @@
 
 package AuctionCentral;
 
+import Agent.Agent;
 import AuctionHouse.AuctionHouse;
-import Bank.Bank;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -26,7 +26,7 @@ public class AuctionCentralProtocol {
   private DataOutputStream bankO;
   
   private Socket socket = null;
-  private String name = null;
+  private Object object = null;
   
   private static Map<String, AuctionHouse> auctionRepository = Collections.synchronizedMap(new HashMap<String, AuctionHouse>());
   private static int clientCount = 0;
@@ -34,12 +34,16 @@ public class AuctionCentralProtocol {
   
   private int state = WAITING;
   private String[] requests = {"START", "register", "de-register", "repository", "transaction"};
+  private Agent agent;
   
-  public AuctionCentralProtocol(Socket socket, String name) throws IOException
+  public AuctionCentralProtocol(Socket socket, Object object) throws IOException
   {
     this.socket = socket;
-    this.name = name;
-    
+    if(object == null) System.out.println("Cannot identify socket endpoint.");
+    this.object = object;
+    if(object instanceof Agent) agent = ((Agent)object);
+    System.out.println(object);
+    if(agent != null) System.out.println(agent.getName());
     clientCount++;
     
     for(int i = 0; i < 5; i++) registerAuctionHouse();
@@ -66,7 +70,6 @@ public class AuctionCentralProtocol {
   
   //tell bank to find agent account with ID & perform action if possible then respond according to bank confirmation
   //to de-register auction houses, get public ID and de-register there.
-  
   public void handleTransaction(String agentBid, String agentID, String houseID) throws IOException
   {
     bankO.writeUTF("block:"+agentBid+":"+agentID);
@@ -83,8 +86,8 @@ public class AuctionCentralProtocol {
   
   private void deregisterAuctionHouse(int publicID)
   {
-    //not sure if anything extra should be done on auction house
-    AuctionHouse auctionHouse = auctionRepository.remove("[HOUSE:" + publicID + "]");
+    //not sure if anything extra should be done on auction house - could just be left as remove
+     AuctionHouse auctionHouse = auctionRepository.remove("[HOUSE:" + publicID + "]");
     
     try
     {
