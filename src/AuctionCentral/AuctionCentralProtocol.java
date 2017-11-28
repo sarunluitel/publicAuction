@@ -11,13 +11,20 @@ package AuctionCentral;
 import AuctionHouse.AuctionHouse;
 import Bank.Bank;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 public class AuctionCentralProtocol {
+  private Socket bankSocket;
+  private DataInputStream bankI;
+  private DataOutputStream bankO;
+  
   private Socket socket = null;
   private String name = null;
   
@@ -28,7 +35,7 @@ public class AuctionCentralProtocol {
   private int state = WAITING;
   private String[] requests = {"START", "register", "de-register", "repository", "transaction"};
   
-  public AuctionCentralProtocol(Socket socket, String name)
+  public AuctionCentralProtocol(Socket socket, String name) throws IOException
   {
     this.socket = socket;
     this.name = name;
@@ -39,6 +46,10 @@ public class AuctionCentralProtocol {
     
     System.out.println("[AuctionCentral]: Protocol-Constructor");
     System.out.println(clientCount + " clients connected!");
+  
+    bankSocket = new Socket(InetAddress.getLocalHost(),2222);
+    bankI = new DataInputStream(bankSocket.getInputStream());
+    bankO = new DataOutputStream(bankSocket.getOutputStream());
   }
   
   public String handleRequest(String request) {
@@ -56,11 +67,11 @@ public class AuctionCentralProtocol {
   //tell bank to find agent account with ID & perform action if possible then respond according to bank confirmation
   //to de-register auction houses, get public ID and de-register there.
   
-  public void handleTransaction(String agentBid, String agentID, String houseID)
+  public void handleTransaction(String agentBid, String agentID, String houseID) throws IOException
   {
-//    bank.handleRequest("block:"+agentBid+":"+agentID);
-//    bank.handleRequest("unblock:"+agentBid+":"+agentID);
-//    bank.handleRequest("move:"+agentBid+":"+agentID+":"+houseID);
+    bankO.writeUTF("block:"+agentBid+":"+agentID);
+    bankO.writeUTF("unblock:"+agentBid+":"+agentID);
+    bankO.writeUTF("move:"+agentBid+":"+agentID+":"+houseID);
   }
   
   public void registerAuctionHouse()
