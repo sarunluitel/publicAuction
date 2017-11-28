@@ -24,7 +24,7 @@ public class AuctionHouse
   
   public AuctionHouse(int publicID)
   {
-    name = "[HOUSE:" + publicID + "]";
+    name = "[House-" + publicID + "]";
   }
  
   public String getName()
@@ -32,6 +32,9 @@ public class AuctionHouse
     return this.name;
   }
   
+  
+  //Not sure if auction houses need to be ran independently anymore since they are created by auction central
+  //May just need to have a thread and protocols for each auction house
   public static void main(String args[]) throws IOException
   {
     Socket socket = new Socket(InetAddress.getLocalHost(), 1111);

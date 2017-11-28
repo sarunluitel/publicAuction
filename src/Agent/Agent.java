@@ -21,44 +21,45 @@ public class Agent implements Serializable
   private int agentBankKey;
   private int agentCentralKey;
   private String name;
-
+  
   public Agent()
   {
     publicID = (int)(Math.random()*1000000);
-    name = "Agent:" + publicID;
+    name = "[Agent-" + publicID + "]";
     agentBankKey = (int)(Math.random()*1000000);
     agentCentralKey = (int)(Math.random()*1000000);
   }
-
+  
   public String getName() {
     return name;
   }
-
+  
   public static void main(String args[]) throws IOException
   {
     //Not too sure how we should handle the agent connecting to both the bank and the auction central socket
     //and eventually the auction houses but this seems like a start
-
+    
     Agent agent = new Agent();
-
+    
     Socket bankSocket = new Socket(InetAddress.getLocalHost(),2222);
     DataInputStream bankI = new DataInputStream(bankSocket.getInputStream());
     DataOutputStream bankO = new DataOutputStream(bankSocket.getOutputStream());
-
+    
     Socket auctionCentralSocket = new Socket(InetAddress.getLocalHost(), 1111);
     ObjectOutputStream auctionCentralObj = new ObjectOutputStream(auctionCentralSocket.getOutputStream());
     DataInputStream auctionCentralI = new DataInputStream(auctionCentralSocket.getInputStream());
     DataOutputStream auctionCentralO = new DataOutputStream(auctionCentralSocket.getOutputStream());
-
+    
     Scanner scan = new Scanner(System.in);
     String message;
 
-    System.out.println(agent);
+    System.out.println(agent.name + " LOGGED IN");
     bankO.writeUTF("name:"+agent.getName());
     auctionCentralObj.writeObject(agent);
-
+    
     while(!(message = scan.nextLine()).equals("EXIT"))
     {
+      message = agent.name + ":" + message;
       bankO.writeUTF(message);
       auctionCentralO.writeUTF(message);
       System.out.println(bankI.readUTF());
@@ -68,7 +69,7 @@ public class Agent implements Serializable
     bankI.close();
     bankO.close();
     bankSocket.close();
-
+    
     auctionCentralO.writeUTF("EXIT");
     auctionCentralI.close();
     auctionCentralO.close();
