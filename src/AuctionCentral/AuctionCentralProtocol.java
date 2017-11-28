@@ -59,7 +59,7 @@ class AuctionCentralProtocol {
   }
   
   String handleRequest(String request) {
-    String result = "[AuctionCentral]: echo request = UNRECOGNIZED";
+    String result = "[AuctionCentral]: echo request = NOT RECOGNIZED";
     
     String segments[] = request.split(":");
     for(String temp : segments)
