@@ -18,14 +18,11 @@ public class AuctionCentral
 {
   private static InetAddress address;
   private static int port = 0;
-  private static boolean open = false;
+  private static boolean open = true;
   
   public static void main(String[] args) throws IOException
   {
     System.out.println("This is my IP -"+ InetAddress.getLocalHost());
-    if(args.length != 2) System.exit(-1);
-
-    
     try (ServerSocket serverSocket = new ServerSocket(1111,50,InetAddress.getLocalHost()))
     {
       System.out.println("[AuctionCentral]:" + serverSocket.toString());
