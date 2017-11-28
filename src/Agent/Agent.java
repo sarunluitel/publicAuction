@@ -53,7 +53,7 @@ public class Agent implements Serializable
     Scanner scan = new Scanner(System.in);
     String message;
   
-    System.out.println(agent);
+    System.out.println(agent.name + " LOGGED IN");
     auctionCentralObj.writeObject(agent);
     
     while(!(message = scan.nextLine()).equals("EXIT"))
