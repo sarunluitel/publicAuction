@@ -16,7 +16,8 @@ public class AuctionCentralThread extends Thread
 {
   private Socket socket = null;
   
-  public AuctionCentralThread(Socket socket) {
+  public AuctionCentralThread(Socket socket)
+  {
     super("AuctionCentralThread");
     this.socket = socket;
     
@@ -64,7 +65,7 @@ public class AuctionCentralThread extends Thread
       in.close();
       out.close();
       socket.close();
-      System.out.println("What's next?");
+      System.out.println("Auction Central Thread's socket is closed");
     }
     catch (IOException e)
     {

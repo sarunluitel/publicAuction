@@ -16,11 +16,14 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.LinkedList;
 import java.util.Scanner;
 
 public class AuctionHouse
 {
   private String name;
+  private LinkedList<String> itemList = new LinkedList<>();
+  private LinkedList<String> itemsForSale = new LinkedList<>();
   
   public AuctionHouse(int publicID)
   {
