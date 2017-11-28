@@ -55,11 +55,14 @@ public class AuctionCentralProtocol {
     return result;
   }
   
-  public void handleTransaction(Agent agent, AuctionHouse auctionHouse, Bank bank)
+  //tell bank to find agent account with ID & perform action if possible then respond according to bank confirmation
+  //to de-register auction houses, get public ID and de-register there.
+  
+  public void handleTransaction(String agentBid, String agentID, String houseID)
   {
-//    bank.handleRequest("block:"+agent.getBid(), agent);
-//    bank.handleRequest("unblock:"+agent.getBid(), agent);
-//    bank.handleRequest("move:"+agent.getBid()+":"+auctionHouse.getName());
+//    bank.handleRequest("block:"+agentBid+":"+agentID);
+//    bank.handleRequest("unblock:"+agentBid+":"+agentID);
+//    bank.handleRequest("move:"+agentBid+":"+agentID+":"+houseID);
   }
   
   public void registerAuctionHouse()
@@ -71,6 +74,7 @@ public class AuctionCentralProtocol {
   
   private void deregisterAuctionHouse(int publicID)
   {
+    //not sure if anything extra should be done on auction house
     AuctionHouse auctionHouse = auctionRepository.remove("[HOUSE:" + publicID + "]");
     
     try
