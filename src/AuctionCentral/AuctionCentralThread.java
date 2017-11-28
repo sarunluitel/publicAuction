@@ -23,7 +23,7 @@ public class AuctionCentralThread extends Thread
     System.out.println("[AuctionCentral]: " + socket.toString() + " connected!");
     try
     {
-      socket.setSoTimeout(5 * 60 * 1000);
+      socket.setSoTimeout(5*60*1000);
     }
     catch(SocketException e)
     {

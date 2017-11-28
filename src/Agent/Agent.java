@@ -30,7 +30,8 @@ public class Agent implements Serializable
     agentCentralKey = (int)(Math.random()*1000000);
   }
   
-  public String getName() {
+  public String getName()
+  {
     return name;
   }
   
@@ -38,7 +39,6 @@ public class Agent implements Serializable
   {
     //Not too sure how we should handle the agent connecting to both the bank and the auction central socket
     //and eventually the auction houses but this seems like a start
-    
     Agent agent = new Agent();
     
     Socket bankSocket = new Socket(InetAddress.getLocalHost(),2222);
@@ -76,7 +76,6 @@ public class Agent implements Serializable
     auctionCentralSocket.close();
   }
 }
-
 // Close a port manually for Mac
 // sudo lsof -i :<port>
 // kill -9 <PID>
