@@ -29,7 +29,7 @@ public class AuctionCentralThread extends Thread
     {
       String input, output;
       AuctionCentralProtocol auctionCentralProtocol = new AuctionCentralProtocol(socket, "Socket");
-      output = auctionCentralProtocol.handleRequest("");
+      output = auctionCentralProtocol.handleRequest("START");
       out.writeUTF(output);
       
       while (!(input = in.readUTF()).equals("EXIT"))

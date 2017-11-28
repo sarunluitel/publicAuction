@@ -28,7 +28,7 @@ public class AuctionCentralProtocol {
   private static final int WAITING = 0;
   
   private int state = WAITING;
-  private String[] requests = {"register", "de-register", "repository", "transaction"};
+  private String[] requests = {"START", "register", "de-register", "repository", "transaction"};
   
   public AuctionCentralProtocol(Socket socket, String name)
   {
@@ -37,7 +37,7 @@ public class AuctionCentralProtocol {
     
     clientCount++;
     
-    for(int i = 0; i <= 5; i++) registerAuctionHouse();
+    for(int i = 0; i < 5; i++) registerAuctionHouse();
     
     System.out.println("[AuctionCentral]: Protocol-Constructor");
     System.out.println(clientCount + " clients connected!");
@@ -48,10 +48,10 @@ public class AuctionCentralProtocol {
     for(int i = 0; i < requests.length; i++)
     {
       if(request.equals(requests[i])) result = "[AuctionCentral-" + this + "]: echo request = " + request;
-      if(request.equals(requests[2])) System.out.println(auctionRepository);
     }
     result += "[From socket: " + this.socket + "]";
     System.out.println(result);
+    if(request.equals(requests[3])) System.out.println(auctionRepository);
     return result;
   }
   
