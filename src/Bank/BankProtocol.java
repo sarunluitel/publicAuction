@@ -16,7 +16,6 @@ public class BankProtocol
     this.name = name;
   }
 
-
   public String handleRequest(String request)
   {
     String result = "[Bank-" + this + "]: echo request = NOT RECOGNIZED";
