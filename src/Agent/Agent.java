@@ -10,6 +10,26 @@
 
 package Agent;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.util.Scanner;
+
 public class Agent
 {
+  public static void main(String args[]) throws IOException
+  {
+    Socket socket = new Socket(InetAddress.getLocalHost(),2222);
+    DataInputStream input = new DataInputStream(socket.getInputStream());
+    DataOutputStream output = new DataOutputStream(socket.getOutputStream());
+    Scanner scan = new Scanner(System.in);
+    String message;
+    while(!(message = scan.nextLine()).equals("EXIT"))
+    {
+      output.writeUTF(message);
+    }
+    socket.close();
+  }
 }

@@ -8,10 +8,7 @@
 
 package AuctionCentral;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 
 public class AuctionCentralThread extends Thread
@@ -27,19 +24,19 @@ public class AuctionCentralThread extends Thread
   
   public void run()
   {
-    try (PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-         BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream())))
+    try (DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+         DataInputStream in = new DataInputStream(socket.getInputStream()))
     {
       String input, output;
       AuctionCentralProtocol auctionCentralProtocol = new AuctionCentralProtocol(socket, "Socket");
       output = auctionCentralProtocol.handleRequest("");
-      out.println(output);
+      out.writeUTF(output);
       
-      while (!(input = in.readLine()).equals("EXIT"))
+      while (!(input = in.readUTF()).equals("EXIT"))
       {
         System.out.println(input);
         output = auctionCentralProtocol.handleRequest(input);
-        out.println(output);
+        out.writeUTF(output);
         if(output.equals("EXIT"))
           break;
       }

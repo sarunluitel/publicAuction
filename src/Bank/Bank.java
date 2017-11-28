@@ -11,7 +11,28 @@
 
 package Bank;
 
+import AuctionCentral.AuctionCentralThread;
+
+import java.io.IOException;
+import java.net.ServerSocket;
+
 public class Bank
 {
+  public static void main(String[] args) throws IOException
+  {
+    int portNumber = 2222;
+    boolean open = true;
+
+    try (ServerSocket serverSocket = new ServerSocket(portNumber))
+    {
+      System.out.println("[Bank]: " + serverSocket.toString());
+      while (open) new BankThread(serverSocket.accept()).start();
+    }
+    catch (IOException e)
+    {
+      System.err.println("[Bank]: Port " + portNumber + " may be busy.");
+      System.exit(-1);
+    }
+  }
 
 }

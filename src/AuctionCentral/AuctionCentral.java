@@ -19,12 +19,12 @@ public class AuctionCentral
   {
     int portNumber = 1111;
     boolean open = true;
-    
+
     try (ServerSocket serverSocket = new ServerSocket(portNumber))
     {
       System.out.println("[AuctionCentral]: " + serverSocket.toString());
       while (open) new AuctionCentralThread(serverSocket.accept()).start();
-      }
+    }
     catch (IOException e)
     {
       System.err.println("[AuctionCentral]: Port " + portNumber + " may be busy.");
