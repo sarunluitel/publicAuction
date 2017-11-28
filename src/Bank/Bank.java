@@ -55,7 +55,7 @@ public class Bank
     boolean open = true;
     Bank bank = new Bank();
 
-    try (ServerSocket serverSocket = new ServerSocket(portNumber))
+    try (ServerSocket serverSocket = new ServerSocket(2222,50,InetAddress.getLocalHost()))
     {
       System.out.println("[Bank]: " + serverSocket.toString());
       while (open) new BankThread(serverSocket.accept()).start();
