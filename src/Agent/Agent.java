@@ -68,7 +68,7 @@ public class Agent implements Serializable
     DataOutputStream auctionCentralO = new DataOutputStream(auctionCentralSocket.getOutputStream());
     
     System.out.println(agent.name + ": Log in successful!");
-    bankO.writeUTF("name:"+agent.getName());
+    bankO.writeUTF("new:"+agent.getName());
     auctionCentralObj.writeObject(agent);
     
     while(!(message = scan.nextLine()).equals("EXIT"))
