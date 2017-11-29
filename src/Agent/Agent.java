@@ -50,15 +50,10 @@ public class Agent extends Application implements Serializable
   public void start(Stage primaryStage) throws Exception
   {
 
-
-    //Stage stage = (Stage) btnConnectIP.getScene().getWindow();
-
     Parent Agent = FXMLLoader.load(getClass().getResource("AgentGUI.fxml"));
     primaryStage.setScene(new Scene(Agent));
 
     primaryStage.show();
-
-
   }
 
   public String getName()
