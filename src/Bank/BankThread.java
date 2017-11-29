@@ -13,7 +13,7 @@ public class BankThread extends Thread
 
   public BankThread(Socket socket)
   {
-    super("BankThread");
+    super("[BankThread]");
     this.socket = socket;
 
     System.out.println("[Bank]: " + socket.toString() + " connected!");
@@ -26,21 +26,22 @@ public class BankThread extends Thread
     {
       String input, output;
       BankProtocol bankProtocol = new BankProtocol(socket, "Socket");
-      output = bankProtocol.handleRequest("START");
-      out.writeUTF(output);
+//      output = bankProtocol.handleRequest("START");
+//      out.writeUTF(output);
 
       while (!(input = in.readUTF()).equals("EXIT"))
       {
         System.out.println(input);
+    
         output = bankProtocol.handleRequest(input);
         out.writeUTF(output);
+    
         if(output.equals("EXIT")) break;
       }
 
       in.close();
       out.close();
       socket.close();
-      System.out.println("Bank's socket is closed");
     }
     catch (IOException e)
     {

@@ -21,18 +21,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 class AuctionCentralProtocol {
+  private static Map<String, AuctionHouse> auctionRepository = Collections.synchronizedMap(new HashMap<String, AuctionHouse>());
+  
   private Socket bankSocket;
   private DataInputStream bankI;
   private DataOutputStream bankO;
   
-  private Socket socket = null;
-  private Object object = null;
+  private Socket socket;
+  private Object object;
   
-  private static Map<String, AuctionHouse> auctionRepository = Collections.synchronizedMap(new HashMap<String, AuctionHouse>());
-  private static int agentCount = 0;
+  private Agent agent;
+  private static int agentCount;
   
   private String[] requests = {"START", "register", "de-register", "repository", "transaction"};
-  private Agent agent;
   
   AuctionCentralProtocol(Socket socket, Object object) throws IOException
   {
@@ -42,8 +43,8 @@ class AuctionCentralProtocol {
       agent = ((Agent)object);
       agentCount++;
   
-      System.out.println(agent.getName() + " CONNECTED TO AUCTION CENTRAL");
-      System.out.println(agentCount + " agent(s) are connected!");
+      System.out.println(agent.getName() + ": Connected to AuctionCentral.");
+      System.out.println("[AuctionCentral]:" + agentCount + " agent(s) are connected!");
     }
     else this.object = object;
     
@@ -51,57 +52,61 @@ class AuctionCentralProtocol {
     
     if(bankSocket == null)
     {
-      System.out.println("[AuctionCentral] CONNECTED TO BANK");
-      bankSocket = new Socket(InetAddress.getLocalHost(),2222);//add a way to getbank IP
+      System.out.println("[AuctionCentral]: Connected to bank.");
+      /* update this to take an address for the bank server - diff. from LocalHost */
+      bankSocket = new Socket(InetAddress.getLocalHost(),2222);
       bankI = new DataInputStream(bankSocket.getInputStream());
       bankO = new DataOutputStream(bankSocket.getOutputStream());
     }
   }
   
   String handleRequest(String request) {
-    String result = "[AuctionCentral]: echo request = NOT RECOGNIZED";
+    String result = "[AuctionCentral]: Request = error.";
   
-    System.out.println("Splitting messages");
+    System.out.println("[AuctionCentral]: Splitting messages.");
     String segments[] = request.split(":");
     for(String temp : segments)
     {
-      //splitting messages
-      System.out.println(temp);
+      System.out.println("[AuctionCentral]: Message split - " + temp);
     }
     
-    for(int i = 0; i < requests.length; i++)
+    for(String current : requests)
     {
-      if(request.contains(requests[i])) result = "[AuctionCentral]: echo request = " + request;
+      if(request.contains(current)) result = "[AuctionCentral]: Request = " + request;
     }
     System.out.println(result);
+    
     if(request.equals(requests[3])) System.out.println(auctionRepository);
+    
     String response = null;
     try
     {
-      if(request.equals(requests[4])) response = "[Bank]:" + handleTransaction("$100.00", "Dummy Agent", "Dummy House");
+      if(request.equals(requests[4])) response = "[Bank]: " + handleTransaction("$100.00", "Dummy Agent", "Dummy House");
     }
     catch(IOException e) {e.printStackTrace();}
     if(response != null) System.out.println(response);
+    
     return result;
   }
   
-  //tell bank to find agent account with ID & perform action if possible then respond according to bank confirmation
-  //to de-register auction houses, get public ID and de-register there.
+  /* tell bank to find agent account with ID & perform action if possible
+     then respond according to bank confirmation to de-register auction houses,
+     get public ID and de-register there.                                       */
   private String handleTransaction(String agentBid, String agentID, String houseID) throws IOException
   {
     //don't allow bid if it has not yet been accepted by bank
-    bankO.writeUTF("block:"+agentBid+":"+agentID);
-    bankO.writeUTF("unblock:"+agentBid+":"+agentID);
-    bankO.writeUTF("move:"+agentBid+":"+agentID+":"+houseID);
+    bankO.writeUTF("[AuctionCentral]: block:"+agentBid+":"+agentID);
+    bankO.writeUTF("[AuctionCentral]: unblock:"+agentBid+":"+agentID);
+    bankO.writeUTF("[AuctionCentral]: move:"+agentBid+":"+agentID+":"+houseID);
     //if item is sold check if house is empty de-register house if so.
     bankO.flush();
+
     return bankI.readUTF();
   }
   
   private void registerAuctionHouse()
   {
-    int publicID = (int)(Math.random()*100000);
-    AuctionHouse auctionHouse = new AuctionHouse(publicID);
+    AuctionHouse auctionHouse = new AuctionHouse();
     auctionRepository.put(auctionHouse.getName(), auctionHouse);
   }
   
@@ -116,7 +121,7 @@ class AuctionCentralProtocol {
     }
     catch(IOException e)
     {
-      System.err.println("Socket already closed.");
+      System.err.println("[AuctionCentral]: De-registering - Socket already closed.");
     }
   }
 }

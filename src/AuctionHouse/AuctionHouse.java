@@ -22,11 +22,13 @@ import java.util.Scanner;
 public class AuctionHouse
 {
   private String name;
+  private int publicID;
   private LinkedList<String> itemList = new LinkedList<>();
   private LinkedList<String> itemsForSale = new LinkedList<>();
   
-  public AuctionHouse(int publicID)
+  public AuctionHouse()
   {
+    publicID = (int)(Math.random()*1000000);
     name = "[House-" + publicID + "]";
   }
  
@@ -40,14 +42,17 @@ public class AuctionHouse
   //May just need to have a thread and protocols for each auction house
   public static void main(String args[]) throws IOException
   {
+    Scanner scan = new Scanner(System.in);
+    String message;
+  
     Socket socket = new Socket(InetAddress.getLocalHost(), 1111);
     DataInputStream in = new DataInputStream(socket.getInputStream());
     DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-    Scanner scan = new Scanner(System.in);
-    String message;
+    
     while (!(message = scan.nextLine()).equals("EXIT"))
     {
       out.writeUTF(message);
+      
       System.out.println(in.readUTF());
     }
 

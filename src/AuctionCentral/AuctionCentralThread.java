@@ -18,12 +18,13 @@ public class AuctionCentralThread extends Thread
   
   public AuctionCentralThread(Socket socket)
   {
-    super("AuctionCentralThread");
+    super("[AuctionCentralThread]");
     this.socket = socket;
     
     System.out.println("[AuctionCentral]: " + socket.toString() + " connected!");
     try
     {
+      System.out.println("[AuctionCentral]: This connection will timeout after 5 minutes of inactivity.");
       socket.setSoTimeout(5*60*1000);
     }
     catch(SocketException e)
@@ -51,21 +52,22 @@ public class AuctionCentralThread extends Thread
       }
       
       AuctionCentralProtocol auctionCentralProtocol = new AuctionCentralProtocol(socket, socketClass);
-      output = auctionCentralProtocol.handleRequest("START");
-      out.writeUTF(output);
+//      output = auctionCentralProtocol.handleRequest("START");
+//      out.writeUTF(output);
       
       while (!(input = in.readUTF()).equals("EXIT"))
       {
         System.out.println(input);
+        
         output = auctionCentralProtocol.handleRequest(input);
         out.writeUTF(output);
+        
         if(output.equals("EXIT")) break;
       }
 
       in.close();
       out.close();
       socket.close();
-      System.out.println("Auction Central Thread's socket is closed");
     }
     catch (IOException e)
     {

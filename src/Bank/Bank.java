@@ -49,23 +49,19 @@ public class Bank
 
   public static void main(String[] args) throws IOException
   {
-    System.out.println("This is my IP -"+ InetAddress.getLocalHost());
-
-    int portNumber = 2222;
-    boolean open = true;
     Bank bank = new Bank();
-
-    try (ServerSocket serverSocket = new ServerSocket(2222,50,InetAddress.getLocalHost()))
+    
+    System.out.println("[Bank]: IP = " + InetAddress.getLocalHost());
+    try (ServerSocket serverSocket = new ServerSocket(2222, 50, InetAddress.getLocalHost()))
     {
-      System.out.println("[Bank]: " + serverSocket.toString());
+      boolean open = true;
+      System.out.println("[Bank]: " + serverSocket.toString() + ".");
       while (open) new BankThread(serverSocket.accept()).start();
     }
     catch (IOException e)
     {
-      System.err.println("[Bank]: Port " + portNumber + " may be busy.");
+      System.err.println("[Bank]: Error connecting...");
       System.exit(-1);
-      
     }
   }
-
 }

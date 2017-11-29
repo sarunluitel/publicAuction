@@ -10,8 +10,6 @@
 
 package Agent;
 
-//import Bank.Bank;
-
 import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
@@ -24,11 +22,7 @@ public class Agent implements Serializable
   private int agentCentralKey;
   private String name;
 
-  private static InetAddress address;
-  private static int port = 0;
-  private static boolean open = false;
-
-
+  private static InetAddress bankAddress, auctionAddress;
   
   public Agent()
   {
@@ -48,13 +42,15 @@ public class Agent implements Serializable
     //Not too sure how we should handle the agent connecting to both the bank and the auction central socket
     //and eventually the auction houses but this seems like a start
     Agent agent = new Agent();
-    Scanner in= new Scanner(System.in);
-    System.out.println("Enter the bank and auction central IP");
+    Scanner scan = new Scanner(System.in);
+    String message;
+  
     try
     {
-      address = InetAddress.getByName(in.nextLine());
-
-
+      System.out.println("Please provide the IP address for the bank.");
+      bankAddress = InetAddress.getByName(scan.nextLine());
+      System.out.println("Please provide the IP address for auction central.");
+      auctionAddress = InetAddress.getByName(scan.nextLine());
     }
     catch(Exception e)
     {
@@ -62,28 +58,28 @@ public class Agent implements Serializable
       System.exit(-1);
     }
     
-    Socket bankSocket = new Socket(address,2222);
+    Socket bankSocket = new Socket(bankAddress,2222);
     DataInputStream bankI = new DataInputStream(bankSocket.getInputStream());
     DataOutputStream bankO = new DataOutputStream(bankSocket.getOutputStream());
     
-    Socket auctionCentralSocket = new Socket(address, 1111);
+    Socket auctionCentralSocket = new Socket(auctionAddress, 1111);
     ObjectOutputStream auctionCentralObj = new ObjectOutputStream(auctionCentralSocket.getOutputStream());
     DataInputStream auctionCentralI = new DataInputStream(auctionCentralSocket.getInputStream());
     DataOutputStream auctionCentralO = new DataOutputStream(auctionCentralSocket.getOutputStream());
     
-    Scanner scan = new Scanner(System.in);
-    String message;
-
-    System.out.println(agent.name + " LOGGED IN");
+    System.out.println(agent.name + ": Log in successful!");
     bankO.writeUTF("name:"+agent.getName());
     auctionCentralObj.writeObject(agent);
     
     while(!(message = scan.nextLine()).equals("EXIT"))
     {
       message = agent.name + ":" + message;
+      
       bankO.writeUTF(message);
       auctionCentralO.writeUTF(message);
+      
       System.out.println(bankI.readUTF());
+      System.out.println(auctionCentralI.readUTF());
     }
 
     bankO.writeUTF("EXIT");

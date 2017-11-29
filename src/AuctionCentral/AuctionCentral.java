@@ -16,21 +16,18 @@ import java.net.ServerSocket;
 
 public class AuctionCentral
 {
-  private static InetAddress address;
-  private static int port = 0;
-  private static boolean open = true;
-  
   public static void main(String[] args) throws IOException
   {
-    System.out.println("This is my IP -"+ InetAddress.getLocalHost());
-    try (ServerSocket serverSocket = new ServerSocket(1111,50,InetAddress.getLocalHost()))
+    System.out.println("[AuctionCentral]: IP = " + InetAddress.getLocalHost() + ".");
+    try (ServerSocket serverSocket = new ServerSocket(1111, 50, InetAddress.getLocalHost()))
     {
-      System.out.println("[AuctionCentral]:" + serverSocket.toString());
+      boolean open = true;
+      System.out.println("[AuctionCentral]: " + serverSocket.toString() + ".");
       while (open) new AuctionCentralThread(serverSocket.accept()).start();
     }
     catch (IOException e)
     {
-      System.err.println("[AuctionCentral]: Port " + port + " may be busy.");
+      System.err.println("[AuctionCentral]: Error connecting...");
       System.exit(-1);
     }
   }
