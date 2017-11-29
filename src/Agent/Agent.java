@@ -27,10 +27,10 @@ import java.util.Scanner;
 
 public class Agent extends Application implements Serializable
 {
-  private int publicID;
-  private int agentBankKey;
-  private int agentCentralKey;
-  private String name;
+  private final int publicID;
+  private final int agentBankKey;
+  private final int agentCentralKey;
+  private final String name;
 
   private static InetAddress bankAddress, auctionAddress;
   @FXML
@@ -115,7 +115,7 @@ public class Agent extends Application implements Serializable
     DataOutputStream auctionCentralO = new DataOutputStream(auctionCentralSocket.getOutputStream());
 
     System.out.println(agent.name + ": Log in successful!");
-    bankO.writeUTF("name:" + agent.getName());
+    bankO.writeUTF("new:"+agent.getName());
     auctionCentralObj.writeObject(agent);
 
     while (!(message = scan.nextLine()).equals("EXIT"))

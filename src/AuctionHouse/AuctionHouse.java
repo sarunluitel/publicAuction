@@ -21,25 +21,38 @@ import java.util.Scanner;
 
 public class AuctionHouse
 {
-  private String name;
-  private int publicID;
+  private final String name;
+  private final int publicID;
   private LinkedList<String> itemList = new LinkedList<>();
   private LinkedList<String> itemsForSale = new LinkedList<>();
   
+  /**
+   * Default constructor.
+   *
+   * Generates a random public ID.
+   */
   public AuctionHouse()
   {
     publicID = (int)(Math.random()*1000000);
     name = "[House-" + publicID + "]";
   }
- 
+  
+  /**
+   * @return name of this auction house.
+   */
   public String getName()
   {
     return this.name;
   }
   
-  
   //Not sure if auction houses need to be ran independently anymore since they are created by auction central
   //May just need to have a thread and protocols for each auction house
+  /**
+   * Main method for auction house.
+   *
+   * @param args
+   * @throws IOException
+   */
   public static void main(String args[]) throws IOException
   {
     Scanner scan = new Scanner(System.in);
