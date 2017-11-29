@@ -15,7 +15,12 @@ public class BankThread extends Thread
 {
   private Socket socket = null;
   private Bank bank;
-
+  
+  /**
+   * Default constructor.
+   *
+   * @param socket
+   */
   public BankThread(Socket socket)
   {
     super("[BankThread]");
@@ -23,7 +28,10 @@ public class BankThread extends Thread
 
     System.out.println("[Bank]: " + socket.toString() + " connected!");
   }
-
+  
+  /**
+   * Run method for bank thread.
+   */
   public void run()
   {
     try (DataOutputStream out = new DataOutputStream(socket.getOutputStream());

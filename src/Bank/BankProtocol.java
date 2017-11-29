@@ -14,13 +14,25 @@ public class BankProtocol
 {
   private Socket socket;
   private String name;
-
+  
+  /**
+   * Default constructor.
+   *
+   * @param socket
+   * @param name
+   */
   public BankProtocol(Socket socket, String name)
   {
     this.socket = socket;
     this.name = name;
   }
-
+  
+  /**
+   * Handles requests as they are received from socket.
+   *
+   * @param request
+   * @return
+   */
   public String handleRequest(String request)
   {
     String result = "[Bank]: Request = error.";

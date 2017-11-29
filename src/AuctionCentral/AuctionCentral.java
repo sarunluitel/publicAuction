@@ -16,6 +16,12 @@ import java.net.ServerSocket;
 
 public class AuctionCentral
 {
+  /**
+   * Main method for AuctionCentral server.
+   *
+   * @param args
+   * @throws IOException
+   */
   public static void main(String[] args) throws IOException
   {
     System.out.println("[AuctionCentral]: IP = " + InetAddress.getLocalHost() + ".");

@@ -10,7 +10,6 @@ package AuctionCentral;
 
 import Agent.Agent;
 import AuctionHouse.AuctionHouse;
-
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -35,6 +34,14 @@ class AuctionCentralProtocol {
   
   private String[] requests = {"START", "register", "de-register", "repository", "transaction"};
   
+  /**
+   * Default constructor.
+   *
+   * Takes a socket and an object to identify who it is speaking with.
+   * @param socket
+   * @param object
+   * @throws IOException
+   */
   AuctionCentralProtocol(Socket socket, Object object) throws IOException
   {
     this.socket = socket;
@@ -48,18 +55,25 @@ class AuctionCentralProtocol {
     }
     else this.object = object;
     
+    /* for now, registering auction houses within auction central. */
     for(int i = 0; i < 5; i++) registerAuctionHouse();
     
     if(bankSocket == null)
     {
       System.out.println("[AuctionCentral]: Connected to bank.");
-      /* update this to take an address for the bank server - diff. from LocalHost */
+      /* update this to take an address for the bank server - diff. from LocalHost. */
       bankSocket = new Socket(InetAddress.getLocalHost(),2222);
       bankI = new DataInputStream(bankSocket.getInputStream());
       bankO = new DataOutputStream(bankSocket.getOutputStream());
     }
   }
   
+  /**
+   * Handles requests as they are received from socket.
+   *
+   * @param request
+   * @return response to request.
+   */
   String handleRequest(String request) {
     String result = "[AuctionCentral]: Request = error.";
   
@@ -92,6 +106,15 @@ class AuctionCentralProtocol {
   /* tell bank to find agent account with ID & perform action if possible
      then respond according to bank confirmation to de-register auction houses,
      get public ID and de-register there.                                       */
+  /**
+   * Mitigates transaction requests between agents and houses.
+   *
+   * @param agentBid
+   * @param agentID
+   * @param houseID
+   * @return response to transaction request.
+   * @throws IOException
+   */
   private String handleTransaction(String agentBid, String agentID, String houseID) throws IOException
   {
     //don't allow bid if it has not yet been accepted by bank
@@ -104,24 +127,24 @@ class AuctionCentralProtocol {
     return bankI.readUTF();
   }
   
+  /**
+   * Registers auction houses and adds them to repository.
+   */
   private void registerAuctionHouse()
   {
     AuctionHouse auctionHouse = new AuctionHouse();
     auctionRepository.put(auctionHouse.getName(), auctionHouse);
   }
   
+  /**
+   * De-registers auction houses from repository & closes their socket.
+   *
+   * @param publicID
+   */
   private void deregisterAuctionHouse(int publicID)
   {
     //not sure if anything extra should be done on auction house - could just be left as remove
-     AuctionHouse auctionHouse = auctionRepository.remove("[House-" + publicID + "]");
-    
-    try
-    {
-      socket.close();
-    }
-    catch(IOException e)
-    {
-      System.err.println("[AuctionCentral]: De-registering - Socket already closed.");
-    }
+    AuctionHouse auctionHouse = auctionRepository.remove("[House-" + publicID + "]");
+    //auctionHouse.exit();
   }
 }

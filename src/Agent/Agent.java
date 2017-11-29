@@ -24,6 +24,11 @@ public class Agent implements Serializable
 
   private static InetAddress bankAddress, auctionAddress;
   
+  /**
+   * Default constructor.
+   *
+   * Generates a random public ID, bank key, & auction key.
+   */
   public Agent()
   {
     publicID = (int)(Math.random()*1000000);
@@ -32,11 +37,20 @@ public class Agent implements Serializable
     agentCentralKey = (int)(Math.random()*1000000);
   }
   
+  /**
+   * @return name of this agent.
+   */
   public String getName()
   {
     return name;
   }
   
+  /**
+   * Main method for agent socket.
+   *
+   * @param args
+   * @throws IOException
+   */
   public static void main(String args[]) throws IOException
   {
     //Not too sure how we should handle the agent connecting to both the bank and the auction central socket

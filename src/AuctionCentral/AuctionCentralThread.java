@@ -14,8 +14,13 @@ import java.net.SocketException;
 
 public class AuctionCentralThread extends Thread
 {
-  private Socket socket = null;
+  private Socket socket;
   
+  /**
+   * Default constructor.
+   *
+   * @param socket
+   */
   public AuctionCentralThread(Socket socket)
   {
     super("[AuctionCentralThread]");
@@ -33,6 +38,9 @@ public class AuctionCentralThread extends Thread
     }
   }
   
+  /**
+   * Run method for auction central thread.
+   */
   public void run()
   {
     try (ObjectInputStream object = new ObjectInputStream(socket.getInputStream());
