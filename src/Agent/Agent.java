@@ -142,7 +142,6 @@ public class Agent extends Application implements Serializable
   }
 }
 
-
 // Close a port manually for Mac
 // sudo lsof -i :<port>
 // kill -9 <PID>
