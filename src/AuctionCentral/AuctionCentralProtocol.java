@@ -52,7 +52,7 @@ class AuctionCentralProtocol {
     if(bankSocket == null)
     {
       System.out.println("[AuctionCentral] CONNECTED TO BANK");
-      bankSocket = new Socket(InetAddress.getLocalHost(),2222);
+      bankSocket = new Socket(InetAddress.getLocalHost(),2222);//add a way to getbank IP
       bankI = new DataInputStream(bankSocket.getInputStream());
       bankO = new DataOutputStream(bankSocket.getOutputStream());
     }
@@ -94,6 +94,7 @@ class AuctionCentralProtocol {
     bankO.writeUTF("unblock:"+agentBid+":"+agentID);
     bankO.writeUTF("move:"+agentBid+":"+agentID+":"+houseID);
     //if item is sold check if house is empty de-register house if so.
+    bankO.flush();
     return bankI.readUTF();
   }
   
