@@ -10,12 +10,22 @@
 
 package Agent;
 
+import javafx.application.Application;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
+import javafx.stage.Stage;
+
 import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.Scanner;
 
-public class Agent implements Serializable
+public class Agent extends Application implements Serializable
 {
   private int publicID;
   private int agentBankKey;
@@ -23,61 +33,98 @@ public class Agent implements Serializable
   private String name;
 
   private static InetAddress bankAddress, auctionAddress;
-  
+  @FXML
+  private TextField txtbankIP, txtAuctionCentalIP;
+  @FXML
+  private Button btnConnectIP;
+
   public Agent()
   {
-    publicID = (int)(Math.random()*1000000);
+    publicID = (int) (Math.random() * 1000000);
     name = "[Agent-" + publicID + "]";
-    agentBankKey = (int)(Math.random()*1000000);
-    agentCentralKey = (int)(Math.random()*1000000);
+    agentBankKey = (int) (Math.random() * 1000000);
+    agentCentralKey = (int) (Math.random() * 1000000);
   }
-  
+
+  @Override
+  public void start(Stage primaryStage) throws Exception
+  {
+
+
+    //Stage stage = (Stage) btnConnectIP.getScene().getWindow();
+
+    Parent Agent = FXMLLoader.load(getClass().getResource("AgentGUI.fxml"));
+    primaryStage.setScene(new Scene(Agent));
+
+    primaryStage.show();
+
+
+  }
+
   public String getName()
   {
     return name;
   }
-  
-  public static void main(String args[]) throws IOException
+
+  @FXML
+  private void secureConnection()
+  {
+    try
+    {
+      bankAddress = InetAddress.getByName(txtbankIP.getText());
+      auctionAddress = InetAddress.getByName(txtAuctionCentalIP.getText());
+      txtAuctionCentalIP.setVisible(false);
+      txtbankIP.setVisible(false);
+      btnConnectIP.setVisible(false);
+
+    } catch (UnknownHostException e)
+    {
+      e.printStackTrace();
+      System.exit(-1);
+    }
+
+    // run code to setup connections after we get addresses to bank and Auction Central
+    try
+    {
+      runCode();// trying to make everything word from GUI
+    } catch (IOException e)
+    {
+      e.printStackTrace();
+      System.exit(-1);
+    }
+
+  }
+
+
+  private void runCode() throws IOException
   {
     //Not too sure how we should handle the agent connecting to both the bank and the auction central socket
     //and eventually the auction houses but this seems like a start
     Agent agent = new Agent();
     Scanner scan = new Scanner(System.in);
     String message;
-  
-    try
-    {
-      System.out.println("Please provide the IP address for the bank.");
-      bankAddress = InetAddress.getByName(scan.nextLine());
-      System.out.println("Please provide the IP address for auction central.");
-      auctionAddress = InetAddress.getByName(scan.nextLine());
-    }
-    catch(Exception e)
-    {
-      e.printStackTrace();
-      System.exit(-1);
-    }
-    
-    Socket bankSocket = new Socket(bankAddress,2222);
+
+
+    Socket bankSocket = new Socket(bankAddress, 2222);
     DataInputStream bankI = new DataInputStream(bankSocket.getInputStream());
     DataOutputStream bankO = new DataOutputStream(bankSocket.getOutputStream());
-    
+
     Socket auctionCentralSocket = new Socket(auctionAddress, 1111);
     ObjectOutputStream auctionCentralObj = new ObjectOutputStream(auctionCentralSocket.getOutputStream());
     DataInputStream auctionCentralI = new DataInputStream(auctionCentralSocket.getInputStream());
     DataOutputStream auctionCentralO = new DataOutputStream(auctionCentralSocket.getOutputStream());
-    
+
     System.out.println(agent.name + ": Log in successful!");
-    bankO.writeUTF("new:"+agent.getName());
+    bankO.writeUTF("name:" + agent.getName());
     auctionCentralObj.writeObject(agent);
-    
-    while(!(message = scan.nextLine()).equals("EXIT"))
+
+    while (!(message = scan.nextLine()).equals("EXIT"))
     {
       message = agent.name + ":" + message;
-      
+
       bankO.writeUTF(message);
       auctionCentralO.writeUTF(message);
-      
+
       System.out.println(bankI.readUTF());
       System.out.println(auctionCentralI.readUTF());
     }
@@ -86,13 +133,21 @@ public class Agent implements Serializable
     bankI.close();
     bankO.close();
     bankSocket.close();
-    
+
     auctionCentralO.writeUTF("EXIT");
     auctionCentralI.close();
     auctionCentralO.close();
     auctionCentralSocket.close();
+
+  }
+
+  public static void main(String args[])
+  {
+    launch(args);
   }
 }
+
+
 // Close a port manually for Mac
 // sudo lsof -i :<port>
 // kill -9 <PID>
