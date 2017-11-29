@@ -1,3 +1,11 @@
+/*
+ * CS351L Project #4: PublicAuction.
+ * Jacob Hurst, Jaehee Shin, Sarun Luitel, Vincent Huber.
+ * 11/28/17
+ *
+ * Item.java - Enum of items to sell at houses.
+ */
+
 package AuctionHouse;
 
 public enum Item

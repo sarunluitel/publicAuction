@@ -3,7 +3,7 @@
  * Jacob Hurst, Jaehee Shin, Sarun Luitel, Vincent Huber.
  * 11/20/17
  *
- * AuctionCentralProtocol.java - The protocol to follow.
+ * AuctionCentralProtocol.java - Protocol for auction central to follow.
  */
 
 package AuctionCentral;

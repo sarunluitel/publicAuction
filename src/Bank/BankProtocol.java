@@ -1,10 +1,15 @@
+/*
+ * CS351L Project #4: PublicAuction.
+ * Jacob Hurst, Jaehee Shin, Sarun Luitel, Vincent Huber.
+ * 11/27/17
+ *
+ * BankProtocol.java - Protocol for the bank to follow.
+ */
+
 package Bank;
 
 import java.net.Socket;
 
-/**
- * Created by jh on 11/27/17.
- */
 public class BankProtocol
 {
   private Socket socket;
