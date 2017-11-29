@@ -44,7 +44,7 @@ class AuctionCentralProtocol {
       agentCount++;
   
       System.out.println(agent.getName() + ": Connected to AuctionCentral.");
-      System.out.println("[AuctionCentral]:" + agentCount + " agent(s) are connected!");
+      System.out.println("[AuctionCentral]: " + agentCount + " agent(s) are connected!");
     }
     else this.object = object;
     

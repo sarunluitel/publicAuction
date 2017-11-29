@@ -24,7 +24,7 @@ public class BankProtocol
     else if(request.length() < 5) return result;
     else if(request.substring(0, 3).equals("new"))
     {
-      System.out.println("[Bank]: Creating new account for " + request.substring(6) + ".");
+      System.out.println("[Bank]: Creating new account for " + request.substring(4) + ".");
       BankAccount account = new BankAccount(request.substring(12, request.length()-1),
                                      Integer.parseInt(request.substring(request.length()-2, request.length()-1))*1000);
       Bank.addAccounts(account);
