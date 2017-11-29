@@ -27,9 +27,8 @@ public class AuctionCentral
     System.out.println("[AuctionCentral]: IP = " + InetAddress.getLocalHost() + ".");
     try (ServerSocket serverSocket = new ServerSocket(1111, 50, InetAddress.getLocalHost()))
     {
-      boolean open = true;
       System.out.println("[AuctionCentral]: " + serverSocket.toString() + ".");
-      while (open) new AuctionCentralThread(serverSocket.accept()).start();
+      while (true) new AuctionCentralThread(serverSocket.accept()).start();
     }
     catch (IOException e)
     {

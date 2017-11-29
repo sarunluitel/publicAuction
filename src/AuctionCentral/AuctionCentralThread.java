@@ -12,9 +12,9 @@ import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
 
-public class AuctionCentralThread extends Thread
+class AuctionCentralThread extends Thread
 {
-  private Socket socket;
+  private final Socket socket;
   
   /**
    * Default constructor.

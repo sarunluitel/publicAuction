@@ -72,9 +72,8 @@ public class Bank
     System.out.println("[Bank]: IP = " + InetAddress.getLocalHost() + ".");
     try (ServerSocket serverSocket = new ServerSocket(2222, 50, InetAddress.getLocalHost()))
     {
-      boolean open = true;
       System.out.println("[Bank]: " + serverSocket.toString() + ".");
-      while (open) new BankThread(serverSocket.accept()).start();
+      while (true) new BankThread(serverSocket.accept()).start();
     }
     catch (IOException e)
     {

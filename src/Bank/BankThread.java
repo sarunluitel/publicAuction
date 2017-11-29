@@ -11,7 +11,7 @@ package Bank;
 import java.io.*;
 import java.net.Socket;
 
-public class BankThread extends Thread
+class BankThread extends Thread
 {
   private Socket socket = null;
   private Bank bank;

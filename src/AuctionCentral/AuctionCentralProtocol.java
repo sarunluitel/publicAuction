@@ -32,7 +32,7 @@ class AuctionCentralProtocol {
   private Agent agent;
   private static int agentCount;
   
-  private String[] requests = {"START", "register", "de-register", "repository", "transaction"};
+  private final String[] requests = {"START", "register", "de-register", "repository", "transaction"};
   
   /**
    * Default constructor.

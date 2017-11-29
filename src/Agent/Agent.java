@@ -17,10 +17,10 @@ import java.util.Scanner;
 
 public class Agent implements Serializable
 {
-  private int publicID;
-  private int agentBankKey;
-  private int agentCentralKey;
-  private String name;
+  private final int publicID;
+  private final int agentBankKey;
+  private final int agentCentralKey;
+  private final String name;
 
   private static InetAddress bankAddress, auctionAddress;
   
@@ -29,7 +29,7 @@ public class Agent implements Serializable
    *
    * Generates a random public ID, bank key, & auction key.
    */
-  public Agent()
+  private Agent()
   {
     publicID = (int)(Math.random()*1000000);
     name = "[Agent-" + publicID + "]";

@@ -8,9 +8,9 @@
 
 package Bank;
 
-public class BankAccount
+class BankAccount
 {
-  private String name;
+  private final String name;
   private int balance, holds[];
   
   /**

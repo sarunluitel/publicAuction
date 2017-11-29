@@ -10,7 +10,7 @@ package Bank;
 
 import java.net.Socket;
 
-public class BankProtocol
+class BankProtocol
 {
   private Socket socket;
   private String name;

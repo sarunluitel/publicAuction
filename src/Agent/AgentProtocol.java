@@ -8,6 +8,6 @@
 
 package Agent;
 
-public class AgentProtocol
+class AgentProtocol
 {
 }

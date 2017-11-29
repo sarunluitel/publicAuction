@@ -21,8 +21,8 @@ import java.util.Scanner;
 
 public class AuctionHouse
 {
-  private String name;
-  private int publicID;
+  private final String name;
+  private final int publicID;
   private LinkedList<String> itemList = new LinkedList<>();
   private LinkedList<String> itemsForSale = new LinkedList<>();
   
