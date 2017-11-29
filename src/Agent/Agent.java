@@ -18,6 +18,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import org.omg.CORBA.PRIVATE_MEMBER;
 
 import java.io.*;
 import java.net.InetAddress;
@@ -31,6 +32,7 @@ public class Agent extends Thread implements Serializable
   private final int agentBankKey;
   private final int agentCentralKey;
   private final String name;
+  private String message="empty";
 
   private static InetAddress bankAddress, auctionAddress;
 
@@ -52,12 +54,17 @@ public class Agent extends Thread implements Serializable
     agentCentralKey = (int) (Math.random() * 1000000);
   }
 
-
-/*  public String getName()
+  // getName is a built in method after extending thread class. renamed to getAgentName.
+  public String getAgentName()
   {
     return name;
-  }*/
+  }
 
+  public void setMessage(String message)
+  {
+    this.message=message;
+
+  }
 
   @Override
   public void run()
@@ -68,7 +75,6 @@ public class Agent extends Thread implements Serializable
       //and eventually the auction houses but this seems like a start
       Agent agent = new Agent();
       Scanner scan = new Scanner(System.in);
-      String message;
 
 
       Socket bankSocket = new Socket(bankAddress, 2222);
@@ -81,18 +87,20 @@ public class Agent extends Thread implements Serializable
       DataOutputStream auctionCentralO = new DataOutputStream(auctionCentralSocket.getOutputStream());
 
       System.out.println(agent.name + ": Log in successful!");
-      bankO.writeUTF("new:" + agent.getName());
+      bankO.writeUTF("new:" + agent.getAgentName());
       auctionCentralObj.writeObject(agent);
 
-      while (!(message = scan.nextLine()).equals("EXIT"))
+      while (!(message.equalsIgnoreCase("EXIT")))
       {
+        System.out.println(message);
         message = agent.name + ":" + message;
 
         bankO.writeUTF(message);
         auctionCentralO.writeUTF(message);
 
-        System.out.println(bankI.readUTF());
-        System.out.println(auctionCentralI.readUTF());
+        //System.out.println(bankI.readUTF());
+        //System.out.println(auctionCentralI.readUTF());
+        //NEEDS TO STOP WHEN THERE IS NO MESSAGE and Wake up during message.
       }
 
       bankO.writeUTF("EXIT");
