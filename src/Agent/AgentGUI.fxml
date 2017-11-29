@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Agent.Agent">
+   <children>
+      <TextField fx:id="txtbankIP" layoutX="14.0" layoutY="22.0" promptText="Enter Bank IP adress" />
+      <TextField fx:id="txtAuctionCentalIP" layoutX="408.0" layoutY="22.0" prefHeight="26.0" prefWidth="178.0" promptText="Enter Auction Central IP" />
+      <Button fx:id="btnConnectIP" layoutX="242.0" layoutY="22.0" mnemonicParsing="false" onAction="#secureConnection" text="&lt;-- Connect--&gt;" />
+   </children>
+</AnchorPane>
