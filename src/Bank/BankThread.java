@@ -1,11 +1,16 @@
+/*
+ * CS351L Project #4: PublicAuction.
+ * Jacob Hurst, Jaehee Shin, Sarun Luitel, Vincent Huber.
+ * 11/20/17
+ *
+ * BankThread.java - Threading to handle multiple client requests.
+ */
+
 package Bank;
 
 import java.io.*;
 import java.net.Socket;
 
-/**
- * Created by jh on 11/27/17.
- */
 public class BankThread extends Thread
 {
   private Socket socket = null;

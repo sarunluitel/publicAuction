@@ -3,7 +3,7 @@
  * Jacob Hurst, Jaehee Shin, Sarun Luitel, Vincent Huber.
  * 11/20/17
  *
- * AuctionCentralProtocol.java - The protocol to follow.
+ * AuctionCentralProtocol.java - Protocol for auction central to follow.
  */
 
 package AuctionCentral;
@@ -44,7 +44,7 @@ class AuctionCentralProtocol {
       agentCount++;
   
       System.out.println(agent.getName() + ": Connected to AuctionCentral.");
-      System.out.println("[AuctionCentral]:" + agentCount + " agent(s) are connected!");
+      System.out.println("[AuctionCentral]: " + agentCount + " agent(s) are connected!");
     }
     else this.object = object;
     

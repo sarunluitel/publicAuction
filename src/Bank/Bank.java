@@ -51,7 +51,7 @@ public class Bank
   {
     Bank bank = new Bank();
     
-    System.out.println("[Bank]: IP = " + InetAddress.getLocalHost());
+    System.out.println("[Bank]: IP = " + InetAddress.getLocalHost() + ".");
     try (ServerSocket serverSocket = new ServerSocket(2222, 50, InetAddress.getLocalHost()))
     {
       boolean open = true;
