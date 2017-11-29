@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Agent.Agent">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Agent.AgentGUIController">
    <children>
       <TextField fx:id="txtbankIP" layoutX="14.0" layoutY="22.0" promptText="Enter Bank IP adress" />
       <TextField fx:id="txtAuctionCentalIP" layoutX="408.0" layoutY="22.0" prefHeight="26.0" prefWidth="178.0" promptText="Enter Auction Central IP" />

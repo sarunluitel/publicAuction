@@ -25,7 +25,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Scanner;
 
-public class Agent extends Application implements Serializable
+public class Agent extends Thread implements Serializable
 {
   private final int publicID;
   private final int agentBankKey;
@@ -33,10 +33,16 @@ public class Agent extends Application implements Serializable
   private final String name;
 
   private static InetAddress bankAddress, auctionAddress;
-  @FXML
-  private TextField txtbankIP, txtAuctionCentalIP;
-  @FXML
-  private Button btnConnectIP;
+
+  public static void setBankAddress(InetAddress bankAddress)
+  {
+    Agent.bankAddress = bankAddress;
+  }
+
+  public static void setAuctionAddress(InetAddress auctionAddress)
+  {
+    Agent.auctionAddress = auctionAddress;
+  }
 
   public Agent()
   {
@@ -46,101 +52,67 @@ public class Agent extends Application implements Serializable
     agentCentralKey = (int) (Math.random() * 1000000);
   }
 
-  @Override
-  public void start(Stage primaryStage) throws Exception
-  {
 
-    Parent Agent = FXMLLoader.load(getClass().getResource("AgentGUI.fxml"));
-    primaryStage.setScene(new Scene(Agent));
-
-    primaryStage.show();
-  }
-
-  public String getName()
+/*  public String getName()
   {
     return name;
-  }
+  }*/
 
-  @FXML
-  private void secureConnection()
+
+  @Override
+  public void run()
   {
     try
     {
-      bankAddress = InetAddress.getByName(txtbankIP.getText());
-      auctionAddress = InetAddress.getByName(txtAuctionCentalIP.getText());
-      txtAuctionCentalIP.setVisible(false);
-      txtbankIP.setVisible(false);
-      btnConnectIP.setVisible(false);
+      //Not too sure how we should handle the agent connecting to both the bank and the auction central socket
+      //and eventually the auction houses but this seems like a start
+      Agent agent = new Agent();
+      Scanner scan = new Scanner(System.in);
+      String message;
 
-    } catch (UnknownHostException e)
+
+      Socket bankSocket = new Socket(bankAddress, 2222);
+      DataInputStream bankI = new DataInputStream(bankSocket.getInputStream());
+      DataOutputStream bankO = new DataOutputStream(bankSocket.getOutputStream());
+
+      Socket auctionCentralSocket = new Socket(auctionAddress, 1111);
+      ObjectOutputStream auctionCentralObj = new ObjectOutputStream(auctionCentralSocket.getOutputStream());
+      DataInputStream auctionCentralI = new DataInputStream(auctionCentralSocket.getInputStream());
+      DataOutputStream auctionCentralO = new DataOutputStream(auctionCentralSocket.getOutputStream());
+
+      System.out.println(agent.name + ": Log in successful!");
+      bankO.writeUTF("new:" + agent.getName());
+      auctionCentralObj.writeObject(agent);
+
+      while (!(message = scan.nextLine()).equals("EXIT"))
+      {
+        message = agent.name + ":" + message;
+
+        bankO.writeUTF(message);
+        auctionCentralO.writeUTF(message);
+
+        System.out.println(bankI.readUTF());
+        System.out.println(auctionCentralI.readUTF());
+      }
+
+      bankO.writeUTF("EXIT");
+      bankI.close();
+      bankO.close();
+      bankSocket.close();
+
+      auctionCentralO.writeUTF("EXIT");
+      auctionCentralI.close();
+      auctionCentralO.close();
+      auctionCentralSocket.close();
+
+    } catch (Exception e)
+
     {
       e.printStackTrace();
-      System.exit(-1);
     }
-
-    // run code to setup connections after we get addresses to bank and Auction Central
-    try
-    {
-      runCode();// trying to make everything word from GUI
-    } catch (IOException e)
-    {
-      e.printStackTrace();
-      System.exit(-1);
-    }
-
   }
 
 
-  private void runCode() throws IOException
-  {
-    //Not too sure how we should handle the agent connecting to both the bank and the auction central socket
-    //and eventually the auction houses but this seems like a start
-    Agent agent = new Agent();
-    Scanner scan = new Scanner(System.in);
-    String message;
-
-
-    Socket bankSocket = new Socket(bankAddress, 2222);
-    DataInputStream bankI = new DataInputStream(bankSocket.getInputStream());
-    DataOutputStream bankO = new DataOutputStream(bankSocket.getOutputStream());
-
-    Socket auctionCentralSocket = new Socket(auctionAddress, 1111);
-    ObjectOutputStream auctionCentralObj = new ObjectOutputStream(auctionCentralSocket.getOutputStream());
-    DataInputStream auctionCentralI = new DataInputStream(auctionCentralSocket.getInputStream());
-    DataOutputStream auctionCentralO = new DataOutputStream(auctionCentralSocket.getOutputStream());
-
-    System.out.println(agent.name + ": Log in successful!");
-    bankO.writeUTF("new:"+agent.getName());
-    auctionCentralObj.writeObject(agent);
-
-    while (!(message = scan.nextLine()).equals("EXIT"))
-    {
-      message = agent.name + ":" + message;
-
-      bankO.writeUTF(message);
-      auctionCentralO.writeUTF(message);
-
-      System.out.println(bankI.readUTF());
-      System.out.println(auctionCentralI.readUTF());
-    }
-
-    bankO.writeUTF("EXIT");
-    bankI.close();
-    bankO.close();
-    bankSocket.close();
-
-    auctionCentralO.writeUTF("EXIT");
-    auctionCentralI.close();
-    auctionCentralO.close();
-    auctionCentralSocket.close();
-
-  }
-
-  public static void main(String args[])
-  {
-    launch(args);
-
-  }
 }
 
 // Close a port manually for Mac
