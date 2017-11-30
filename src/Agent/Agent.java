@@ -11,17 +11,14 @@
 package Agent;
 
 import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import org.omg.CORBA.PRIVATE_MEMBER;
 
 import java.io.*;
 import java.net.InetAddress;
@@ -29,21 +26,26 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Scanner;
 
-public class Agent extends Application implements Serializable
+public class Agent extends Thread implements Serializable
 {
   private final int publicID;
   private final int agentBankKey;
   private final int agentCentralKey;
   private final String name;
+  private String message="empty";
 
   private static InetAddress bankAddress, auctionAddress;
-  
-  @FXML
-  private TextField bankIP, auctionIP;
-  
-  @FXML
-  private Button connect;
-  
+
+  public static void setBankAddress(InetAddress bankAddress)
+  {
+    Agent.bankAddress = bankAddress;
+  }
+
+  public static void setAuctionAddress(InetAddress auctionAddress)
+  {
+    Agent.auctionAddress = auctionAddress;
+  }
+
   public Agent()
   {
     publicID = (int) (Math.random() * 1000000);
@@ -51,95 +53,74 @@ public class Agent extends Application implements Serializable
     agentBankKey = (int) (Math.random() * 1000000);
     agentCentralKey = (int) (Math.random() * 1000000);
   }
-  
-  @Override
-  public void start(Stage primaryStage) throws Exception
-  {
-    Parent root = FXMLLoader.load(getClass().getResource("AgentGUI.fxml"));
-    primaryStage.setScene(new Scene(root));
-    primaryStage.show();
-  }
 
-  public String getName()
+  // getName is a built in method after extending thread class. renamed to getAgentName.
+  public String getAgentName()
   {
     return name;
   }
 
-  @FXML
-  private void secureConnection()
+  public void setMessage(String message)
+  {
+    this.message=message;
+
+  }
+
+  @Override
+  public void run()
   {
     try
     {
-      bankAddress = InetAddress.getByName(bankIP.getText());
-      auctionAddress = InetAddress.getByName(auctionIP.getText());
-      auctionIP.setVisible(false);
-      bankIP.setVisible(false);
-      connect.setVisible(false);
-    }
-    catch (UnknownHostException e)
+      //Not too sure how we should handle the agent connecting to both the bank and the auction central socket
+      //and eventually the auction houses but this seems like a start
+      Agent agent = new Agent();
+      Scanner scan = new Scanner(System.in);
+
+
+      Socket bankSocket = new Socket(bankAddress, 2222);
+      DataInputStream bankI = new DataInputStream(bankSocket.getInputStream());
+      DataOutputStream bankO = new DataOutputStream(bankSocket.getOutputStream());
+
+      Socket auctionCentralSocket = new Socket(auctionAddress, 1111);
+      ObjectOutputStream auctionCentralObj = new ObjectOutputStream(auctionCentralSocket.getOutputStream());
+      DataInputStream auctionCentralI = new DataInputStream(auctionCentralSocket.getInputStream());
+      DataOutputStream auctionCentralO = new DataOutputStream(auctionCentralSocket.getOutputStream());
+
+      System.out.println(agent.name + ": Log in successful!");
+      bankO.writeUTF("new:" + agent.getAgentName());
+      auctionCentralObj.writeObject(agent);
+
+      while (!(message.equalsIgnoreCase("EXIT")))
+      {
+        System.out.println(message);
+        message = agent.name + ":" + message;
+
+        bankO.writeUTF(message);
+        auctionCentralO.writeUTF(message);
+
+        //System.out.println(bankI.readUTF());
+        //System.out.println(auctionCentralI.readUTF());
+        //NEEDS TO STOP WHEN THERE IS NO MESSAGE and Wake up during message.
+      }
+
+      bankO.writeUTF("EXIT");
+      bankI.close();
+      bankO.close();
+      bankSocket.close();
+
+      auctionCentralO.writeUTF("EXIT");
+      auctionCentralI.close();
+      auctionCentralO.close();
+      auctionCentralSocket.close();
+
+    } catch (Exception e)
+
     {
       e.printStackTrace();
-      System.exit(-1);
-    }
-
-    // run code to setup connections after we get addresses to bank and Auction Central
-    try
-    {
-      startBidding();// trying to make everything word from GUI
-    } catch (IOException e)
-    {
-      e.printStackTrace();
-      System.exit(-1);
     }
   }
-  
-  private void startBidding() throws IOException
-  {
-    //Not too sure how we should handle the agent connecting to both the bank and the auction central socket
-    //and eventually the auction houses but this seems like a start
-    Agent agent = new Agent();
-    Scanner scan = new Scanner(System.in);
-    String message;
 
-    Socket bankSocket = new Socket(bankAddress, 2222);
-    DataInputStream bankI = new DataInputStream(bankSocket.getInputStream());
-    DataOutputStream bankO = new DataOutputStream(bankSocket.getOutputStream());
 
-    Socket auctionCentralSocket = new Socket(auctionAddress, 1111);
-    ObjectOutputStream auctionCentralObj = new ObjectOutputStream(auctionCentralSocket.getOutputStream());
-    DataInputStream auctionCentralI = new DataInputStream(auctionCentralSocket.getInputStream());
-    DataOutputStream auctionCentralO = new DataOutputStream(auctionCentralSocket.getOutputStream());
-
-    System.out.println(agent.name + ": Log in successful!");
-    bankO.writeUTF("new:"+agent.getName());
-    auctionCentralObj.writeObject(agent);
-
-    while (!(message = scan.nextLine()).equals("EXIT"))
-    {
-      message = agent.name + ":" + message;
-
-      bankO.writeUTF(message);
-      auctionCentralO.writeUTF(message);
-
-      System.out.println(bankI.readUTF());
-      System.out.println(auctionCentralI.readUTF());
-    }
-
-    bankO.writeUTF("EXIT");
-    bankI.close();
-    bankO.close();
-    bankSocket.close();
-
-    auctionCentralO.writeUTF("EXIT");
-    auctionCentralI.close();
-    auctionCentralO.close();
-    auctionCentralSocket.close();
-  }
-  
-  public static void main(String args[])
-  {
-    launch(args);
-  }
 }
 
 // Close a port manually for Mac
