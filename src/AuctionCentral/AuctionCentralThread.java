@@ -8,6 +8,8 @@
 
 package AuctionCentral;
 
+import Message.Message;
+
 import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
@@ -43,7 +45,8 @@ class AuctionCentralThread extends Thread
    */
   public void run()
   {
-    try (ObjectInputStream object = new ObjectInputStream(socket.getInputStream());
+    try (ObjectInputStream messageIn = new ObjectInputStream(socket.getInputStream());
+         ObjectOutputStream messageOut = new ObjectOutputStream(socket.getOutputStream());
          DataOutputStream out = new DataOutputStream(socket.getOutputStream());
          DataInputStream in = new DataInputStream(socket.getInputStream()))
     {
@@ -52,7 +55,7 @@ class AuctionCentralThread extends Thread
       
       try
       {
-        socketClass = object.readObject();
+        socketClass = messageIn.readObject();
       }
       catch(ClassNotFoundException e)
       {
@@ -66,6 +69,11 @@ class AuctionCentralThread extends Thread
       while (!(input = in.readUTF()).equals("EXIT"))
       {
         System.out.println(input);
+        
+//        messageOut.writeObject(new Message(this, "transaction", "painting", 123456, 100));
+//        Message message = ((Message)messageIn.readObject());
+//        Object obj = message.getSender();
+//        String msg = message.getMessage();
         
         output = auctionCentralProtocol.handleRequest(input);
         out.writeUTF(output);
