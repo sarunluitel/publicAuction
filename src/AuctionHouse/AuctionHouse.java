@@ -11,9 +11,9 @@
 
 package AuctionHouse;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import Message.Message;
+
+import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.LinkedList;
@@ -75,19 +75,39 @@ public class AuctionHouse
     String message;
   
     Socket socket = new Socket(InetAddress.getLocalHost(), 1111);
-    DataInputStream in = new DataInputStream(socket.getInputStream());
-    DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-    
-    while (!(message = scan.nextLine()).equals("EXIT"))
+    try (ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+         ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream()))
     {
-      out.writeUTF(message);
-      
-      System.out.println(in.readUTF());
+      try
+      {
+        Message input, output;
+        input = ((Message)in.readObject());
+        
+        while (true)
+        {
+          if(input != null)
+          {
+            System.out.println(input.getMessage());
+          
+            input = ((Message)in.readObject());
+            output = null;
+            out.writeObject(output);
+          
+            input = null;
+          }
+        }
+      }
+      catch(ClassNotFoundException e)
+      {
+        System.err.println(e.getMessage());
+      }
+      in.close();
+      out.close();
+      socket.close();
     }
-
-    out.writeUTF("EXIT");
-    in.close();
-    out.close();
-    socket.close();
+    catch (IOException e)
+    {
+      e.printStackTrace();
+    }
   }
 }

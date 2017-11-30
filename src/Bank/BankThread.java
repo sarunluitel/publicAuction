@@ -8,6 +8,8 @@
 
 package Bank;
 
+import Message.Message;
+
 import java.io.*;
 import java.net.Socket;
 
@@ -34,24 +36,34 @@ class BankThread extends Thread
    */
   public void run()
   {
-    try (DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-         DataInputStream in = new DataInputStream(socket.getInputStream()))
+    try (ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+         ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream()))
     {
-      String input, output;
-      BankProtocol bankProtocol = new BankProtocol(socket, "Socket");
-//      output = bankProtocol.handleRequest("START");
-//      out.writeUTF(output);
-
-      while (!(input = in.readUTF()).equals("EXIT"))
+      try
       {
-        System.out.println(input);
-    
-        output = bankProtocol.handleRequest(input);
-        out.writeUTF(output);
-    
-        if(output.equals("EXIT")) break;
-      }
+        Message input, output;
+        input = ((Message)in.readObject());
+      
+        BankProtocol bankProtocol = new BankProtocol(socket, input);
 
+        while (true)
+        {
+          if(input != null)
+          {
+            System.out.println(input.getMessage());
+    
+            input = ((Message)in.readObject());
+            output = bankProtocol.handleRequest(input);
+    
+            out.writeObject(output);
+    
+            input = null;
+          }
+        }
+      } catch(ClassNotFoundException e)
+      {
+        System.err.println(e.getMessage());
+      }
       in.close();
       out.close();
       socket.close();

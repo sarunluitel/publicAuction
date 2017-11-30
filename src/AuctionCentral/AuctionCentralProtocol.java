@@ -24,7 +24,7 @@ import java.util.Map;
 class AuctionCentralProtocol {
   private static Map<String, AuctionHouse> auctionRepository = Collections.synchronizedMap(new HashMap<String, AuctionHouse>());
   
-  private Socket bankSocket;
+  private static Socket bankSocket;
   private DataInputStream bankI;
   private DataOutputStream bankO;
   
@@ -34,28 +34,26 @@ class AuctionCentralProtocol {
   private Agent agent;
   private static int agentCount;
   
-  private final String[] requests = {"START", "register", "de-register", "repository", "transaction"};
-  
   /**
    * Default constructor.
    *
    * Takes a socket and an object to identify who it is speaking with.
    * @param socket
-   * @param object
+   * @param message
    * @throws IOException
    */
-  AuctionCentralProtocol(Socket socket, Object object) throws IOException
+  AuctionCentralProtocol(Socket socket, Message message) throws IOException
   {
     this.socket = socket;
-    if(object instanceof Agent)
+    if(message.getSender() instanceof Agent)
     {
-      agent = ((Agent)object);
+      agent = ((Agent)message.getSender());
       agentCount++;
   
       System.out.println(agent.getAgentName() + ": Connected to AuctionCentral.");
       System.out.println("[AuctionCentral]: " + agentCount + " agent(s) are connected!");
     }
-    else this.object = object;
+    else this.object = message.getSender();
     
     /* for now, registering auction houses within auction central. */
     for(int i = 0; i < 5; i++) registerAuctionHouse();
@@ -76,42 +74,10 @@ class AuctionCentralProtocol {
    * @param request
    * @return response to request.
    */
-  String handleRequest(String request) {
-    String result = "[AuctionCentral]: Request = error.";
-  
-    System.out.println("[AuctionCentral]: Splitting messages.");
-    String segments[] = request.split(":");
-    for(String temp : segments)
-    {
-      System.out.println("[AuctionCentral]: Message split - " + temp);
-    }
-    
-    for(String current : requests)
-    {
-      if(request.contains(current)) result = "[AuctionCentral]: Request = " + request;
-    }
-    System.out.println(result);
-    
-    if(request.equals(requests[3])) System.out.println(auctionRepository);
-    
-    String response = null;
-    try
-    {
-      if(request.contains(requests[4])) response = "[Bank]: " + handleTransaction("$100.00", "Dummy Agent", "Dummy House");
-    }
-    catch(IOException e)
-    {
-      e.printStackTrace();
-    }
-    if(response != null) System.out.println(response);
-    
-    return result;
-  }
-  
-  public Message handleRequest(Message message)
+  public Message handleRequest(Message request)
   {
-    Message response = new Message(this, "", "", 0, 0);
-    switch(message.getMessage())
+//    Message response = new Message(this, "", "", 0, 0);
+    switch(request.getMessage())
     {
       case "START":
         System.out.println(1);
@@ -127,6 +93,7 @@ class AuctionCentralProtocol {
         break;
       case "transaction":
         System.out.println(5);
+//        handleTransaction(message.get)
         break;
       case "EXIT":
         System.out.println(6);
@@ -135,7 +102,7 @@ class AuctionCentralProtocol {
         System.out.println(-1);
         break;
     }
-    return response;
+    return null;//response;
   }
   
   /* tell bank to find agent account with ID & perform action if possible
@@ -167,8 +134,8 @@ class AuctionCentralProtocol {
    */
   private void registerAuctionHouse()
   {
-    AuctionHouse auctionHouse = new AuctionHouse();
-    auctionRepository.put(auctionHouse.getName(), auctionHouse);
+//    AuctionHouse auctionHouse = new AuctionHouse();
+//    auctionRepository.put(auctionHouse.getName(), auctionHouse);
   }
   
   /**
@@ -179,7 +146,7 @@ class AuctionCentralProtocol {
   private void deregisterAuctionHouse(int publicID)
   {
     //not sure if anything extra should be done on auction house - could just be left as remove
-    AuctionHouse auctionHouse = auctionRepository.remove("[House-" + publicID + "]");
+    //AuctionHouse auctionHouse = auctionRepository.remove("[House-" + publicID + "]");
     //auctionHouse.exit();
   }
 }

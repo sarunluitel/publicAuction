@@ -45,51 +45,35 @@ class AuctionCentralThread extends Thread
    */
   public void run()
   {
-    try (ObjectInputStream messageIn = new ObjectInputStream(socket.getInputStream());
-         ObjectOutputStream messageOut = new ObjectOutputStream(socket.getOutputStream());
-         DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-         DataInputStream in = new DataInputStream(socket.getInputStream()))
+    try (ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+         ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream()))
     {
-      String input, output;
-      Object socketClass = null;
-      
       try
       {
-        socketClass = messageIn.readObject();
-        Message i = null, o = null;
-      i = ((Message)messageIn.readObject());
+        Message input, output;
+        input = ((Message)in.readObject());
       
-      AuctionCentralProtocol auctionCentralProtocol = new AuctionCentralProtocol(socket, socketClass);
-//      output = auctionCentralProtocol.handleRequest("START");
-//      out.writeUTF(output);
+        AuctionCentralProtocol auctionCentralProtocol = new AuctionCentralProtocol(socket, input);
       
-      while (true)//!(input = in.readUTF()).equals("EXIT"))
-      {
-        if(i != null)
+        while (true)
         {
-          System.out.println(i.getMessage());
-          //        messageOut.writeObject(new Message(this, "transaction", "painting", 123456, 100));
-          //        Message message = ((Message)messageIn.readObject());
-          //        Object obj = message.getSender();
-          //        String msg = message.getMessage();
-          try{i = ((Message)messageIn.readObject());}catch(ClassNotFoundException c){}
-          o = auctionCentralProtocol.handleRequest(i);
-          messageOut.writeObject(o);
-          i = null;
+          if(input != null)
+          {
+            System.out.println(input.getMessage());
+          
+            input = ((Message)in.readObject());
+            output = auctionCentralProtocol.handleRequest(input);
+          
+            out.writeObject(output);
+          
+            input = null;
+          }
         }
-        
-//        output = auctionCentralProtocol.handleRequest(input);
-//        out.writeUTF(output);
-        
-//        if(output.equals("EXIT")) break;
-      }
-  
       }
       catch(ClassNotFoundException e)
       {
-        System.out.println(e.getMessage());
+        System.err.println(e.getMessage());
       }
-      
       in.close();
       out.close();
       socket.close();
