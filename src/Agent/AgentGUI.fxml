@@ -5,13 +5,13 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Agent.AgentGUIController">
+<AnchorPane prefHeight="640.0" prefWidth="620.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Agent.AgentGUIController">
    <children>
-      <TextField fx:id="txtbankIP" layoutX="14.0" layoutY="22.0" promptText="Enter Bank IP adress" />
-      <TextField fx:id="txtAuctionCentalIP" layoutX="408.0" layoutY="22.0" prefHeight="26.0" prefWidth="178.0" promptText="Enter Auction Central IP" />
-      <Button fx:id="btnConnectIP" layoutX="242.0" layoutY="22.0" mnemonicParsing="false" onAction="#secureConnection" text="&lt;-- Connect--&gt;" />
-      <TextArea fx:id="txtField" layoutX="146.0" layoutY="71.0" prefHeight="211.0" prefWidth="311.0" />
-      <TextField fx:id="txtInput" layoutX="191.0" layoutY="291.0" prefHeight="26.0" prefWidth="225.0" promptText="Input Here" />
-      <Button fx:id="btnSubmit" defaultButton="true" layoutX="239.0" layoutY="352.0" mnemonicParsing="false" onAction="#submitRequest" text="Submit Request" />
+      <TextField fx:id="bankIP" layoutX="10.0" layoutY="25.0" prefHeight="30.0" prefWidth="200.0" promptText="Bank IP address" text="Bank IP address"/>
+      <TextField fx:id="auctionIP" layoutX="410.0" layoutY="25.0" prefHeight="30.0" prefWidth="200.0" promptText="Auction Central IP address" text="Auction Central IP address" />
+      <Button fx:id="connect" layoutX="210.0" layoutY="25.0" prefHeight="30.0" prefWidth="200.0" mnemonicParsing="false" onAction="#secureConnection" text="Connect" />
+      <TextArea fx:id="textArea" layoutX="150.0" layoutY="75.0" prefHeight="200.0" prefWidth="300.0" />
+      <TextField fx:id="input" layoutX="150.0" layoutY="275.0" prefHeight="30.0" prefWidth="300.0" promptText="Message" />
+      <Button fx:id="submit" defaultButton="true" layoutX="210.0" layoutY="540.0" prefHeight="30.0" prefWidth="200.0" mnemonicParsing="false" onAction="#submitRequest" text="Submit" />
    </children>
 </AnchorPane>

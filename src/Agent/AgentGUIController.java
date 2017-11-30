@@ -26,20 +26,20 @@ import java.net.UnknownHostException;
 public class AgentGUIController extends Application
 {
   @FXML
-  private TextField txtbankIP, txtAuctionCentalIP, txtInput;
+  private TextField bankIP, auctionIP, input;
   @FXML
-  private Button btnConnectIP;
+  private Button connect;
   @FXML
-  private TextArea txtField;
+  private TextArea textArea;
 
-  private Agent agent=new Agent();
+  private Agent agent = new Agent();
 
   @FXML
   public void initialize()
   {
-    txtField.setVisible(false);
-    txtInput.setVisible(false);
-    txtField.setEditable(false);
+    textArea.setVisible(false);
+    input.setVisible(false);
+    textArea.setEditable(false);
   }
 
   @FXML
@@ -47,14 +47,14 @@ public class AgentGUIController extends Application
   {
     try
     {
-      Agent.setAuctionAddress(InetAddress.getByName(txtbankIP.getText()));
-      Agent.setBankAddress(InetAddress.getByName(txtAuctionCentalIP.getText()));
-      txtAuctionCentalIP.setVisible(false);
-      txtbankIP.setVisible(false);
-      btnConnectIP.setVisible(false);
+      Agent.setAuctionAddress(InetAddress.getByName(bankIP.getText()));
+      Agent.setBankAddress(InetAddress.getByName(auctionIP.getText()));
+      auctionIP.setVisible(false);
+      bankIP.setVisible(false);
+      connect.setVisible(false);
 
-      txtField.setVisible(true);
-      txtInput.setVisible(true);
+      textArea.setVisible(true);
+      input.setVisible(true);
 
     } catch (UnknownHostException e)
     {
@@ -65,40 +65,36 @@ public class AgentGUIController extends Application
     // run code to setup connections after we get addresses to bank and Auction Central
     try
     {
-
       agent.start();
-    } catch (Exception e)
+    }
+    catch (Exception e)
     {
       e.printStackTrace();
       System.exit(-1);
     }
 
   }
-
-
+  
   public static void main(String args[])
   {
     launch(args);
-
   }
 
   @Override
   public void start(Stage primaryStage) throws Exception
   {
-
-    Parent Agent = FXMLLoader.load(getClass().getResource("AgentGUI.fxml"));
-    primaryStage.setScene(new Scene(Agent));
-
+    Parent root = FXMLLoader.load(getClass().getResource("AgentGUI.fxml"));
+    primaryStage.setScene(new Scene(root));
     primaryStage.show();
   }
 
   @FXML
   private void submitRequest()
   {
-    agent.setMessage(txtInput.getText());
-    String request= txtInput.getText();
-    txtInput.setText("");
-    txtField.setText(request);
+    agent.setMessage(input.getText());
+    String request= input.getText();
+    input.setText("");
+    textArea.setText(request);
 
   }
 }

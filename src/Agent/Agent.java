@@ -32,7 +32,7 @@ public class Agent extends Thread implements Serializable
   private final int agentBankKey;
   private final int agentCentralKey;
   private final String name;
-  private String message="empty";
+  private String message = "";
 
   private static InetAddress bankAddress, auctionAddress;
 
@@ -62,8 +62,7 @@ public class Agent extends Thread implements Serializable
 
   public void setMessage(String message)
   {
-    this.message=message;
-
+    this.message = message;
   }
 
   @Override
@@ -75,8 +74,7 @@ public class Agent extends Thread implements Serializable
       //and eventually the auction houses but this seems like a start
       Agent agent = new Agent();
       Scanner scan = new Scanner(System.in);
-
-
+      
       Socket bankSocket = new Socket(bankAddress, 2222);
       DataInputStream bankI = new DataInputStream(bankSocket.getInputStream());
       DataOutputStream bankO = new DataOutputStream(bankSocket.getOutputStream());
@@ -92,15 +90,19 @@ public class Agent extends Thread implements Serializable
 
       while (!(message.equalsIgnoreCase("EXIT")))
       {
-        System.out.println(message);
-        message = agent.name + ":" + message;
+        if(!message.equals(""))
+        {
+          System.out.println(message);
+          message = agent.name + ":" + message;
 
-        bankO.writeUTF(message);
-        auctionCentralO.writeUTF(message);
+          bankO.writeUTF(message);
+          auctionCentralO.writeUTF(message);
 
-        //System.out.println(bankI.readUTF());
-        //System.out.println(auctionCentralI.readUTF());
-        //NEEDS TO STOP WHEN THERE IS NO MESSAGE and Wake up during message.
+          //System.out.println(bankI.readUTF());
+          //System.out.println(auctionCentralI.readUTF());
+          //NEEDS TO STOP WHEN THERE IS NO MESSAGE and Wake up during message.
+        }
+        message = "";
       }
 
       bankO.writeUTF("EXIT");
@@ -113,8 +115,8 @@ public class Agent extends Thread implements Serializable
       auctionCentralO.close();
       auctionCentralSocket.close();
 
-    } catch (Exception e)
-
+    }
+    catch (Exception e)
     {
       e.printStackTrace();
     }
