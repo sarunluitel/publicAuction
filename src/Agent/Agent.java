@@ -10,6 +10,7 @@
 
 package Agent;
 
+import Message.Message;
 import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -81,15 +82,17 @@ public class Agent extends Thread implements Serializable
 
       Socket auctionCentralSocket = new Socket(auctionAddress, 1111);
       ObjectOutputStream auctionCentralObj = new ObjectOutputStream(auctionCentralSocket.getOutputStream());
+      ObjectInputStream auctionCentralIN = new ObjectInputStream(auctionCentralSocket.getInputStream());
       DataInputStream auctionCentralI = new DataInputStream(auctionCentralSocket.getInputStream());
       DataOutputStream auctionCentralO = new DataOutputStream(auctionCentralSocket.getOutputStream());
 
       System.out.println(agent.name + ": Log in successful!");
       bankO.writeUTF("new:" + agent.getAgentName());
       auctionCentralObj.writeObject(agent);
-
+      
       while (!(message.equalsIgnoreCase("EXIT")))
       {
+        auctionCentralObj.writeObject(new Message(this, "repository", "", 0, 0));
         if(!message.equals(""))
         {
           System.out.println(message);

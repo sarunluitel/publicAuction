@@ -10,6 +10,8 @@ package AuctionCentral;
 
 import Agent.Agent;
 import AuctionHouse.AuctionHouse;
+import Message.Message;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -104,6 +106,36 @@ class AuctionCentralProtocol {
     if(response != null) System.out.println(response);
     
     return result;
+  }
+  
+  public Message handleRequest(Message message)
+  {
+    Message response = new Message(this, "", "", 0, 0);
+    switch(message.getMessage())
+    {
+      case "START":
+        System.out.println(1);
+        break;
+      case "register":
+        System.out.println(2);
+        break;
+      case "de-register":
+        System.out.println(3);
+        break;
+      case "repository":
+        System.out.println(4);
+        break;
+      case "transaction":
+        System.out.println(5);
+        break;
+      case "EXIT":
+        System.out.println(6);
+        break;
+      default:
+        System.out.println(-1);
+        break;
+    }
+    return response;
   }
   
   /* tell bank to find agent account with ID & perform action if possible

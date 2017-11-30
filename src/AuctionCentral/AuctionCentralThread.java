@@ -56,31 +56,40 @@ class AuctionCentralThread extends Thread
       try
       {
         socketClass = messageIn.readObject();
+        Message i = null, o = null;
+      i = ((Message)messageIn.readObject());
+      
+      AuctionCentralProtocol auctionCentralProtocol = new AuctionCentralProtocol(socket, socketClass);
+//      output = auctionCentralProtocol.handleRequest("START");
+//      out.writeUTF(output);
+      
+      while (true)//!(input = in.readUTF()).equals("EXIT"))
+      {
+        if(i != null)
+        {
+          System.out.println(i.getMessage());
+          //        messageOut.writeObject(new Message(this, "transaction", "painting", 123456, 100));
+          //        Message message = ((Message)messageIn.readObject());
+          //        Object obj = message.getSender();
+          //        String msg = message.getMessage();
+          try{i = ((Message)messageIn.readObject());}catch(ClassNotFoundException c){}
+          o = auctionCentralProtocol.handleRequest(i);
+          messageOut.writeObject(o);
+          i = null;
+        }
+        
+//        output = auctionCentralProtocol.handleRequest(input);
+//        out.writeUTF(output);
+        
+//        if(output.equals("EXIT")) break;
+      }
+  
       }
       catch(ClassNotFoundException e)
       {
         System.out.println(e.getMessage());
       }
       
-      AuctionCentralProtocol auctionCentralProtocol = new AuctionCentralProtocol(socket, socketClass);
-//      output = auctionCentralProtocol.handleRequest("START");
-//      out.writeUTF(output);
-      
-      while (!(input = in.readUTF()).equals("EXIT"))
-      {
-        System.out.println(input);
-        
-//        messageOut.writeObject(new Message(this, "transaction", "painting", 123456, 100));
-//        Message message = ((Message)messageIn.readObject());
-//        Object obj = message.getSender();
-//        String msg = message.getMessage();
-        
-        output = auctionCentralProtocol.handleRequest(input);
-        out.writeUTF(output);
-        
-        if(output.equals("EXIT")) break;
-      }
-
       in.close();
       out.close();
       socket.close();
