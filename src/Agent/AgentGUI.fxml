@@ -4,10 +4,10 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Agent.Agent">
+<AnchorPane prefHeight="420.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Agent.Agent">
    <children>
-      <TextField fx:id="txtbankIP" layoutX="14.0" layoutY="22.0" promptText="Enter Bank IP adress" />
-      <TextField fx:id="txtAuctionCentalIP" layoutX="408.0" layoutY="22.0" prefHeight="26.0" prefWidth="178.0" promptText="Enter Auction Central IP" />
-      <Button fx:id="btnConnectIP" layoutX="242.0" layoutY="22.0" mnemonicParsing="false" onAction="#secureConnection" text="&lt;-- Connect--&gt;" />
+      <TextField fx:id="bankIP" layoutX="10.0" layoutY="25.0" prefHeight="30.0" prefWidth="200.0" promptText="Bank IP address" text="Bank IP address" />
+      <TextField fx:id="auctionIP" layoutX="410.0" layoutY="25.0" prefHeight="30.0" prefWidth="200.0" promptText="Auction Central IP address" text="Auction Central IP address" />
+      <Button fx:id="connect" layoutX="210.0" layoutY="25.0" prefHeight="30.0" prefWidth="200.0" mnemonicParsing="false" onAction="#secureConnection" text="Connect" />
    </children>
 </AnchorPane>
