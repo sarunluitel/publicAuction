@@ -23,6 +23,7 @@ public class AuctionHouse
 {
   private final String name;
   private final int publicID;
+  private static int totalHouses = 0;
   private LinkedList<String> itemList = new LinkedList<>();
   private LinkedList<String> itemsForSale = new LinkedList<>();
   
@@ -33,7 +34,8 @@ public class AuctionHouse
    */
   public AuctionHouse()
   {
-    publicID = (int)(Math.random()*1000000);
+    totalHouses++;
+    publicID = totalHouses;
     name = "[House-" + publicID + "]";
   }
   
