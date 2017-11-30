@@ -8,8 +8,25 @@
 
 package AuctionHouse;
 
-public enum Item
+public class Item
 {
-  PAINTING, BASEBALL_CARD, POTTERY, JEWELRY, CHAIR,
-  CLOCK, RUG, HOLY_GRAIL
+  private String itemName;
+  private int bidAmount;
+
+
+  public Item(int num)
+  {
+    itemName = "Item" + num;
+    bidAmount = 100;
+  }
+
+  public String getItemName()
+  {
+    return itemName;
+  }
+
+  public int getBidAmount()
+  {
+    return bidAmount;
+  }
 }
