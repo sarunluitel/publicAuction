@@ -37,6 +37,7 @@ public class AuctionHouse
     totalHouses++;
     publicID = totalHouses;
     name = "[House-" + publicID + "]";
+    setItems();
   }
   
   /**
@@ -46,7 +47,20 @@ public class AuctionHouse
   {
     return this.name;
   }
-  
+
+  /**
+   * Method to set items available to sell
+   *
+   * No parameters
+   */
+  private void setItems()
+  {
+    for(int i = 1; i < 4; i++)
+    {
+      itemsForSale.add("Item" + i);
+    }
+  }
+
   //Not sure if auction houses need to be ran independently anymore since they are created by auction central
   //May just need to have a thread and protocols for each auction house
   /**
