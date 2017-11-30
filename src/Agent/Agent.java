@@ -11,21 +11,10 @@
 package Agent;
 
 import Message.Message;
-import javafx.application.Application;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
-import javafx.stage.Stage;
-import org.omg.CORBA.PRIVATE_MEMBER;
 
 import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
-import java.util.Scanner;
 
 public class Agent extends Thread implements Serializable
 {
@@ -71,63 +60,71 @@ public class Agent extends Thread implements Serializable
   {
     try
     {
-      //Not too sure how we should handle the agent connecting to both the bank and the auction central socket
-      //and eventually the auction houses but this seems like a start
       Agent agent = new Agent();
-      Scanner scan = new Scanner(System.in);
-      
       Socket bankSocket = new Socket(bankAddress, 2222);
-      DataInputStream bankI = new DataInputStream(bankSocket.getInputStream());
-      DataOutputStream bankO = new DataOutputStream(bankSocket.getOutputStream());
-
       Socket auctionCentralSocket = new Socket(auctionAddress, 1111);
-      ObjectOutputStream auctionCentralObj = new ObjectOutputStream(auctionCentralSocket.getOutputStream());
-      ObjectInputStream auctionCentralIN = new ObjectInputStream(auctionCentralSocket.getInputStream());
-      DataInputStream auctionCentralI = new DataInputStream(auctionCentralSocket.getInputStream());
-      DataOutputStream auctionCentralO = new DataOutputStream(auctionCentralSocket.getOutputStream());
-
-      System.out.println(agent.name + ": Log in successful!");
-      bankO.writeUTF("new:" + agent.getAgentName());
-      auctionCentralObj.writeObject(agent);
       
-      while (!(message.equalsIgnoreCase("EXIT")))
+      try (ObjectInputStream bankIn = new ObjectInputStream(bankSocket.getInputStream());
+           ObjectOutputStream bankOut = new ObjectOutputStream(bankSocket.getOutputStream());
+           ObjectInputStream auctionIn = new ObjectInputStream(bankSocket.getInputStream());
+           ObjectOutputStream auctionOut = new ObjectOutputStream(bankSocket.getOutputStream()))
       {
-        auctionCentralObj.writeObject(new Message(this, "repository", "", 0, 0));
-        if(!message.equals(""))
+        try
         {
-          System.out.println(message);
-          message = agent.name + ":" + message;
+          Message bankInput, bankOutput, auctionInput, auctionOutput;
+          bankInput = ((Message)bankIn.readObject());
+          auctionInput = ((Message)auctionIn.readObject());
+  
+          System.out.println(agent.name + ": Log in successful!");
+          bankOut.writeObject(new Message(agent, "new", "", agent.agentBankKey, -1));
+          auctionOut.writeObject(new Message(agent, "new", "", agent.agentCentralKey, -1));
+          boolean flag = true;
+          while (flag)
+          {
+            if(bankInput != null)
+            {
+              System.out.println(bankInput.getMessage());
+    
+              bankInput = ((Message)bankIn.readObject());
+              bankOutput = null;//send your messages here
+    
+              bankOut.writeObject(bankOutput);
+    
+              bankInput = null;
+            }
+            if(auctionInput != null)
+            {
+              System.out.println(auctionInput.getMessage());
+    
+              auctionInput = ((Message)auctionIn.readObject());
+              auctionOutput = null;//send your messages here
+    
+              auctionOut.writeObject(auctionOutput);
+    
+              auctionInput = null;
+            }
+          }
+          bankIn.close();
+          bankOut.close();
+          bankSocket.close();
 
-          bankO.writeUTF(message);
-          auctionCentralO.writeUTF(message);
-
-          //System.out.println(bankI.readUTF());
-          //System.out.println(auctionCentralI.readUTF());
-          //NEEDS TO STOP WHEN THERE IS NO MESSAGE and Wake up during message.
+          auctionIn.close();
+          auctionOut.close();
+          auctionCentralSocket.close();
         }
-        message = "";
+        catch(ClassNotFoundException e)
+        {
+          System.err.println(e.getMessage());
+        }
       }
-
-      bankO.writeUTF("EXIT");
-      bankI.close();
-      bankO.close();
-      bankSocket.close();
-
-      auctionCentralO.writeUTF("EXIT");
-      auctionCentralI.close();
-      auctionCentralO.close();
-      auctionCentralSocket.close();
-
+      catch (IOException e)
+      {
+        e.printStackTrace();
+      }
     }
     catch (Exception e)
     {
       e.printStackTrace();
     }
   }
-
-
 }
-
-// Close a port manually for Mac
-// sudo lsof -i :<port>
-// kill -9 <PID>
