@@ -95,9 +95,12 @@ class AuctionCentralProtocol {
     String response = null;
     try
     {
-      if(request.equals(requests[4])) response = "[Bank]: " + handleTransaction("$100.00", "Dummy Agent", "Dummy House");
+      if(request.contains(requests[4])) response = "[Bank]: " + handleTransaction("$100.00", "Dummy Agent", "Dummy House");
     }
-    catch(IOException e) {e.printStackTrace();}
+    catch(IOException e)
+    {
+      e.printStackTrace();
+    }
     if(response != null) System.out.println(response);
     
     return result;
