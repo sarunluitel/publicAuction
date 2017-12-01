@@ -67,8 +67,6 @@ public class Bank
    */
   public static void main(String[] args) throws IOException
   {
-    Bank bank = new Bank();
-    
     System.out.println("[Bank]: IP = " + InetAddress.getLocalHost() + ".");
     try (ServerSocket serverSocket = new ServerSocket(2222, 50, InetAddress.getLocalHost()))
     {

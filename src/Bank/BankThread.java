@@ -16,7 +16,6 @@ import java.net.Socket;
 class BankThread extends Thread
 {
   private Socket socket = null;
-  private Bank bank;
   
   /**
    * Default constructor.
