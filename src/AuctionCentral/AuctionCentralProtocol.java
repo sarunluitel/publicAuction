@@ -24,7 +24,7 @@ import java.util.Map;
 class AuctionCentralProtocol {
   private static Map<String, AuctionHouse> auctionRepository = Collections.synchronizedMap(new HashMap<String, AuctionHouse>());
   
-  private static Socket bankSocket;
+  private Socket bankSocket = null;
   private DataInputStream bankI;
   private DataOutputStream bankO;
   
@@ -45,6 +45,7 @@ class AuctionCentralProtocol {
   AuctionCentralProtocol(Socket socket, Message message) throws IOException
   {
     this.socket = socket;
+    System.out.println(message.getMessage() + message.getItem());
     if(message.getSender() instanceof Agent)
     {
       agent = ((Agent)message.getSender());
@@ -62,7 +63,7 @@ class AuctionCentralProtocol {
     {
       System.out.println("[AuctionCentral]: Connected to bank.");
       /* update this to take an address for the bank server - diff. from LocalHost. */
-      bankSocket = new Socket(InetAddress.getLocalHost(),2222);
+      bankSocket = new Socket(InetAddress.getByName(message.getItem()),2222);
       bankI = new DataInputStream(bankSocket.getInputStream());
       bankO = new DataOutputStream(bankSocket.getOutputStream());
     }

@@ -36,11 +36,13 @@ class BankThread extends Thread
    */
   public void run()
   {
-    try (ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
-         ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream()))
+    System.out.println("bankrun");
+    try (ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+         ObjectInputStream in = new ObjectInputStream(socket.getInputStream()))
     {
       try
       {
+        System.out.println("bank message");
         Message input, output;
         input = ((Message)in.readObject());
       

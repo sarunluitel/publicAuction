@@ -31,9 +31,9 @@ public class AgentGUIController extends Application
   private Button connect;
   @FXML
   private TextArea textArea;
-
-  private Agent agent = new Agent();
-
+  
+  private Agent agent;
+  
   @FXML
   public void initialize()
   {
@@ -45,10 +45,13 @@ public class AgentGUIController extends Application
   @FXML
   private void secureConnection()
   {
+    System.out.println("secure");
+    agent = new Agent();
+  
     try
     {
-      Agent.setAuctionAddress(InetAddress.getByName(bankIP.getText()));
-      Agent.setBankAddress(InetAddress.getByName(auctionIP.getText()));
+      agent.setAuctionAddress(InetAddress.getByName(bankIP.getText()));
+      agent.setBankAddress(InetAddress.getByName(auctionIP.getText()));
       auctionIP.setVisible(false);
       bankIP.setVisible(false);
       connect.setVisible(false);
@@ -95,6 +98,5 @@ public class AgentGUIController extends Application
     String request= input.getText();
     input.setText("");
     textArea.setText(request);
-
   }
 }

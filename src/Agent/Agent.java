@@ -24,24 +24,28 @@ public class Agent extends Thread implements Serializable
   private final String name;
   private String message = "";
 
-  private static InetAddress bankAddress, auctionAddress;
+  private InetAddress bankAddress, auctionAddress;
 
-  public static void setBankAddress(InetAddress bankAddress)
+  public void setBankAddress(InetAddress bankAddress)
   {
-    Agent.bankAddress = bankAddress;
+    System.out.println(auctionAddress.toString());
+    this.bankAddress = bankAddress;
   }
 
-  public static void setAuctionAddress(InetAddress auctionAddress)
+  public  void setAuctionAddress(InetAddress auctionAddress)
   {
-    Agent.auctionAddress = auctionAddress;
+    System.out.println(auctionAddress.toString());
+    this.auctionAddress = auctionAddress;
   }
 
   public Agent()
   {
+    System.out.println("new agent");
     publicID = (int) (Math.random() * 1000000);
     name = "[Agent-" + publicID + "]";
     agentBankKey = (int) (Math.random() * 1000000);
     agentCentralKey = (int) (Math.random() * 1000000);
+    System.out.println(this);
   }
 
   // getName is a built in method after extending thread class. renamed to getAgentName.
@@ -58,26 +62,38 @@ public class Agent extends Thread implements Serializable
   @Override
   public void run()
   {
+    System.out.println("agent run");
     try
     {
-      Agent agent = new Agent();
       Socket bankSocket = new Socket(bankAddress, 2222);
       Socket auctionCentralSocket = new Socket(auctionAddress, 1111);
-      
-      try (ObjectInputStream bankIn = new ObjectInputStream(bankSocket.getInputStream());
-           ObjectOutputStream bankOut = new ObjectOutputStream(bankSocket.getOutputStream());
-           ObjectInputStream auctionIn = new ObjectInputStream(bankSocket.getInputStream());
-           ObjectOutputStream auctionOut = new ObjectOutputStream(bankSocket.getOutputStream()))
+      System.out.println("connected");
+      try
       {
+        System.out.println(bankSocket.getInputStream().available());
+        System.out.println(bankSocket.getInputStream());
+        System.out.println(bankSocket.isConnected());
+        System.out.println(this);
+        ObjectOutputStream bankOut = new ObjectOutputStream(bankSocket.getOutputStream());
+        System.out.println("wtf3");
+        ObjectOutputStream auctionOut = new ObjectOutputStream(auctionCentralSocket.getOutputStream());
+        System.out.println("wtf5");
+        ObjectInputStream bankIn = new ObjectInputStream(bankSocket.getInputStream());
+        System.out.println("wtf2");
+        ObjectInputStream auctionIn = new ObjectInputStream(auctionCentralSocket.getInputStream());
+        System.out.println("wtf4");
         try
         {
+          System.out.println("streams opened");
           Message bankInput, bankOutput, auctionInput, auctionOutput;
           bankInput = ((Message)bankIn.readObject());
           auctionInput = ((Message)auctionIn.readObject());
   
-          System.out.println(agent.name + ": Log in successful!");
-          bankOut.writeObject(new Message(agent, "new", "", agent.agentBankKey, -1));
-          auctionOut.writeObject(new Message(agent, "new", "", agent.agentCentralKey, -1));
+          System.out.println(this.name + ": Log in successful!");
+          
+          bankOut.writeObject(new Message(this, "new", "", this.agentBankKey, -1));
+          auctionOut.writeObject(new Message(this, "new", auctionAddress.toString(), this.agentCentralKey, -1));
+          
           boolean flag = true;
           while (flag)
           {
@@ -112,17 +128,21 @@ public class Agent extends Thread implements Serializable
           auctionOut.close();
           auctionCentralSocket.close();
         }
-        catch(ClassNotFoundException e)
+        catch (ClassNotFoundException e)
         {
-          System.err.println(e.getMessage());
+          e.printStackTrace();
         }
       }
       catch (IOException e)
       {
         e.printStackTrace();
       }
+      finally {
+        System.out.println("uhhh");
+      }
+      System.out.println("HELLO");
     }
-    catch (Exception e)
+    catch (IOException e)
     {
       e.printStackTrace();
     }

@@ -75,8 +75,8 @@ public class AuctionHouse
     String message;
   
     Socket socket = new Socket(InetAddress.getLocalHost(), 1111);
-    try (ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
-         ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream()))
+    try (ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+         ObjectInputStream in = new ObjectInputStream(socket.getInputStream()))
     {
       try
       {

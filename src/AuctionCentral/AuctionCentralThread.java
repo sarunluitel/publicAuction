@@ -45,11 +45,13 @@ class AuctionCentralThread extends Thread
    */
   public void run()
   {
-    try (ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
-         ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream()))
+    System.out.println("run");
+    try (ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+         ObjectInputStream in = new ObjectInputStream(socket.getInputStream()))
     {
       try
       {
+        System.out.println("message start");
         Message input, output;
         input = ((Message)in.readObject());
       
@@ -57,6 +59,7 @@ class AuctionCentralThread extends Thread
       
         while (true)
         {
+          input = ((Message)in.readObject());
           if(input != null)
           {
             System.out.println(input.getMessage());
