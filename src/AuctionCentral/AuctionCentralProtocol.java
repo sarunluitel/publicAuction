@@ -29,6 +29,8 @@ class AuctionCentralProtocol implements Serializable
   
   private Socket socket;
   private Object object;
+  private Message message;
+  public Message setup;
   
   private Agent agent;
   private static int agentCount;
@@ -44,6 +46,7 @@ class AuctionCentralProtocol implements Serializable
   AuctionCentralProtocol(Socket socket, Message message) throws IOException
   {
     this.socket = socket;
+    this.message = message;
     if(message.getSender() instanceof Agent)
     {
       agent = ((Agent)message.getSender());
@@ -65,8 +68,9 @@ class AuctionCentralProtocol implements Serializable
       bankO = new ObjectOutputStream(bankSocket.getOutputStream());
       bankI = new ObjectInputStream(bankSocket.getInputStream());
       
-      bankO.writeObject(new Message(null, "auction central", "", 0, 0));
+      bankO.writeObject(new Message(null, "[AuctionCentral]: ", "Hello, friend.", "", 0, 0));
     }
+    setup = handleRequest(message);
   }
   
   /**
@@ -81,42 +85,42 @@ class AuctionCentralProtocol implements Serializable
     String message;
     switch(request.getMessage())
     {
-      case "START":
-        message = "[AuctionCentral]: Initializing...";
-        response = new Message(this, message, "Initialized", request.getKey(), 0);
+      case "new":
+        message = "Initializing...";
+        response = new Message(null, "[AuctionCentral]: ",  message, "Initialized", request.getKey(), 0);
         System.out.println(message);
         break;
       case "register":
-        message = "[AuctionCentral]: Registering...";
+        message = "Registering...";
         registerAuctionHouse();//with param request.getSender() casted to auction house
-        response = new Message(this, message, "Action performed", request.getKey(), 0);
+        response = new Message(this, "[AuctionCentral]: ",  message, "Action performed", request.getKey(), 0);
         System.out.println(message);
         break;
       case "de-register":
-        message = "[AuctionCentral]: De-registering...";
+        message = "De-registering...";
         deregisterAuctionHouse(request.getKey());
-        response = new Message(this, message, "Action performed", request.getKey(), 0);
+        response = new Message(this, "[AuctionCentral]: ",  message, "Action performed", request.getKey(), 0);
         System.out.println(message);
         break;
       case "repository":
         message = auctionRepository.toString();
-        response = new Message(this, message, "House list", request.getKey(), auctionRepository.size());
+        response = new Message(this, "[AuctionCentral]: ",  message, "House list", request.getKey(), auctionRepository.size());
         System.out.println(message);
         break;
       case "transaction":
-        message = "[AuctionCentral]: Mitigating transaction...";
-        response = new Message(this, message, "Mitigated transaction", request.getKey(), 0);
+        message = "Mitigating transaction...";
+        response = new Message(this, "[AuctionCentral]: ", message, "Mitigated transaction", request.getKey(), 0);
         //handleTransaction(message.get)
         System.out.println(message);
         break;
       case "EXIT":
-        message = "[AuctionCentral]: Goodbye!";
-        response = new Message(this, message, "Goodbye!", request.getKey(), 0);
+        message = "Goodbye!";
+        response = new Message(this,  "[AuctionCentral]: ", message, "Goodbye!", request.getKey(), 0);
         System.out.println(message);
         break;
       default:
-        message = "[AuctionCentral]: Error - request not recognized.";
-        response = new Message(this, message, "", request.getKey(), 0);
+        message = "Error - request not recognized.";
+        response = new Message(this, "[AuctionCentral]: ", message, "", request.getKey(), 0);
         System.out.println(message);
         break;
     }

@@ -5,18 +5,27 @@ import java.io.Serializable;
 public class Message implements Serializable
 {
   private Object sender;
-  private String message;
-  private int key;
-  private String item;
-  private int amount;
   
-  public Message(Object sender, String message, String item, int key, int amount)
+  private String signature;
+  private String message;
+  private String item;
+  
+  private int amount;
+  private int key;
+  
+  public Message(Object sender, String signature, String message, String item, int amount, int key)
   {
     this.sender = sender;
+    this.signature = signature;
     this.message = message;
     this.item = item;
-    this.key = key;
     this.amount = amount;
+    this.key = key;
+  }
+  
+  public String getSignature()
+  {
+    return signature;
   }
   
   public Object getSender()
@@ -34,13 +43,13 @@ public class Message implements Serializable
     return item;
   }
   
-  public int getKey()
-  {
-    return key;
-  }
-  
   public int getAmount()
   {
     return amount;
+  }
+  
+  public int getKey()
+  {
+    return key;
   }
 }

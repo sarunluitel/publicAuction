@@ -34,6 +34,7 @@ public class AgentGUIController extends Application
   private TextArea textArea;
   
   private Agent agent;
+  private String history = "";
   
   @FXML
   public void initialize()
@@ -98,13 +99,15 @@ public class AgentGUIController extends Application
     primaryStage.show();
   }
 
+  
   @FXML
   private void submitRequest()
   {
+    //Just hit enter to submit!
     String request = input.getText();
-    textArea.setText(request);
+    history = history + request + "\n";
+    textArea.setText(history);
     agent.setMessageText(request);
-    System.out.println(1);
     input.setText("");
   }
 }
