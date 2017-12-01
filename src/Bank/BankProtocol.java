@@ -16,6 +16,7 @@ class BankProtocol
 {
   private Socket socket;
   private Message message;
+  private BankAccount account;
   
   /**
    * Default constructor.
@@ -27,6 +28,7 @@ class BankProtocol
   {
     this.socket = socket;
     this.message = message;
+    handleRequest(message);
   }
   
   /**
@@ -37,20 +39,50 @@ class BankProtocol
    */
   public Message handleRequest(Message request)
   {
-    String result = "[Bank]: Request = error.";
-  
-    if(request.equals("")) return null;
-    else if(request.getMessage().length() < 5) return null;
-    else if(request.getMessage().substring(0, 3).equals("new"))
+    Message response;
+    String message;
+    switch(request.getMessage())
     {
-      System.out.println("[Bank]: Creating new account for " + request.getMessage().substring(4) + ".");
-      BankAccount account = new BankAccount(request.getMessage().substring(12, request.getMessage().length()-1),
-                                     Integer.parseInt(request.getMessage().substring(request.getMessage().length()-2, request.getMessage().length()-1))*1000);
-      Bank.addAccounts(account);
-      
-      System.out.println("[Bank]: New account = [ID=" + account.getName() + ", BAL=$" + account.getBalance() + ".00].");
-      System.out.println("[Bank]: " + Bank.getNumAccounts() + " account(s) are opened!");
+      case "auction central":
+        message = "[Bank]: Connection made with auction central.";
+        response = new Message(this, message, "Connected", request.getKey(), request.getAmount());
+        break;
+      case "new":
+        System.out.println("[Bank]: Creating new account for " + request.getMessage().substring(4) + ".");
+        account = new BankAccount(request.getMessage().substring(12, request.getMessage().length()-1),
+                Integer.parseInt(request.getMessage().substring(request.getMessage().length()-2, request.getMessage().length()-1))*1000);
+        Bank.addAccounts(account);
+        message = "[Bank]: New account = [ID=" + account.getName() + ", BAL=$" + account.getBalance() + ".00].";
+        System.out.println(message);
+        System.out.println("[Bank]: " + Bank.getNumAccounts() + " account(s) are opened!");
+        response = new Message(this, message, "Account created", request.getKey(), account.getBalance());
+        break;
+      case "balance":
+        message = "[Bank]: See amount for balance.";
+        response = new Message(this, message, "Balance provided", request.getKey(), account.getBalance());
+        break;
+      case "block":
+        message = "[Bank]: Blocking " + account.getBalance() + " on " + account.getName() + "'s...";
+        response = new Message(this, message, "Blocked an amount", request.getKey(), account.getBalance());
+        break;
+      case "unblock":
+        message = "[Bank]: Unblocking " + account.getBalance() + " on " + account.getName() + "'s...";
+        response = new Message(this, message, "Blocked an amount", request.getKey(), account.getBalance());
+        break;
+      case "transaction":
+        message = "[Bank]: Purchase made, removing $" + account.getBalance() + ".00 from " + account.getName() + "'s account...";
+        response = new Message(this, message, "Funds removed", request.getKey(), account.getBalance());
+        break;
+      case "EXIT":
+        message = "[Bank]: Goodbye!";
+        response = new Message(this, message, "Goodbye!", request.getKey(), account.getBalance());
+        break;
+      default:
+        message = "[Bank]: Error - request not recognized.";
+        response = new Message(this, message, "", request.getKey(), account.getBalance());
+        System.out.println(message);
+        break;
     }
-    return null;
+    return response;
   }
 }

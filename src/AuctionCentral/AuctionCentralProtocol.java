@@ -12,9 +12,7 @@ import Agent.Agent;
 import AuctionHouse.AuctionHouse;
 import Message.Message;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Collections;
@@ -25,8 +23,8 @@ class AuctionCentralProtocol {
   private static Map<String, AuctionHouse> auctionRepository = Collections.synchronizedMap(new HashMap<String, AuctionHouse>());
   
   private Socket bankSocket = null;
-  private DataInputStream bankI;
-  private DataOutputStream bankO;
+  private ObjectInputStream bankI;
+  private ObjectOutputStream bankO;
   
   private Socket socket;
   private Object object;
@@ -63,9 +61,11 @@ class AuctionCentralProtocol {
     {
       System.out.println("[AuctionCentral]: Connected to bank.");
       /* update this to take an address for the bank server - diff. from LocalHost. */
-      bankSocket = new Socket(InetAddress.getByName(message.getItem()),2222);
-      bankI = new DataInputStream(bankSocket.getInputStream());
-      bankO = new DataOutputStream(bankSocket.getOutputStream());
+      bankSocket = new Socket(InetAddress.getByName(message.getItem().substring(1)),2222);
+      bankO = new ObjectOutputStream(bankSocket.getOutputStream());
+      bankI = new ObjectInputStream(bankSocket.getInputStream());
+      
+      bankO.writeObject(new Message(this, "auction central", "", 0, 0));
     }
   }
   
@@ -77,33 +77,45 @@ class AuctionCentralProtocol {
    */
   public Message handleRequest(Message request)
   {
-//    Message response = new Message(this, "", "", 0, 0);
+    Message response;
+    String message;
     switch(request.getMessage())
     {
       case "START":
-        System.out.println(1);
+        message = "[AuctionCentral]: Initializing...";
+        response = new Message(this, message, "Initialized", request.getKey(), 0);
         break;
       case "register":
-        System.out.println(2);
+        message = "[AuctionCentral]: Registering...";
+        registerAuctionHouse();//with param request.getSender() casted to auction house
+        response = new Message(this, message, "Action performed", request.getKey(), 0);
         break;
       case "de-register":
-        System.out.println(3);
+        message = "[AuctionCentral]: De-registering...";
+        deregisterAuctionHouse(request.getKey());
+        response = new Message(this, message, "Action performed", request.getKey(), 0);
         break;
       case "repository":
-        System.out.println(4);
+        System.out.println(auctionRepository);
+        message = auctionRepository.toString();
+        response = new Message(this, message, "House list", request.getKey(), auctionRepository.size());
         break;
       case "transaction":
-        System.out.println(5);
-//        handleTransaction(message.get)
+        message = "[AuctionCentral]: Mitigating transaction...";
+        response = new Message(this, message, "Mitigated transaction", request.getKey(), 0);
+        //handleTransaction(message.get)
         break;
       case "EXIT":
-        System.out.println(6);
+        message = "[AuctionCentral]: Goodbye!";
+        response = new Message(this, message, "Goodbye!", request.getKey(), 0);
         break;
       default:
-        System.out.println(-1);
+        message = "[AuctionCentral]: Error - request not recognized.";
+        response = new Message(this, message, "", request.getKey(), 0);
+        System.out.println(message);
         break;
     }
-    return null;//response;
+    return response;
   }
   
   /* tell bank to find agent account with ID & perform action if possible

@@ -86,17 +86,23 @@ public class Agent extends Thread implements Serializable
         {
           System.out.println("streams opened");
           Message bankInput, bankOutput, auctionInput, auctionOutput;
-          bankInput = ((Message)bankIn.readObject());
-          auctionInput = ((Message)auctionIn.readObject());
   
           System.out.println(this.name + ": Log in successful!");
-          
+  
+          System.out.println("writing to bank");
           bankOut.writeObject(new Message(this, "new", "", this.agentBankKey, -1));
+          System.out.println("writing to auction");
           auctionOut.writeObject(new Message(this, "new", auctionAddress.toString(), this.agentCentralKey, -1));
-          
+  
+          System.out.println("listening to bank");
+          bankInput = ((Message)bankIn.readObject());
+          System.out.println("listening to auction");
+          auctionInput = ((Message)auctionIn.readObject());
+  
           boolean flag = true;
           while (flag)
           {
+            System.out.println("loop");
             if(bankInput != null)
             {
               System.out.println(bankInput.getMessage());

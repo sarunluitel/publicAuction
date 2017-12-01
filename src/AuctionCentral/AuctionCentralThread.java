@@ -27,17 +27,16 @@ class AuctionCentralThread extends Thread
   {
     super("[AuctionCentralThread]");
     this.socket = socket;
-    
-    System.out.println("[AuctionCentral]: " + socket.toString() + " connected!");
-    try
-    {
-      System.out.println("[AuctionCentral]: This connection will timeout after 5 minutes of inactivity.");
-      socket.setSoTimeout(5*60*1000);
-    }
-    catch(SocketException e)
-    {
-      e.printStackTrace();
-    }
+//    System.out.println("[AuctionCentral]: " + socket.toString() + " connected!");
+//    try
+//    {
+//      System.out.println("[AuctionCentral]: This connection will timeout after 5 minutes of inactivity.");
+//      socket.setSoTimeout(5*60*1000);
+//    }
+//    catch(SocketException e)
+//    {
+//      e.printStackTrace();
+//    }
   }
   
   /**
