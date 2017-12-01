@@ -50,7 +50,7 @@ class AuctionCentralThread extends Thread
           input = ((Message)in.readObject());
           if(input != null)
           {
-            System.out.println(input.getSender() + input.getMessage());
+            System.out.println(input.getSignature() + input.getMessage());
           
             input = ((Message)in.readObject());
             output = auctionCentralProtocol.handleRequest(input);
