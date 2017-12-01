@@ -96,7 +96,7 @@ public class Agent extends Thread implements Serializable
               messageSubmitted = false;
               messageText = "";
             }
-  
+            
             System.out.println(this.getAgentName() + ": Reading from auction central...");
             auctionInput = ((Message)auctionIn.readObject());
             System.out.println(this.getAgentName() + ": Reading from bank...");
