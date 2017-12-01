@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="640.0" prefWidth="620.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Agent.AgentGUIController">
-   <children>
-      <TextField fx:id="bankIP" layoutX="10.0" layoutY="25.0" prefHeight="30.0" prefWidth="200.0" promptText="Bank IP address" text="Bank IP address"/>
-      <TextField fx:id="auctionIP" layoutX="410.0" layoutY="25.0" prefHeight="30.0" prefWidth="200.0" promptText="Auction Central IP address" text="Auction Central IP address" />
-      <Button fx:id="connect" layoutX="210.0" layoutY="25.0" prefHeight="30.0" prefWidth="200.0" mnemonicParsing="false" onAction="#secureConnection" text="Connect" />
-      <TextArea fx:id="textArea" layoutX="150.0" layoutY="75.0" prefHeight="200.0" prefWidth="300.0" />
-      <TextField fx:id="input" layoutX="150.0" layoutY="275.0" prefHeight="30.0" prefWidth="300.0" promptText="Message" />
-      <Button fx:id="submit" defaultButton="true" layoutX="210.0" layoutY="540.0" prefHeight="30.0" prefWidth="200.0" mnemonicParsing="false" onAction="#submitRequest" text="Submit" />
-   </children>
+<AnchorPane prefHeight="640.0" prefWidth="620.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="Agent.AgentGUIController">
+  <children>
+    <TextField fx:id="bankIP" layoutX="10.0" layoutY="25.0" prefHeight="30.0" prefWidth="200.0" promptText="Bank IP address" text="Bank IP address" />
+    <TextField fx:id="auctionIP" layoutX="410.0" layoutY="25.0" prefHeight="30.0" prefWidth="200.0" promptText="Auction Central IP address" text="Auction Central IP address" />
+    <Button fx:id="connect" layoutX="210.0" layoutY="25.0" mnemonicParsing="false" onAction="#secureConnection" prefHeight="30.0" prefWidth="200.0" text="Connect" />
+    <TextArea fx:id="textArea" layoutX="150.0" layoutY="75.0" prefHeight="200.0" prefWidth="300.0" />
+    <TextField fx:id="input" layoutX="150.0" layoutY="275.0" onKeyPressed="#submitRequest" prefHeight="30.0" prefWidth="300.0" promptText="Message" />
+    <Button fx:id="submit" defaultButton="true" layoutX="210.0" layoutY="540.0" mnemonicParsing="false" onAction="#submitRequest" prefHeight="30.0" prefWidth="200.0" text="Submit" />
+  </children>
 </AnchorPane>

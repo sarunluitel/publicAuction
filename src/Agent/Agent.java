@@ -22,8 +22,10 @@ public class Agent extends Thread implements Serializable
   private final int agentBankKey;
   private final int agentCentralKey;
   private final String name;
-  private String message = "";
-
+  
+  private String messageText = "";
+  private boolean messageSubmitted = false;
+  
   private InetAddress bankAddress, auctionAddress;
 
   public void setBankAddress(InetAddress bankAddress)
@@ -50,9 +52,11 @@ public class Agent extends Thread implements Serializable
     return name;
   }
 
-  public void setMessage(String message)
+  public void setMessageText(String messageText)
   {
-    this.message = message;
+    messageSubmitted = true;
+    
+    this.messageText = messageText;
   }
 
   @Override
@@ -75,34 +79,37 @@ public class Agent extends Thread implements Serializable
           
           bankOut.writeObject(new Message(this, "new", "", this.agentBankKey, -1));
           auctionOut.writeObject(new Message(this, "new", auctionAddress.toString(), this.agentCentralKey, -1));
-  
-          bankInput = ((Message)bankIn.readObject());
-          auctionInput = ((Message)auctionIn.readObject());
-  
-          boolean flag = true;
-          while (flag)
+          
+          while (true)
           {
+            System.out.println(true);
+            if(messageSubmitted)
+            {
+              System.out.println("Submitting message = " + messageText + " to auction & bank.");
+              auctionOutput = new Message(this, messageText, "", agentCentralKey, 0);
+              bankOutput = new Message(this, messageText, "", agentBankKey, 0);
+  
+              auctionOut.writeObject(auctionOutput);
+              bankOut.writeObject(bankOutput);
+              
+              messageSubmitted = false;
+              messageText = "";
+            }
+  
+            System.out.println("Reading from auction central...");
+            auctionInput = ((Message)auctionIn.readObject());
+            System.out.println("Reading from bank...");
+            bankInput = ((Message)bankIn.readObject());
+            
             if(bankInput != null)
             {
+              if(bankInput.getMessage().equals("EXIT")) break;
               System.out.println(bankInput.getMessage());
-    
-              bankInput = ((Message)bankIn.readObject());
-              bankOutput = null;//send your messages here
-    
-              bankOut.writeObject(bankOutput);
-    
-              bankInput = null;
             }
             if(auctionInput != null)
             {
+              if(auctionInput.getMessage().equals("EXIT")) break;
               System.out.println(auctionInput.getMessage());
-    
-              auctionInput = ((Message)auctionIn.readObject());
-              auctionOutput = null;//send your messages here
-    
-              auctionOut.writeObject(auctionOutput);
-    
-              auctionInput = null;
             }
           }
           bankIn.close();

@@ -18,6 +18,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 
 import java.net.InetAddress;
@@ -57,8 +58,15 @@ public class AgentGUIController extends Application
 
       textArea.setVisible(true);
       input.setVisible(true);
-
-    } catch (UnknownHostException e)
+      input.setOnKeyPressed(e ->
+      {
+        if(e.getCode() == KeyCode.ENTER)
+        {
+          submitRequest();
+        }
+      });
+    }
+    catch (UnknownHostException e)
     {
       e.printStackTrace();
       System.exit(-1);
@@ -93,9 +101,10 @@ public class AgentGUIController extends Application
   @FXML
   private void submitRequest()
   {
-    agent.setMessage(input.getText());
-    String request= input.getText();
-    input.setText("");
+    String request = input.getText();
     textArea.setText(request);
+    agent.setMessageText(request);
+    System.out.println(1);
+    input.setText("");
   }
 }
