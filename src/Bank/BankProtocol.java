@@ -93,7 +93,7 @@ class BankProtocol implements Serializable
         break;
       default:
         message = "Error - request not recognized.";
-        response = new Message(this, "[Bank]: ", message, "", request.getKey(), account.getBalance());
+        response = new Message(null, "[Bank]: ", message, "", -1, -1);
         System.out.println(message);
         break;
     }

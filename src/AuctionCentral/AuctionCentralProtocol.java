@@ -120,7 +120,7 @@ class AuctionCentralProtocol implements Serializable
         break;
       default:
         message = "Error - request not recognized.";
-        response = new Message(this, "[AuctionCentral]: ", message, "", request.getKey(), 0);
+        response = new Message(null, "[AuctionCentral]: ", message, "", -1, -1);
         System.out.println(message);
         break;
     }

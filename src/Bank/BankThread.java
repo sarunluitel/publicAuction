@@ -50,7 +50,7 @@ class BankThread extends Thread
         {
           if(input != null)
           {
-            System.out.println(input.getMessage());
+            System.out.println(input.getSender() + input.getMessage());
     
             input = ((Message)in.readObject());
             output = bankProtocol.handleRequest(input);
