@@ -27,16 +27,6 @@ class AuctionCentralThread extends Thread
   {
     super("[AuctionCentralThread]");
     this.socket = socket;
-//    System.out.println("[AuctionCentral]: " + socket.toString() + " connected!");
-//    try
-//    {
-//      System.out.println("[AuctionCentral]: This connection will timeout after 5 minutes of inactivity.");
-//      socket.setSoTimeout(5*60*1000);
-//    }
-//    catch(SocketException e)
-//    {
-//      e.printStackTrace();
-//    }
   }
   
   /**
@@ -44,13 +34,11 @@ class AuctionCentralThread extends Thread
    */
   public void run()
   {
-    System.out.println("run");
     try (ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
          ObjectInputStream in = new ObjectInputStream(socket.getInputStream()))
     {
       try
       {
-        System.out.println("message start");
         Message input, output;
         input = ((Message)in.readObject());
       

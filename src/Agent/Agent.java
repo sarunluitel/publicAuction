@@ -28,24 +28,20 @@ public class Agent extends Thread implements Serializable
 
   public void setBankAddress(InetAddress bankAddress)
   {
-    System.out.println(auctionAddress.toString());
     this.bankAddress = bankAddress;
   }
 
   public  void setAuctionAddress(InetAddress auctionAddress)
   {
-    System.out.println(auctionAddress.toString());
     this.auctionAddress = auctionAddress;
   }
 
   public Agent()
   {
-    System.out.println("new agent");
     publicID = (int) (Math.random() * 1000000);
     name = "[Agent-" + publicID + "]";
     agentBankKey = (int) (Math.random() * 1000000);
     agentCentralKey = (int) (Math.random() * 1000000);
-    System.out.println(this);
   }
 
   // getName is a built in method after extending thread class. renamed to getAgentName.
@@ -62,47 +58,30 @@ public class Agent extends Thread implements Serializable
   @Override
   public void run()
   {
-    System.out.println("agent run");
     try
     {
       Socket bankSocket = new Socket(bankAddress, 2222);
       Socket auctionCentralSocket = new Socket(auctionAddress, 1111);
-      System.out.println("connected");
       try
       {
-        System.out.println(bankSocket.getInputStream().available());
-        System.out.println(bankSocket.getInputStream());
-        System.out.println(bankSocket.isConnected());
-        System.out.println(this);
-        ObjectOutputStream bankOut = new ObjectOutputStream(bankSocket.getOutputStream());
-        System.out.println("wtf3");
         ObjectOutputStream auctionOut = new ObjectOutputStream(auctionCentralSocket.getOutputStream());
-        System.out.println("wtf5");
-        ObjectInputStream bankIn = new ObjectInputStream(bankSocket.getInputStream());
-        System.out.println("wtf2");
+        ObjectOutputStream bankOut = new ObjectOutputStream(bankSocket.getOutputStream());
         ObjectInputStream auctionIn = new ObjectInputStream(auctionCentralSocket.getInputStream());
-        System.out.println("wtf4");
+        ObjectInputStream bankIn = new ObjectInputStream(bankSocket.getInputStream());
         try
         {
-          System.out.println("streams opened");
           Message bankInput, bankOutput, auctionInput, auctionOutput;
-  
           System.out.println(this.name + ": Log in successful!");
-  
-          System.out.println("writing to bank");
+          
           bankOut.writeObject(new Message(this, "new", "", this.agentBankKey, -1));
-          System.out.println("writing to auction");
           auctionOut.writeObject(new Message(this, "new", auctionAddress.toString(), this.agentCentralKey, -1));
   
-          System.out.println("listening to bank");
           bankInput = ((Message)bankIn.readObject());
-          System.out.println("listening to auction");
           auctionInput = ((Message)auctionIn.readObject());
   
           boolean flag = true;
           while (flag)
           {
-            System.out.println("loop");
             if(bankInput != null)
             {
               System.out.println(bankInput.getMessage());
@@ -143,10 +122,6 @@ public class Agent extends Thread implements Serializable
       {
         e.printStackTrace();
       }
-      finally {
-        System.out.println("uhhh");
-      }
-      System.out.println("HELLO");
     }
     catch (IOException e)
     {

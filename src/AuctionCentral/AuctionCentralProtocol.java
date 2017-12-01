@@ -44,7 +44,6 @@ class AuctionCentralProtocol implements Serializable
   AuctionCentralProtocol(Socket socket, Message message) throws IOException
   {
     this.socket = socket;
-    System.out.println(message.getMessage() + message.getItem());
     if(message.getSender() instanceof Agent)
     {
       agent = ((Agent)message.getSender());
@@ -85,30 +84,35 @@ class AuctionCentralProtocol implements Serializable
       case "START":
         message = "[AuctionCentral]: Initializing...";
         response = new Message(this, message, "Initialized", request.getKey(), 0);
+        System.out.println(message);
         break;
       case "register":
         message = "[AuctionCentral]: Registering...";
         registerAuctionHouse();//with param request.getSender() casted to auction house
         response = new Message(this, message, "Action performed", request.getKey(), 0);
+        System.out.println(message);
         break;
       case "de-register":
         message = "[AuctionCentral]: De-registering...";
         deregisterAuctionHouse(request.getKey());
         response = new Message(this, message, "Action performed", request.getKey(), 0);
+        System.out.println(message);
         break;
       case "repository":
-        System.out.println(auctionRepository);
         message = auctionRepository.toString();
         response = new Message(this, message, "House list", request.getKey(), auctionRepository.size());
+        System.out.println(message);
         break;
       case "transaction":
         message = "[AuctionCentral]: Mitigating transaction...";
         response = new Message(this, message, "Mitigated transaction", request.getKey(), 0);
         //handleTransaction(message.get)
+        System.out.println(message);
         break;
       case "EXIT":
         message = "[AuctionCentral]: Goodbye!";
         response = new Message(this, message, "Goodbye!", request.getKey(), 0);
+        System.out.println(message);
         break;
       default:
         message = "[AuctionCentral]: Error - request not recognized.";

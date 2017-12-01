@@ -45,7 +45,6 @@ public class AgentGUIController extends Application
   @FXML
   private void secureConnection()
   {
-    System.out.println("secure");
     agent = new Agent();
   
     try

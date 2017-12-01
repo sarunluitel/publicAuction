@@ -48,6 +48,7 @@ class BankProtocol implements Serializable
       case "auction central":
         message = "[Bank]: Connection made with auction central.";
         response = new Message(this, message, "Connected", request.getKey(), request.getAmount());
+        System.out.println(message);
         break;
       case "new":
         String agent = ((Agent)request.getSender()).getAgentName();
@@ -65,22 +66,27 @@ class BankProtocol implements Serializable
       case "balance":
         message = "[Bank]: See amount for balance.";
         response = new Message(this, message, "Balance provided", request.getKey(), account.getBalance());
+        System.out.println(message);
         break;
       case "block":
         message = "[Bank]: Blocking " + account.getBalance() + " on " + account.getName() + "'s...";
         response = new Message(this, message, "Blocked an amount", request.getKey(), account.getBalance());
+        System.out.println(message);
         break;
       case "unblock":
         message = "[Bank]: Unblocking " + account.getBalance() + " on " + account.getName() + "'s...";
         response = new Message(this, message, "Blocked an amount", request.getKey(), account.getBalance());
+        System.out.println(message);
         break;
       case "transaction":
         message = "[Bank]: Purchase made, removing $" + account.getBalance() + ".00 from " + account.getName() + "'s account...";
         response = new Message(this, message, "Funds removed", request.getKey(), account.getBalance());
+        System.out.println(message);
         break;
       case "EXIT":
         message = "[Bank]: Goodbye!";
         response = new Message(this, message, "Goodbye!", request.getKey(), account.getBalance());
+        System.out.println(message);
         break;
       default:
         message = "[Bank]: Error - request not recognized.";

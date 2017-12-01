@@ -19,7 +19,6 @@ public class Item
   {
     itemName = "Item" + num;
     bidAmount = 100;
-
   }
 
   public String getItemName()
