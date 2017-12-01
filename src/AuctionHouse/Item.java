@@ -11,6 +11,7 @@ package AuctionHouse;
 public class Item
 {
   private String itemName;
+  private int agentKey;
   private int bidAmount;
 
 
@@ -18,6 +19,7 @@ public class Item
   {
     itemName = "Item" + num;
     bidAmount = 100;
+
   }
 
   public String getItemName()
@@ -28,5 +30,15 @@ public class Item
   public int getBidAmount()
   {
     return bidAmount;
+  }
+
+  public int getAgent()
+  {
+    return agentKey;
+  }
+
+  public void setCurrentBid(int bid)
+  {
+    bidAmount = bid;
   }
 }

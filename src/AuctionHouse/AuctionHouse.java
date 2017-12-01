@@ -25,7 +25,7 @@ public class AuctionHouse
   private final int publicID;
   private static int totalHouses = 0;
   private LinkedList<String> itemList = new LinkedList<>();
-  private LinkedList<String> itemsForSale = new LinkedList<>();
+  private LinkedList<Item> itemsForSale = new LinkedList<>();
   
   /**
    * Default constructor.
@@ -57,7 +57,7 @@ public class AuctionHouse
   {
     for(int i = 1; i < 4; i++)
     {
-      itemsForSale.add("Item" + i);
+      itemsForSale.add(new Item(i));
     }
   }
 
