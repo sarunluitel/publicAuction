@@ -59,6 +59,13 @@ public class AgentGUIController extends Application
 
       textArea.setVisible(true);
       input.setVisible(true);
+      
+      agent.setMessageText("");
+      synchronized(agent)
+      {
+        agent.notify();
+      }
+      
       input.setOnKeyPressed(e ->
       {
         if(e.getCode() == KeyCode.ENTER)
@@ -109,5 +116,10 @@ public class AgentGUIController extends Application
     textArea.setText(history);
     agent.setMessageText(request);
     input.setText("");
+  
+    synchronized(agent)
+    {
+      agent.notify();
+    }
   }
 }

@@ -54,8 +54,6 @@ public class Agent extends Thread implements Serializable
 
   public void setMessageText(String messageText)
   {
-    messageSubmitted = true;
-    
     this.messageText = messageText;
   }
 
@@ -82,7 +80,8 @@ public class Agent extends Thread implements Serializable
           
           while (true)
           {
-            if(messageSubmitted)
+            bankInput = auctionInput = null;
+            if(!messageText.equals(""))
             {
               System.out.println(this.getAgentName() + ": Submitting message = " + messageText + " to auction & bank.");
               auctionOutput = new Message(this, this.getAgentName() + ": ", messageText, "", agentCentralKey, 0);
@@ -92,16 +91,24 @@ public class Agent extends Thread implements Serializable
               bankOut.flush();
               auctionOut.writeObject(auctionOutput);
               bankOut.writeObject(bankOutput);
-              
-              messageSubmitted = false;
+
               messageText = "";
             }
-            
+            else
+            {
+              synchronized(this) {
+                try {
+                  this.wait();
+                }
+                catch(InterruptedException ignored){}
+              }
+            }
+  
             System.out.println(this.getAgentName() + ": Reading from auction central...");
             auctionInput = ((Message)auctionIn.readObject());
             System.out.println(this.getAgentName() + ": Reading from bank...");
             bankInput = ((Message)bankIn.readObject());
-            
+  
             if(bankInput != null)
             {
               if(bankInput.getMessage().equals("EXIT")) break;
