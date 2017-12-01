@@ -77,8 +77,8 @@ public class Agent extends Thread implements Serializable
           Message bankInput, bankOutput, auctionInput, auctionOutput;
           System.out.println(this.name + ": Log in successful!");
           
-          bankOut.writeObject(new Message(this, this.getAgentName(), "new", "", this.agentBankKey, -1));
-          auctionOut.writeObject(new Message(this, this.getAgentName(), "new", auctionAddress.toString(), this.agentCentralKey, -1));
+          bankOut.writeObject(new Message(this, this.getAgentName() + ": ", "new", "", this.agentBankKey, -1));
+          auctionOut.writeObject(new Message(this, this.getAgentName() + ": ", "new", auctionAddress.toString(), this.agentCentralKey, -1));
           
           while (true)
           {
@@ -86,8 +86,8 @@ public class Agent extends Thread implements Serializable
             if(messageSubmitted)
             {
               System.out.println("Submitting message = " + messageText + " to auction & bank.");
-              auctionOutput = new Message(this, this.getAgentName(), messageText, "", agentCentralKey, 0);
-              bankOutput = new Message(this, this.getAgentName(), messageText, "", agentBankKey, 0);
+              auctionOutput = new Message(this, this.getAgentName() + ": ", messageText, "", agentCentralKey, 0);
+              bankOutput = new Message(this, this.getAgentName() + ": ", messageText, "", agentBankKey, 0);
               
               auctionOut.flush();
               bankOut.flush();

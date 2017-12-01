@@ -23,7 +23,7 @@ class BankAccount
   public BankAccount(String name, int balance)
   {
     this.name = name;
-    this.balance = balance;
+    this.balance = (balance < 1000) ? 1000 : balance;
     this.holds = null;
   }
   

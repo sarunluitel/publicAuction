@@ -57,10 +57,10 @@ class BankProtocol implements Serializable
         String agent = ((Agent)request.getSender()).getAgentName();
         
         System.out.println("[Bank]: Creating new account for " + agent + ".");
-        account = new BankAccount(agent.substring(12, agent.length()-1),Integer.parseInt(agent.substring(agent.length()-2, agent.length()-1))*1000);
+        account = new BankAccount(agent, ((int)Math.random()*1000));
         Bank.addAccounts(account);
         
-        message = "New account = [ID=" + account.getName() + ", BAL=$" + account.getBalance() + ".00].";
+        message = "[Bank]: New account = [ID=" + account.getName() + ", BAL=$" + account.getBalance() + ".00].";
         System.out.println(message);
         System.out.println("[Bank]: " + Bank.getNumAccounts() + " account(s) are opened!");
         
@@ -94,7 +94,7 @@ class BankProtocol implements Serializable
       default:
         message = "Error - request not recognized.";
         response = new Message(null, "[Bank]: ", message, "", -1, -1);
-        System.out.println(message);
+        System.out.println("[Bank]: " + message);
         break;
     }
     return response;
