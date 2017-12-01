@@ -19,7 +19,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-class AuctionCentralProtocol {
+class AuctionCentralProtocol implements Serializable
+{
   private static Map<String, AuctionHouse> auctionRepository = Collections.synchronizedMap(new HashMap<String, AuctionHouse>());
   
   private Socket bankSocket = null;
@@ -65,7 +66,7 @@ class AuctionCentralProtocol {
       bankO = new ObjectOutputStream(bankSocket.getOutputStream());
       bankI = new ObjectInputStream(bankSocket.getInputStream());
       
-      bankO.writeObject(new Message(this, "auction central", "", 0, 0));
+      bankO.writeObject(new Message(null, "auction central", "", 0, 0));
     }
   }
   

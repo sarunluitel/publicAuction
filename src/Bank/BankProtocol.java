@@ -8,11 +8,13 @@
 
 package Bank;
 
+import Agent.Agent;
 import Message.Message;
 
+import java.io.Serializable;
 import java.net.Socket;
 
-class BankProtocol
+class BankProtocol implements Serializable
 {
   private Socket socket;
   private Message message;
@@ -48,13 +50,16 @@ class BankProtocol
         response = new Message(this, message, "Connected", request.getKey(), request.getAmount());
         break;
       case "new":
-        System.out.println("[Bank]: Creating new account for " + request.getMessage().substring(4) + ".");
-        account = new BankAccount(request.getMessage().substring(12, request.getMessage().length()-1),
-                Integer.parseInt(request.getMessage().substring(request.getMessage().length()-2, request.getMessage().length()-1))*1000);
+        String agent = ((Agent)request.getSender()).getAgentName();
+        
+        System.out.println("[Bank]: Creating new account for " + agent + ".");
+        account = new BankAccount(agent.substring(12, agent.length()-1),Integer.parseInt(agent.substring(agent.length()-2, agent.length()-1))*1000);
         Bank.addAccounts(account);
+        
         message = "[Bank]: New account = [ID=" + account.getName() + ", BAL=$" + account.getBalance() + ".00].";
         System.out.println(message);
         System.out.println("[Bank]: " + Bank.getNumAccounts() + " account(s) are opened!");
+        
         response = new Message(this, message, "Account created", request.getKey(), account.getBalance());
         break;
       case "balance":
