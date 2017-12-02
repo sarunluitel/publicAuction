@@ -87,10 +87,11 @@ public class Agent extends Thread implements Serializable
               auctionOutput = new Message(this, this.getAgentName() + ": ", messageText, "", agentCentralKey, 0);
               bankOutput = new Message(this, this.getAgentName() + ": ", messageText, "", agentBankKey, 0);
 
-              auctionOut.flush();
-              bankOut.flush();
               auctionOut.writeObject(auctionOutput);
+              auctionOut.flush();
               bankOut.writeObject(bankOutput);
+              bankOut.flush();
+
 
               messageText = "";
             } else
@@ -108,6 +109,7 @@ public class Agent extends Thread implements Serializable
 
             System.out.println(this.getAgentName() + ": Reading from auction central...");
             auctionInput = ((Message) auctionIn.readObject());
+            System.out.println(auctionInput.getSender()+"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             System.out.println(this.getAgentName() + ": Reading from bank...");
             bankInput = ((Message) bankIn.readObject());
 

@@ -56,7 +56,7 @@ public class AgentGUIController extends Application
 
   /**
    * secureConnection() is invoked when btnConnect is clicked. secures connections.
-   * hides old GUIElements and shows interface for agent to work on. starts the4 Agent Thread
+   * hides old GUIElements and shows interface for agent to work on. starts the Agent Thread
    *
    * @return void.
    */
@@ -100,14 +100,8 @@ public class AgentGUIController extends Application
     }
 
     // run code to setup connections after we get addresses to bank and Auction Central
-    try
-    {
-      agent.start();
-    } catch (Exception e)
-    {
-      e.printStackTrace();
-      System.exit(-1);
-    }
+    agent.start();
+
 
   }
 
