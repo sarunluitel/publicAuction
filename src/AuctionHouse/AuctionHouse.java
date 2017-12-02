@@ -26,10 +26,10 @@ public class AuctionHouse
   private static int totalHouses = 0;
   private LinkedList<String> itemList = new LinkedList<>();
   private LinkedList<Item> itemsForSale = new LinkedList<>();
-  
+
   /**
    * Default constructor.
-   *
+   * <p>
    * Generates a random public ID.
    */
   public AuctionHouse()
@@ -39,7 +39,7 @@ public class AuctionHouse
     name = "[House-" + publicID + "]";
     setItems();
   }
-  
+
   /**
    * @return name of this auction house.
    */
@@ -50,12 +50,12 @@ public class AuctionHouse
 
   /**
    * Method to set items available to sell
-   *
+   * <p>
    * No parameters
    */
   private void setItems()
   {
-    for(int i = 1; i < 4; i++)
+    for (int i = 1; i < 4; i++)
     {
       itemsForSale.add(new Item(i));
     }
@@ -76,32 +76,30 @@ public class AuctionHouse
       try
       {
         Message input, output;
-        input = ((Message)in.readObject());
-        
+        input = ((Message) in.readObject());
+
         while (true)
         {
-          if(input != null)
+          if (input != null)
           {
             System.out.println(input.getMessage());
-            
-            input = ((Message)in.readObject());
-            
+
+            input = ((Message) in.readObject());
+
             output = null;
             out.writeObject(output);
-          
+
             input = null;
           }
         }
-      }
-      catch(ClassNotFoundException e)
+      } catch (ClassNotFoundException e)
       {
         System.err.println(e.getMessage());
       }
       in.close();
       out.close();
       socket.close();
-    }
-    catch (IOException e)
+    } catch (IOException e)
     {
       e.printStackTrace();
     }

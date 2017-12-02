@@ -19,16 +19,17 @@ import java.util.ArrayList;
 public class Bank
 {
   private static ArrayList<BankAccount> accounts = new ArrayList<>();
-  
+
   /**
    * Adds bank account to the list of accounts.
+   *
    * @param account
    */
   static void addAccounts(BankAccount account)
   {
     accounts.add(account);
   }
-  
+
   /**
    * @param account
    * @return whether the bank account is contained in accounts repo.
@@ -37,7 +38,7 @@ public class Bank
   {
     return accounts.contains(account);
   }
-  
+
   /**
    * @return number of accounts.
    */
@@ -45,7 +46,7 @@ public class Bank
   {
     return accounts.size();
   }
-  
+
   /**
    * @param name
    * @return Account linked to the name.
@@ -54,11 +55,11 @@ public class Bank
   {
     for (BankAccount account : accounts)
     {
-      if(account.getName().equals(name)) return account;
+      if (account.getName().equals(name)) return account;
     }
     return null;
   }
-  
+
   /**
    * Main method for bank.
    *
@@ -72,8 +73,7 @@ public class Bank
     {
       System.out.println("[Bank]: " + serverSocket.toString() + ".");
       while (true) new BankThread(serverSocket.accept()).start();
-    }
-    catch (IOException e)
+    } catch (IOException e)
     {
       System.err.println("[Bank]: Error connecting...");
       System.exit(-1);

@@ -1,15 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="640.0" prefWidth="620.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="Agent.AgentGUIController">
+<AnchorPane prefHeight="515.0" prefWidth="620.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Agent.AgentGUIController">
   <children>
     <TextField fx:id="bankIP" layoutX="10.0" layoutY="25.0" prefHeight="30.0" prefWidth="200.0" promptText="Bank IP address" text="Bank IP address" />
     <TextField fx:id="auctionIP" layoutX="410.0" layoutY="25.0" prefHeight="30.0" prefWidth="200.0" promptText="Auction Central IP address" text="Auction Central IP address" />
     <Button fx:id="connect" layoutX="210.0" layoutY="25.0" mnemonicParsing="false" onAction="#secureConnection" prefHeight="30.0" prefWidth="200.0" text="Connect" />
-    <TextArea fx:id="textArea" layoutX="150.0" layoutY="75.0" prefHeight="200.0" prefWidth="300.0" />
-    <TextField fx:id="input" layoutX="150.0" layoutY="275.0" onKeyPressed="#submitRequest" prefHeight="30.0" prefWidth="300.0" promptText="Message" />
-    <Button fx:id="submit" defaultButton="true" layoutX="210.0" layoutY="540.0" mnemonicParsing="false" onAction="#submitRequest" prefHeight="30.0" prefWidth="200.0" text="Submit" />
+    <TextArea fx:id="textArea" layoutX="150.0" layoutY="75.0" prefHeight="290.0" prefWidth="300.0" />
+    <TextField fx:id="input" layoutX="150.0" layoutY="412.0" prefHeight="30.0" prefWidth="300.0" promptText="Bid" />
+    <Button fx:id="btnBid" defaultButton="true" layoutX="210.0" layoutY="460.0" mnemonicParsing="false" onAction="#placeBid" prefHeight="30.0" prefWidth="200.0" text="Bid" />
+      <ComboBox fx:id="itemsComboBox" layoutX="150.0" layoutY="374.0" prefHeight="25.0" prefWidth="300.0" promptText="Select Items to Bid on" />
+      <Text fx:id="txtBankBalance" fill="#0eeb1d" layoutX="466.0" layoutY="96.0" strokeType="OUTSIDE" strokeWidth="0.0" text="\$$$" wrappingWidth="131.13671875">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Text>
+      <Text fx:id="txtTotalBidPlaced" fill="#0ba3e5" layoutX="36.0" layoutY="95.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Bids: " wrappingWidth="41.13671875">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Text>
   </children>
 </AnchorPane>

@@ -22,23 +22,24 @@ import java.util.Map;
 class AuctionCentralProtocol implements Serializable
 {
   private static Map<String, AuctionHouse> auctionRepository = Collections.synchronizedMap(new HashMap<String, AuctionHouse>());
-  
+
   private Socket bankSocket = null;
   private ObjectInputStream bankI;
   private ObjectOutputStream bankO;
-  
+
   private Socket socket;
   private Object object;
   private Message message;
   public Message setup;
-  
+
   private Agent agent;
   private static int agentCount;
-  
+
   /**
    * Default constructor.
-   *
+   * <p>
    * Takes a socket and an object to identify who it is speaking with.
+   *
    * @param socket
    * @param message
    * @throws IOException
@@ -47,32 +48,31 @@ class AuctionCentralProtocol implements Serializable
   {
     this.socket = socket;
     this.message = message;
-    if(message.getSender() instanceof Agent)
+    if (message.getSender() instanceof Agent)
     {
-      agent = ((Agent)message.getSender());
+      agent = ((Agent) message.getSender());
       agentCount++;
-  
+
       System.out.println(agent.getAgentName() + ": Connected to AuctionCentral.");
       System.out.println("[AuctionCentral]: " + agentCount + " agent(s) are connected!");
-    }
-    else this.object = message.getSender();
+    } else this.object = message.getSender();
     
     /* for now, registering auction houses within auction central. */
-    for(int i = 0; i < 5; i++) registerAuctionHouse();
-    
-    if(bankSocket == null)
+    for (int i = 0; i < 5; i++) registerAuctionHouse();
+
+    if (bankSocket == null)
     {
       System.out.println("[AuctionCentral]: Connected to bank.");
       /* update this to take an address for the bank server - diff. from LocalHost. */
-      bankSocket = new Socket(InetAddress.getByName(message.getItem().substring(1)),2222);
+      bankSocket = new Socket(InetAddress.getByName(message.getItem().substring(1)), 2222);
       bankO = new ObjectOutputStream(bankSocket.getOutputStream());
       bankI = new ObjectInputStream(bankSocket.getInputStream());
-      
+
       bankO.writeObject(new Message(null, "[AuctionCentral]: ", "Hello, friend.", "", 0, 0));
     }
     setup = handleRequest(message);
   }
-  
+
   /**
    * Handles requests as they are received from socket.
    *
@@ -83,28 +83,28 @@ class AuctionCentralProtocol implements Serializable
   {
     Message response;
     String message;
-    switch(request.getMessage())
+    switch (request.getMessage())
     {
       case "new":
         message = "Initializing...";
-        response = new Message(null, "[AuctionCentral]: ",  message, "Initialized", request.getKey(), 0);
+        response = new Message(null, "[AuctionCentral]: ", message, "Initialized", request.getKey(), 0);
         System.out.println("[AuctionCentral]: " + message);
         break;
       case "register":
         message = "Registering...";
         registerAuctionHouse();//with param request.getSender() casted to auction house
-        response = new Message(this, "[AuctionCentral]: ",  message, "Action performed", request.getKey(), 0);
+        response = new Message(this, "[AuctionCentral]: ", message, "Action performed", request.getKey(), 0);
         System.out.println("[AuctionCentral]: " + message);
         break;
       case "de-register":
         message = "De-registering...";
         deregisterAuctionHouse(request.getKey());
-        response = new Message(this, "[AuctionCentral]: ",  message, "Action performed", request.getKey(), 0);
+        response = new Message(this, "[AuctionCentral]: ", message, "Action performed", request.getKey(), 0);
         System.out.println("[AuctionCentral]: " + message);
         break;
       case "repository":
         message = auctionRepository.toString();
-        response = new Message(this, "[AuctionCentral]: ",  message, "House list", request.getKey(), auctionRepository.size());
+        response = new Message(this, "[AuctionCentral]: ", message, "House list", request.getKey(), auctionRepository.size());
         System.out.println("[AuctionCentral]: " + message);
         break;
       case "transaction":
@@ -115,7 +115,7 @@ class AuctionCentralProtocol implements Serializable
         break;
       case "EXIT":
         message = "Goodbye!";
-        response = new Message(this,  "[AuctionCentral]: ", message, "Goodbye!", request.getKey(), 0);
+        response = new Message(this, "[AuctionCentral]: ", message, "Goodbye!", request.getKey(), 0);
         System.out.println("[AuctionCentral]: " + message);
         break;
       default:
@@ -130,6 +130,7 @@ class AuctionCentralProtocol implements Serializable
   /* tell bank to find agent account with ID & perform action if possible
      then respond according to bank confirmation to de-register auction houses,
      get public ID and de-register there.                                       */
+
   /**
    * Mitigates transaction requests between agents and houses.
    *
@@ -142,15 +143,15 @@ class AuctionCentralProtocol implements Serializable
   private String handleTransaction(String agentBid, String agentID, String houseID) throws IOException
   {
     //don't allow bid if it has not yet been accepted by bank
-    bankO.writeUTF("[AuctionCentral]: block:"+agentBid+":"+agentID);
-    bankO.writeUTF("[AuctionCentral]: unblock:"+agentBid+":"+agentID);
-    bankO.writeUTF("[AuctionCentral]: move:"+agentBid+":"+agentID+":"+houseID);
+    bankO.writeUTF("[AuctionCentral]: block:" + agentBid + ":" + agentID);
+    bankO.writeUTF("[AuctionCentral]: unblock:" + agentBid + ":" + agentID);
+    bankO.writeUTF("[AuctionCentral]: move:" + agentBid + ":" + agentID + ":" + houseID);
     //if item is sold check if house is empty de-register house if so.
     bankO.flush();
 
     return bankI.readUTF();
   }
-  
+
   /**
    * Registers auction houses and adds them to repository.
    */
@@ -159,7 +160,7 @@ class AuctionCentralProtocol implements Serializable
 //    AuctionHouse auctionHouse = new AuctionHouse();
 //    auctionRepository.put(auctionHouse.getName(), auctionHouse);
   }
-  
+
   /**
    * De-registers auction houses from repository & closes their socket.
    *

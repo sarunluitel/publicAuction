@@ -29,8 +29,7 @@ public class AuctionCentral
     {
       System.out.println("[AuctionCentral]: " + serverSocket.toString() + ".");
       while (true) new AuctionCentralThread(serverSocket.accept()).start();
-    }
-    catch (IOException e)
+    } catch (IOException e)
     {
       System.err.println("[AuctionCentral]: Error connecting...");
       System.exit(-1);

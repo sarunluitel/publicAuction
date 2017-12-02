@@ -17,12 +17,12 @@ import java.net.Socket;
 class BankProtocol implements Serializable
 {
   private Socket socket;
-  
+
   private Message message;
   public Message setup;
-  
+
   private BankAccount account;
-  
+
   /**
    * Default constructor.
    *
@@ -35,7 +35,7 @@ class BankProtocol implements Serializable
     this.message = message;
     setup = handleRequest(message);
   }
-  
+
   /**
    * Handles requests as they are received from socket.
    *
@@ -46,7 +46,7 @@ class BankProtocol implements Serializable
   {
     Message response;
     String message;
-    switch(request.getMessage())
+    switch (request.getMessage())
     {
       case "auction central":
         message = "Connection made with auction central.";
@@ -54,16 +54,16 @@ class BankProtocol implements Serializable
         System.out.println("[Bank]: " + message);
         break;
       case "new":
-        String agent = ((Agent)request.getSender()).getAgentName();
-        
+        String agent = ((Agent) request.getSender()).getAgentName();
+
         System.out.println("[Bank]: Creating new account for " + agent + ".");
-        account = new BankAccount(agent, ((int)(Math.random()*10)));
+        account = new BankAccount(agent, ((int) (Math.random() * 10)));
         Bank.addAccounts(account);
-        
+
         message = "New account = [ID=" + account.getName() + ", BAL=$" + account.getBalance() + ".00].";
         System.out.println("[Bank]: " + message);
         System.out.println("[Bank]: " + Bank.getNumAccounts() + " account(s) are opened!");
-        
+
         response = new Message(null, "[Bank]: ", message, "Account created", request.getKey(), account.getBalance());
         break;
       case "balance":

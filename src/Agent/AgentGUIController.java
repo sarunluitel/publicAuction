@@ -16,9 +16,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.net.InetAddress;
@@ -32,23 +34,37 @@ public class AgentGUIController extends Application
   private Button connect;
   @FXML
   private TextArea textArea;
-  
+  @FXML
+  private Text txtTotalBidPlaced, txtBankBalance;
+  @FXML
+  private ComboBox<String> itemsComboBox;
+
   private Agent agent;
   private String history = "";
-  
+
   @FXML
   public void initialize()
   {
     textArea.setVisible(false);
     input.setVisible(false);
     textArea.setEditable(false);
+    txtTotalBidPlaced.setVisible(false);
+    txtBankBalance.setVisible(false);
+    itemsComboBox.setVisible(false);
+
   }
 
+  /**
+   * secureConnection() is invoked when btnConnect is clicked. secures connections.
+   * hides old GUIElements and shows interface for agent to work on. starts the4 Agent Thread
+   *
+   * @return void.
+   */
   @FXML
   private void secureConnection()
   {
     agent = new Agent();
-  
+
     try
     {
       agent.setAuctionAddress(InetAddress.getByName(bankIP.getText()));
@@ -59,22 +75,25 @@ public class AgentGUIController extends Application
 
       textArea.setVisible(true);
       input.setVisible(true);
-      
+      txtTotalBidPlaced.setVisible(true);
+      txtBankBalance.setVisible(true);
+      itemsComboBox.setVisible(true);
+
       agent.setMessageText("");
-      synchronized(agent)
+      synchronized (agent)
       {
         agent.notify();
       }
-      
-      input.setOnKeyPressed(e ->
+
+      //The Event input Comes from FXML we do not need Lambda expressions.
+      /*input.setOnKeyPressed(e ->
       {
         if(e.getCode() == KeyCode.ENTER)
         {
-          submitRequest();
+          placeBid();
         }
-      });
-    }
-    catch (UnknownHostException e)
+      });*/
+    } catch (UnknownHostException e)
     {
       e.printStackTrace();
       System.exit(-1);
@@ -84,15 +103,14 @@ public class AgentGUIController extends Application
     try
     {
       agent.start();
-    }
-    catch (Exception e)
+    } catch (Exception e)
     {
       e.printStackTrace();
       System.exit(-1);
     }
 
   }
-  
+
   public static void main(String args[])
   {
     launch(args);
@@ -106,18 +124,18 @@ public class AgentGUIController extends Application
     primaryStage.show();
   }
 
-  
+
   @FXML
-  private void submitRequest()
+  private void placeBid()
   {
-    //Just hit enter to submit!
+    //Just hit enter to place Bid!
     String request = input.getText();
     history = history + request + "\n";
     textArea.setText(history);
     agent.setMessageText(request);
     input.setText("");
-  
-    synchronized(agent)
+
+    synchronized (agent)
     {
       agent.notify();
     }

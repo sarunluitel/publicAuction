@@ -16,7 +16,7 @@ import java.net.Socket;
 class BankThread extends Thread
 {
   private Socket socket = null;
-  
+
   /**
    * Default constructor.
    *
@@ -29,7 +29,7 @@ class BankThread extends Thread
 
     System.out.println("[Bank]: " + socket.toString() + " connected!");
   }
-  
+
   /**
    * Run method for bank thread.
    */
@@ -41,34 +41,33 @@ class BankThread extends Thread
       try
       {
         Message input, output;
-        input = ((Message)in.readObject());
-      
+        input = ((Message) in.readObject());
+
         BankProtocol bankProtocol = new BankProtocol(socket, input);
         out.writeObject(bankProtocol.setup);
-        
+
         while (true)
         {
-          if(input != null)
+          if (input != null)
           {
             System.out.println(input.getSignature() + input.getMessage());
-    
-            input = ((Message)in.readObject());
+
+            input = ((Message) in.readObject());
             output = bankProtocol.handleRequest(input);
-    
+
             out.flush();
             out.writeObject(output);
             input = null;
           }
         }
-      } catch(ClassNotFoundException e)
+      } catch (ClassNotFoundException e)
       {
         System.err.println(e.getMessage());
       }
       in.close();
       out.close();
       socket.close();
-    }
-    catch (IOException e)
+    } catch (IOException e)
     {
       e.printStackTrace();
     }

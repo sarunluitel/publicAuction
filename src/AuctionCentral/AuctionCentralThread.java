@@ -17,7 +17,7 @@ import java.net.SocketException;
 class AuctionCentralThread extends Thread
 {
   private final Socket socket;
-  
+
   /**
    * Default constructor.
    *
@@ -28,7 +28,7 @@ class AuctionCentralThread extends Thread
     super("[AuctionCentralThread]");
     this.socket = socket;
   }
-  
+
   /**
    * Run method for auction central thread.
    */
@@ -40,36 +40,34 @@ class AuctionCentralThread extends Thread
       try
       {
         Message input, output;
-        input = ((Message)in.readObject());
-      
+        input = ((Message) in.readObject());
+
         AuctionCentralProtocol auctionCentralProtocol = new AuctionCentralProtocol(socket, input);
         out.writeObject(auctionCentralProtocol.setup);
-        
+
         while (true)
         {
-          input = ((Message)in.readObject());
-          if(input != null)
+          input = ((Message) in.readObject());
+          if (input != null)
           {
             System.out.println(input.getSignature() + input.getMessage());
-          
-            input = ((Message)in.readObject());
+
+            input = ((Message) in.readObject());
             output = auctionCentralProtocol.handleRequest(input);
-          
+
             out.flush();
             out.writeObject(output);
             input = null;
           }
         }
-      }
-      catch(ClassNotFoundException e)
+      } catch (ClassNotFoundException e)
       {
         System.err.println(e.getMessage());
       }
       in.close();
       out.close();
       socket.close();
-    }
-    catch (IOException e)
+    } catch (IOException e)
     {
       e.printStackTrace();
     }
