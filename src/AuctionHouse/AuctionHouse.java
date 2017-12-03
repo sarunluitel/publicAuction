@@ -92,11 +92,19 @@ public class AuctionHouse implements Serializable
   }
 
   /**
+   * @return auction house public id
+   */
+  public int getPublicId()
+  {
+    return publicId;
+  }
+
+  /**
    * Method sets publicId
    * Used by AuctionCentral
    * @param id
    */
-  public void setPublicId(int id)
+  private void setPublicId(int id)
   {
     publicId = id;
   }
@@ -144,16 +152,24 @@ public class AuctionHouse implements Serializable
         out.flush();
         System.out.println("Sent Register");
 
-        while (true)
+        if(in.available() != 0)
         {
           input = ((Message) in.readObject());
+          house.setPublicId(input.getKey());
+        }
+
+
+        input = null;
+        while (true)
+        {
+          if(in.available() != 0) input = ((Message) in.readObject());
           if (input != null)
           {
             System.out.println(input.getMessage());
 
 
 
-            output = new Message(house, house.getName(), "de-register", "", -1, -1);
+            output = new Message(house, house.getName(), "de-register", "", house.getPublicId(), -1);
             out.writeObject(output);
             out.flush();
             input = null;
