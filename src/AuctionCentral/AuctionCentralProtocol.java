@@ -101,6 +101,7 @@ class AuctionCentralProtocol implements Serializable
       case "de-register":
         auctionRepository.remove(request.getKey());
         message = "De-registering " + auctionRepository +  "...";
+        System.out.println("fuck github");
         response = new Message(null, "[AuctionCentral]: ", message, "De-registered", request.getKey(), 0);
         System.out.println("[AuctionCentral]: " + message);
         break;
