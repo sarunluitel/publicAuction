@@ -127,7 +127,7 @@ public class AuctionHouse implements Serializable
       {
         System.out.println("Connected");
         Message input, output;
-        input = ((Message) in.readObject());
+
         //TEST
         out.writeObject(new Message(house, house.getName(), "register", "", -1, -1));
         out.flush();
@@ -135,11 +135,12 @@ public class AuctionHouse implements Serializable
 
         while (true)
         {
+          input = ((Message) in.readObject());
           if (input != null)
           {
             System.out.println(input.getMessage());
 
-            input = ((Message) in.readObject());
+
 
             output = null;
             out.writeObject(output);
