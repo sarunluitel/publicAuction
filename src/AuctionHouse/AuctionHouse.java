@@ -61,7 +61,8 @@ public class AuctionHouse implements Serializable
   }
 
   private final String name;
-  private final int publicID;
+  private final int houseNum;
+  private int publicId;
   private static int totalHouses = 0;
   private LinkedList<String> itemList = new LinkedList<>();
   private LinkedList<Item> itemsForSale = new LinkedList<>();
@@ -77,8 +78,8 @@ public class AuctionHouse implements Serializable
   public AuctionHouse()
   {
     totalHouses++;
-    publicID = totalHouses;
-    name = "[House-" + publicID + "]";
+    houseNum = totalHouses;
+    name = "[House-" + houseNum + "]";
     setItems();
   }
 
@@ -88,6 +89,16 @@ public class AuctionHouse implements Serializable
   public String getName()
   {
     return this.name;
+  }
+
+  /**
+   * Method sets publicId
+   * Used by AuctionCentral
+   * @param id
+   */
+  public void setPublicId(int id)
+  {
+    publicId = id;
   }
 
   /**
@@ -142,7 +153,7 @@ public class AuctionHouse implements Serializable
 
 
 
-            output = null;
+            output = new Message(house, house.getName(), "de-register", "", -1, -1);
             out.writeObject(output);
             out.flush();
             input = null;
