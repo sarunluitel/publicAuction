@@ -15,7 +15,7 @@ import Message.Message;
 import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
-import AuctionHouse.AuctionHouse.Item;
+import java.util.Random;
 
 public class Agent extends Thread implements Serializable
 {
@@ -23,7 +23,6 @@ public class Agent extends Thread implements Serializable
   private final int agentBankKey;
   private final int agentCentralKey;
   private final String name;
-  private Item item;
 
   private String messageText = "";
   private boolean messageSubmitted = false;
@@ -43,10 +42,29 @@ public class Agent extends Thread implements Serializable
 
   public Agent()
   {
-    publicID = (int) (Math.random() * 1000000);
-    name = "[Agent-" + publicID + "]";
+    publicID = new Random().nextInt(1000);
+    name = giveRandName(new Random().nextInt(20));
     agentBankKey = (int) (Math.random() * 1000000);
     agentCentralKey = (int) (Math.random() * 1000000);
+  }
+
+  private String giveRandName(int input)
+  {
+    if (input % 4 == 0) return "Jacob";
+    else if (input % 4 == 1) return "Jaehee";
+    else if (input % 4 == 2) return "Sarun";
+    else if (input % 4 == 3) return "Vince";
+
+    return "NoName";
+  }
+  public String getAgentPublicID()
+  {
+    return "[Agent-" + publicID + "]";
+  }
+
+  public int getPublicID()
+  {
+    return publicID;
   }
 
   // getName is a built in method after extending thread class. renamed to getAgentName.
@@ -54,6 +72,7 @@ public class Agent extends Thread implements Serializable
   {
     return name;
   }
+
 
   public void setMessageText(String messageText)
   {

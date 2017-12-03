@@ -19,7 +19,7 @@ class BankProtocol implements Serializable
   private Socket socket;
 
   private Message message;
-  public Message setup;
+//  public Message setup;
 
   private BankAccount account;
 
@@ -33,7 +33,7 @@ class BankProtocol implements Serializable
   {
     this.socket = socket;
     this.message = message;
-    setup = handleRequest(message);
+//    setup = handleRequest(message);
   }
 
   /**
@@ -55,15 +55,18 @@ class BankProtocol implements Serializable
         System.out.println("[Bank]: " + message);
         break;
       case "new":
-        String agent = ((Agent) request.getSender()).getAgentName();
+        String name = ((Agent) request.getSender()).getAgentName();
+        int publicID =  ((Agent) request.getSender()).getPublicID();
 
-        System.out.println("[Bank]: Creating new account for " + agent + ".");
-        account = new BankAccount(agent, ((int) (Math.random() * 10)));
+        System.out.println("[Bank]: Creating new account for " + name + ".");
+
+        account = new BankAccount(name, publicID, 500);
         Bank.addAccounts(account);
 
-        message = "New account = [ID=" + account.getName() + ", BAL=$" + account.getBalance() + ".00].";
+        message = "New account = [NAME=" + account.getName() + ", ID=" + account.getPublicID()+ ", BAL=$" + account.getBalance() + ".00].";
         System.out.println("[Bank]: " + message);
         System.out.println("[Bank]: " + Bank.getNumAccounts() + " account(s) are opened!");
+
         response = new Message(null, "[Bank]: ", message, "Account created", request.getKey(), account.getBalance());
         break;
 
