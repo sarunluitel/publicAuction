@@ -128,7 +128,7 @@ public class AuctionHouse implements Serializable
         System.out.println("Connected");
         Message input, output;
         input = ((Message) in.readObject());
-
+        //TEST
         out.writeObject(new Message(house, house.getName(), "register", "", -1, -1));
         out.flush();
         System.out.println("Sent Register");
