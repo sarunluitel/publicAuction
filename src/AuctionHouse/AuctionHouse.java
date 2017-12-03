@@ -21,7 +21,7 @@ import java.util.Scanner;
 
 public class AuctionHouse implements Serializable
 {
-  public class Item
+  public class Item implements Serializable
   {
     private String itemName;
     private int agentKey;
