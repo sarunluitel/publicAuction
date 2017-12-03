@@ -21,7 +21,7 @@ import java.util.Scanner;
 
 public class AuctionHouse implements Serializable
 {
-  public class Item
+  public class Item implements Serializable
   {
     private String itemName;
     private int agentKey;
@@ -126,7 +126,7 @@ public class AuctionHouse implements Serializable
       try
       {
         System.out.println("Connected");
-        Message input, output;
+        Message input = null, output = null;
 
         //TEST
         out.writeObject(new Message(house, house.getName(), "register", "", -1, -1));
@@ -135,7 +135,7 @@ public class AuctionHouse implements Serializable
 
         while (true)
         {
-          input = ((Message) in.readObject());
+          if(in.available() != 0) input = ((Message) in.readObject());
           if (input != null)
           {
             System.out.println(input.getMessage());

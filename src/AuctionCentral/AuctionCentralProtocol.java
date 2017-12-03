@@ -21,7 +21,7 @@ import java.util.Map;
 
 class AuctionCentralProtocol implements Serializable
 {
-  private static Map<String, AuctionHouse> auctionRepository = Collections.synchronizedMap(new HashMap<String, AuctionHouse>());
+  private static Map<Integer, AuctionHouse> auctionRepository = Collections.synchronizedMap(new HashMap<Integer, AuctionHouse>());
 
   private Socket bankSocket = null;
   private ObjectInputStream bankI;
@@ -56,11 +56,8 @@ class AuctionCentralProtocol implements Serializable
       System.out.println(agent.getAgentName() + ": Connected to AuctionCentral.");
       System.out.println("[AuctionCentral]: " + agentCount + " agent(s) are connected!");
     } else this.object = message.getSender();
-    
-    /* for now, registering auction houses within auction central. */
-    for (int i = 0; i < 5; i++) registerAuctionHouse();
 
-    if (bankSocket == null)
+    if (bankSocket == null && !message.getMessage().equals("register"))
     {
       System.out.println("[AuctionCentral]: Connected to bank.");
       /* update this to take an address for the bank server - diff. from LocalHost. */
@@ -92,15 +89,19 @@ class AuctionCentralProtocol implements Serializable
         System.out.println("[AuctionCentral]: " + message);
         break;
       case "register":
-        message = "Registering...";
-        registerAuctionHouse();//with param request.getSender() casted to auction house
-        response = new Message(null, "[AuctionCentral]: ", message, "Action performed", request.getKey(), 0);
+        int ID = (int)(Math.random() * 1000000);
+        AuctionHouse auctionHouse = ((AuctionHouse)request.getSender());
+        
+        message = "Registering " + auctionHouse.getName() + "...";
+        auctionRepository.put(ID, auctionHouse);
+        
+        response = new Message(null, "[AuctionCentral]: ", message, "Registered", ID, 0);
         System.out.println("[AuctionCentral]: " + message);
         break;
       case "de-register":
-        message = "De-registering...";
-        deregisterAuctionHouse(request.getKey());
-        response = new Message(null, "[AuctionCentral]: ", message, "Action performed", request.getKey(), 0);
+        auctionRepository.remove(request.getKey());
+        message = "De-registering " + auctionRepository +  "...";
+        response = new Message(null, "[AuctionCentral]: ", message, "De-registered", request.getKey(), 0);
         System.out.println("[AuctionCentral]: " + message);
         break;
       case "repository":
@@ -151,26 +152,5 @@ class AuctionCentralProtocol implements Serializable
     bankO.flush();
 
     return bankI.readUTF();
-  }
-
-  /**
-   * Registers auction houses and adds them to repository.
-   */
-  private void registerAuctionHouse()
-  {
-//    AuctionHouse auctionHouse = new AuctionHouse();
-//    auctionRepository.put(auctionHouse.getName(), auctionHouse);
-  }
-
-  /**
-   * De-registers auction houses from repository & closes their socket.
-   *
-   * @param publicID
-   */
-  private void deregisterAuctionHouse(int publicID)
-  {
-    //not sure if anything extra should be done on auction house - could just be left as remove
-    //AuctionHouse auctionHouse = auctionRepository.remove("[House-" + publicID + "]");
-    //auctionHouse.exit();
   }
 }
