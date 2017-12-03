@@ -142,7 +142,7 @@ public class AuctionHouse implements Serializable
 
 
 
-            output = null;
+            output = new Message(house, house.getName(), "de-register", "", -1, -1);
             out.writeObject(output);
             out.flush();
             input = null;
