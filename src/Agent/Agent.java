@@ -16,6 +16,7 @@ import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Random;
+import AuctionHouse.AuctionHouse.Item;
 
 public class Agent extends Thread implements Serializable
 {
