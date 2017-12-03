@@ -30,7 +30,7 @@ public class AuctionHouse
 
     public Item(int num)
     {
-      itemName = "Item" + num;
+      itemName = "Items" + num;
       bidAmount = 100;
     }
 
