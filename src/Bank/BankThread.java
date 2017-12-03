@@ -45,6 +45,7 @@ class BankThread extends Thread
 
         BankProtocol bankProtocol = new BankProtocol(socket, input);
         out.writeObject(bankProtocol.setup);
+        out.flush();
 
         while (true)
         {
@@ -52,11 +53,11 @@ class BankThread extends Thread
           {
             System.out.println(input.getSignature() + input.getMessage());
 
-            input = ((Message) in.readObject());
+            if(in.available()!=0)input = ((Message) in.readObject());
             output = bankProtocol.handleRequest(input);
 
-            out.flush();
             out.writeObject(output);
+            out.flush();
             input = null;
           }
         }

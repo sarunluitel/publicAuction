@@ -44,6 +44,7 @@ class AuctionCentralThread extends Thread
 
         AuctionCentralProtocol auctionCentralProtocol = new AuctionCentralProtocol(socket, input);
         out.writeObject(auctionCentralProtocol.setup);
+        out.flush();
 
         while (true)
         {
@@ -52,7 +53,7 @@ class AuctionCentralThread extends Thread
           {
             System.out.println(input.getSignature() + input.getMessage());
 
-            input = ((Message) in.readObject());
+            if(in.available()!=0)input = ((Message) in.readObject());
             output = auctionCentralProtocol.handleRequest(input);
 
             out.flush();

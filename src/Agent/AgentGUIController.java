@@ -86,14 +86,6 @@ public class AgentGUIController extends Application
         agent.notify();
       }
 
-      //The Event input Comes from FXML we do not need Lambda expressions.
-      /*input.setOnKeyPressed(e ->
-      {
-        if(e.getCode() == KeyCode.ENTER)
-        {
-          placeBid();
-        }
-      });*/
     } catch (UnknownHostException e)
     {
       e.printStackTrace();
@@ -102,11 +94,16 @@ public class AgentGUIController extends Application
 
     // run code to setup connections after we get addresses to bank and Auction Central
     agent.start();
+
+
     new AnimationTimer() {
       @Override
       public void handle(long now) {
         if(agent.MsgFrmBank!=null)
+        {
         txtBankBalance.setText("$$$ - "+agent.MsgFrmBank.getAmount());
+
+        }
       }
     }.start();
 
@@ -131,11 +128,15 @@ public class AgentGUIController extends Application
   {
     //Just hit enter to place Bid!
     String request = input.getText();
-    history = history + request + "\n";
-    textArea.setText(history);
-    agent.setMessageText(request);
-    input.setText("");
+    if(!request.equals(""))
+    {
 
+      history += request + "\n";
+     if(agent.MsgFrmBank!=null) history += agent.MsgFrmBank.getSignature() + agent.MsgFrmBank.getMessage()+ "\n";
+      textArea.setText(history);
+      agent.setMessageText(request);
+      input.setText("");
+    }
     synchronized (agent)
     {
       agent.notify();

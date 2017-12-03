@@ -68,16 +68,22 @@ public class Agent extends Thread implements Serializable
       try
       {
         ObjectOutputStream auctionOut = new ObjectOutputStream(auctionCentralSocket.getOutputStream());
+        auctionOut.flush();
         ObjectOutputStream bankOut = new ObjectOutputStream(bankSocket.getOutputStream());
+        bankOut.flush();
+
         ObjectInputStream auctionIn = new ObjectInputStream(auctionCentralSocket.getInputStream());
         ObjectInputStream bankIn = new ObjectInputStream(bankSocket.getInputStream());
+
         try
         {
           Message bankInput, bankOutput, auctionInput, auctionOutput;
           System.out.println(this.name + ": Log in successful!");
 
           bankOut.writeObject(new Message(this, this.getAgentName() + ": ", "new", "", this.agentBankKey, -1));
+          bankOut.flush();
           auctionOut.writeObject(new Message(this, this.getAgentName() + ": ", "new", auctionAddress.toString(), this.agentCentralKey, -1));
+          auctionOut.flush();
 
           while (true)
           {
@@ -109,12 +115,13 @@ public class Agent extends Thread implements Serializable
             }
 
             System.out.println(this.getAgentName() + ": Reading from auction central...");
-            //auctionInput = ((Message) auctionIn.readObject());
+            if(auctionIn.available()!=0)   auctionInput = ((Message) auctionIn.readObject());
+
             System.out.println(this.getAgentName() + ": Reading from bank...");
-            bankInput = ((Message) bankIn.readObject());
-            //MsgFrmAuction=auctionInput;
+            if(bankIn.available()!=0) bankInput = ((Message) bankIn.readObject());
+            MsgFrmAuction=auctionInput;
             MsgFrmBank= bankInput;
-            System.out.println(MsgFrmBank.getAmount());
+           // System.out.println(MsgFrmBank.getAmount());
 
 
             if (bankInput != null)

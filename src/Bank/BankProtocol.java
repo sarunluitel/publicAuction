@@ -46,6 +46,7 @@ class BankProtocol implements Serializable
   {
     Message response;
     String message;
+    System.out.println(request.getMessage()+"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
     switch (request.getMessage())
     {
       case "auction central":
@@ -64,37 +65,38 @@ class BankProtocol implements Serializable
         System.out.println("[Bank]: " + message);
         System.out.println("[Bank]: " + Bank.getNumAccounts() + " account(s) are opened!");
         response = new Message(null, "[Bank]: ", message, "Account created", request.getKey(), account.getBalance());
-        System.out.println(response.getAmount()+"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         break;
 
       case "balance":
         message = "See amount for balance.";
-        response = new Message(this, "[Bank]: ", message, "Balance provided", request.getKey(), account.getBalance());
+        response = new Message(null, "[Bank]: ", message, "Balance provided", request.getKey(), account.getBalance());
         System.out.println("[Bank]: " + message);
         break;
       case "block":
         message = "Blocking " + account.getBalance() + " on " + account.getName() + "'s...";
-        response = new Message(this, "[Bank]: ", message, "Blocked an amount", request.getKey(), account.getBalance());
+        response = new Message(null, "[Bank]: ", message, "Blocked an amount", request.getKey(), account.getBalance());
         System.out.println("[Bank]: " + message);
         break;
       case "unblock":
         message = "Unblocking " + account.getBalance() + " on " + account.getName() + "'s...";
-        response = new Message(this, "[Bank]: ", message, "Blocked an amount", request.getKey(), account.getBalance());
+        response = new Message(null, "[Bank]: ", message, "Blocked an amount", request.getKey(), account.getBalance());
         System.out.println("[Bank]: " + message);
         break;
       case "transaction":
         message = "Purchase made, removing $" + account.getBalance() + ".00 from " + account.getName() + "'s account...";
-        response = new Message(this, "[Bank]: ", message, "Funds removed", request.getKey(), account.getBalance());
+        response = new Message(null, "[Bank]: ", message, "Funds removed", request.getKey(), account.getBalance());
         System.out.println("[Bank]: " + message);
         break;
       case "EXIT":
         message = "Goodbye!";
-        response = new Message(this, "[Bank]: ", message, "Goodbye!", request.getKey(), account.getBalance());
+        response = new Message(null, "[Bank]: ", message, "Goodbye!", request.getKey(), account.getBalance());
         System.out.println("[Bank]: " + message);
         break;
+
       default:
         message = "Error - request not recognized.";
-        response = new Message(null, "[Bank]: ", message, "", -1, account.getBalance());
+        int balance = (account != null) ? account.getBalance() : -1;
+        response = new Message(null, "[Bank]: ", message, "", -1, balance);
         System.out.println("[Bank]: " + message);
         break;
     }

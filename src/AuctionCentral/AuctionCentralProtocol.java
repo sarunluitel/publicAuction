@@ -68,7 +68,8 @@ class AuctionCentralProtocol implements Serializable
       bankO = new ObjectOutputStream(bankSocket.getOutputStream());
       bankI = new ObjectInputStream(bankSocket.getInputStream());
 
-      bankO.writeObject(new Message(null, "[AuctionCentral]: ", "Hello, friend.", "", 0, 0));
+      bankO.writeObject(new Message(null, "[AuctionCentral]: ", "auction central", "", 0, 0));
+      bankO.flush();
     }
     setup = handleRequest(message);
   }
@@ -93,29 +94,29 @@ class AuctionCentralProtocol implements Serializable
       case "register":
         message = "Registering...";
         registerAuctionHouse();//with param request.getSender() casted to auction house
-        response = new Message(this, "[AuctionCentral]: ", message, "Action performed", request.getKey(), 0);
+        response = new Message(null, "[AuctionCentral]: ", message, "Action performed", request.getKey(), 0);
         System.out.println("[AuctionCentral]: " + message);
         break;
       case "de-register":
         message = "De-registering...";
         deregisterAuctionHouse(request.getKey());
-        response = new Message(this, "[AuctionCentral]: ", message, "Action performed", request.getKey(), 0);
+        response = new Message(null, "[AuctionCentral]: ", message, "Action performed", request.getKey(), 0);
         System.out.println("[AuctionCentral]: " + message);
         break;
       case "repository":
         message = auctionRepository.toString();
-        response = new Message(this, "[AuctionCentral]: ", message, "House list", request.getKey(), auctionRepository.size());
+        response = new Message(null, "[AuctionCentral]: ", message, "House list", request.getKey(), auctionRepository.size());
         System.out.println("[AuctionCentral]: " + message);
         break;
       case "transaction":
         message = "Mitigating transaction...";
-        response = new Message(this, "[AuctionCentral]: ", message, "Mitigated transaction", request.getKey(), 0);
+        response = new Message(null, "[AuctionCentral]: ", message, "Mitigated transaction", request.getKey(), 0);
         //handleTransaction(message.get)
         System.out.println("[AuctionCentral]: " + message);
         break;
       case "EXIT":
         message = "Goodbye!";
-        response = new Message(this, "[AuctionCentral]: ", message, "Goodbye!", request.getKey(), 0);
+        response = new Message(null, "[AuctionCentral]: ", message, "Goodbye!", request.getKey(), 0);
         System.out.println("[AuctionCentral]: " + message);
         break;
       default:
