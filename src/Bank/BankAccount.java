@@ -9,11 +9,14 @@
 
 package Bank;
 
+import java.util.ArrayList;
+
 class BankAccount
 {
   private final String name;
-  private int balance, holds[];
-
+  private final int publicID;
+  private int balance;
+  private ArrayList<Integer> holds;
   /**
    * Default constructor.
    *
@@ -21,11 +24,14 @@ class BankAccount
    * @param name
    * @param balance
    */
-  public BankAccount(String name, int balance)
+  public BankAccount(String name, int publicID, int balance)
   {
     this.name = name;
-    this.balance = (balance < 1) ? 1000 : balance * 1000;
-    this.holds = null;
+    this.publicID = publicID;
+    this.balance = balance;
+    this.holds = new ArrayList<>();
+//    balance - amount
+//    holds [] = amount
   }
 
   /**
@@ -37,10 +43,22 @@ class BankAccount
   }
 
   /**
+   * @return publicID associated with account.
+   */
+  public int getPublicID()
+  {
+    return publicID;
+  }
+
+  /**
    * @return balance associated with account.
    */
   public int getBalance()
   {
     return balance;
+  }
+
+  public void addHolds()
+  {
   }
 }
