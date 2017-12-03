@@ -19,7 +19,7 @@ import java.net.Socket;
 import java.util.LinkedList;
 import java.util.Scanner;
 
-public class AuctionHouse
+public class AuctionHouse implements Serializable
 {
   public class Item
   {
@@ -97,13 +97,15 @@ public class AuctionHouse
    */
   private void setItems()
   {
-    for (int i = 1; i < 4; i++)
+    for (int i = 0; i < 3; i++)
     {
       itemsForSale.add(new Item(i));
       itemsForSale.get(i).setCurrentBid(100);
     }
 
   }
+
+
 
   /**
    * Main method for auction house.
@@ -113,14 +115,23 @@ public class AuctionHouse
    */
   public static void main(String args[]) throws IOException
   {
-    Socket socket = new Socket(InetAddress.getLocalHost(), 1111);
+    AuctionHouse house = new AuctionHouse();
+    Scanner scan = new Scanner(System.in);
+    System.out.println("Enter the address: ");
+    String address = scan.nextLine();
+    Socket socket = new Socket(InetAddress.getByName(address), 1111);
     try (ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
          ObjectInputStream in = new ObjectInputStream(socket.getInputStream()))
     {
       try
       {
+        System.out.println("Connected");
         Message input, output;
         input = ((Message) in.readObject());
+
+        out.writeObject(new Message(house, house.getName(), "register", "", -1, -1));
+        out.flush();
+        System.out.println("Sent Register");
 
         while (true)
         {
@@ -132,7 +143,7 @@ public class AuctionHouse
 
             output = null;
             out.writeObject(output);
-
+            out.flush();
             input = null;
           }
         }

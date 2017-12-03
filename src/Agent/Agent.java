@@ -15,6 +15,7 @@ import Message.Message;
 import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
+import AuctionHouse.AuctionHouse.Item;
 
 public class Agent extends Thread implements Serializable
 {
@@ -22,6 +23,7 @@ public class Agent extends Thread implements Serializable
   private final int agentBankKey;
   private final int agentCentralKey;
   private final String name;
+  private Item item;
 
   private String messageText = "";
   private boolean messageSubmitted = false;
