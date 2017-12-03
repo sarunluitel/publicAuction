@@ -10,6 +10,7 @@
 
 package Agent;
 
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -101,7 +102,13 @@ public class AgentGUIController extends Application
 
     // run code to setup connections after we get addresses to bank and Auction Central
     agent.start();
-
+    new AnimationTimer() {
+      @Override
+      public void handle(long now) {
+        if(agent.MsgFrmBank!=null)
+        txtBankBalance.setText("$$$ - "+agent.MsgFrmBank.getAmount());
+      }
+    }.start();
 
   }
 

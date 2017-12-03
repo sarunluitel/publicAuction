@@ -63,9 +63,10 @@ class BankProtocol implements Serializable
         message = "New account = [ID=" + account.getName() + ", BAL=$" + account.getBalance() + ".00].";
         System.out.println("[Bank]: " + message);
         System.out.println("[Bank]: " + Bank.getNumAccounts() + " account(s) are opened!");
-
         response = new Message(null, "[Bank]: ", message, "Account created", request.getKey(), account.getBalance());
+        System.out.println(response.getAmount()+"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         break;
+
       case "balance":
         message = "See amount for balance.";
         response = new Message(this, "[Bank]: ", message, "Balance provided", request.getKey(), account.getBalance());
@@ -93,7 +94,7 @@ class BankProtocol implements Serializable
         break;
       default:
         message = "Error - request not recognized.";
-        response = new Message(null, "[Bank]: ", message, "", -1, -1);
+        response = new Message(null, "[Bank]: ", message, "", -1, account.getBalance());
         System.out.println("[Bank]: " + message);
         break;
     }

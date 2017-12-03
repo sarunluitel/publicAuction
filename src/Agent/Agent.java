@@ -27,6 +27,7 @@ public class Agent extends Thread implements Serializable
   private boolean messageSubmitted = false;
 
   private InetAddress bankAddress, auctionAddress;
+  public Message MsgFrmAuction, MsgFrmBank;
 
   public void setBankAddress(InetAddress bankAddress)
   {
@@ -108,10 +109,13 @@ public class Agent extends Thread implements Serializable
             }
 
             System.out.println(this.getAgentName() + ": Reading from auction central...");
-            auctionInput = ((Message) auctionIn.readObject());
-            System.out.println(auctionInput.getSender()+"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            //auctionInput = ((Message) auctionIn.readObject());
             System.out.println(this.getAgentName() + ": Reading from bank...");
             bankInput = ((Message) bankIn.readObject());
+            //MsgFrmAuction=auctionInput;
+            MsgFrmBank= bankInput;
+            System.out.println(MsgFrmBank.getAmount());
+
 
             if (bankInput != null)
             {

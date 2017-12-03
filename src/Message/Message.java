@@ -13,7 +13,7 @@ public class Message implements Serializable
   private int amount;
   private int key;
 
-  public Message(Object sender, String signature, String message, String item, int amount, int key)
+  public Message(Object sender, String signature, String message, String item, int key, int amount)
   {
     this.sender = sender;
     this.signature = signature;
