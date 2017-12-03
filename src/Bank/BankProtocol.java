@@ -19,7 +19,7 @@ class BankProtocol implements Serializable
   private Socket socket;
 
   private Message message;
-  public Message setup;
+//  public Message setup;
 
   private BankAccount account;
 
@@ -33,7 +33,7 @@ class BankProtocol implements Serializable
   {
     this.socket = socket;
     this.message = message;
-    setup = handleRequest(message);
+//    setup = handleRequest(message);
   }
 
   /**
