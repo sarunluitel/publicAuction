@@ -95,13 +95,13 @@ class AuctionCentralProtocol implements Serializable
         message = "Registering " + auctionHouse.getName() + "...";
         auctionRepository.put(ID, auctionHouse);
         
-        response = new Message(null, "[AuctionCentral]: ", message, "Registered", ID, 0);
+        response = new Message(null, "[AuctionCentral]: ", message, "Registered", ID, auctionRepository.size());
         System.out.println("[AuctionCentral]: " + message);
         break;
       case "de-register":
         auctionRepository.remove(request.getKey());
         message = "De-registering " + auctionRepository +  "...";
-        response = new Message(null, "[AuctionCentral]: ", message, "De-registered", request.getKey(), 0);
+        response = new Message(null, "[AuctionCentral]: ", message, "De-registered", request.getKey(), auctionRepository.size());
         System.out.println("[AuctionCentral]: " + message);
         break;
       case "repository":

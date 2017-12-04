@@ -60,16 +60,12 @@ public class AuctionHouse implements Serializable
     }
   }
 
-  private final String name;
-  private final int houseNum;
+  private String name;
+  private int index;
   private int publicId;
-  private static int totalHouses = 0;
   private LinkedList<String> itemList = new LinkedList<>();
   private LinkedList<Item> itemsForSale = new LinkedList<>();
-
-
-
-
+  
   /**
    * Default constructor.
    * <p>
@@ -77,12 +73,19 @@ public class AuctionHouse implements Serializable
    */
   public AuctionHouse()
   {
-    totalHouses++;
-    houseNum = totalHouses;
-    name = "[House-" + houseNum + "]";
+    name = "[House-...]";
     setItems();
   }
-
+  
+  public void setIndex(int index) {
+    name = "[House-" + index + "]";
+    this.index = index;
+  }
+  
+  public int getIndex() {
+    return index;
+  }
+  
   /**
    * @return name of this auction house.
    */
@@ -145,31 +148,26 @@ public class AuctionHouse implements Serializable
       try
       {
         System.out.println("Connected");
-        Message input, output;
+        Message input = null, output = null;
 
         //TEST
         out.writeObject(new Message(house, house.getName(), "register", "", -1, -1));
         out.flush();
         System.out.println("Sent Register");
-
-        if(in.available() != 0)
-        {
-          input = ((Message) in.readObject());
-          house.setPublicId(input.getKey());
-        }
-
-
-        input = null;
+        
         while (true)
         {
           if(in.available() != 0) input = ((Message) in.readObject());
           if (input != null)
           {
+            if(house.getPublicId() == 0)
+            {
+              house.setIndex(input.getAmount());
+              house.setPublicId(input.getKey());
+            }
             System.out.println(input.getMessage());
-
-
-
-            output = new Message(house, house.getName(), "de-register", "", house.getPublicId(), -1);
+            
+            output = new Message(house, house.getName(), "de-register", "", house.getPublicId(), house.getIndex());
             out.writeObject(output);
             out.flush();
             input = null;
