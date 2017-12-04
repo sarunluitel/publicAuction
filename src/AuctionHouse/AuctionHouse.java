@@ -73,13 +73,14 @@ public class AuctionHouse implements Serializable
    */
   public AuctionHouse()
   {
-    name = "[House-...]";
+    name = "[House-...] ";
     setItems();
   }
   
   public void setIndex(int index) {
-    name = "[House-" + index + "]";
+    name = "[House-" + index + "] ";
     this.index = index;
+    System.out.println(name);
   }
   
   public int getIndex() {
@@ -139,7 +140,7 @@ public class AuctionHouse implements Serializable
   {
     AuctionHouse house = new AuctionHouse();
     Scanner scan = new Scanner(System.in);
-    System.out.println("Enter the address: ");
+    System.out.println("Enter Auction Central's IP: ");
     String address = scan.nextLine();
     Socket socket = new Socket(InetAddress.getByName(address), 1111);
     try (ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
@@ -155,16 +156,15 @@ public class AuctionHouse implements Serializable
         out.flush();
         System.out.println("Sent Register");
         
+        input = ((Message)in.readObject());
+        house.setIndex(input.getAmount());
+        house.setPublicId(input.getKey());
+        
         while (true)
         {
           if(in.available() != 0) input = ((Message) in.readObject());
           if (input != null)
           {
-            if(house.getPublicId() == 0)
-            {
-              house.setIndex(input.getAmount());
-              house.setPublicId(input.getKey());
-            }
             System.out.println(input.getMessage());
             
             output = new Message(house, house.getName(), "de-register", "", house.getPublicId(), house.getIndex());
