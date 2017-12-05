@@ -13,6 +13,8 @@ public class Message implements Serializable
   private final int amount;
   private final int key;
 
+  private long timestamp;
+  
   public Message(Object sender, String signature, String message, String item, int key, int amount)
   {
     this.sender = sender;
@@ -21,6 +23,8 @@ public class Message implements Serializable
     this.item = item;
     this.amount = amount;
     this.key = key;
+    
+    timestamp = System.currentTimeMillis();
   }
 
   public String getSignature()
@@ -51,5 +55,10 @@ public class Message implements Serializable
   public int getKey()
   {
     return key;
+  }
+  
+  public long getTimestamp()
+  {
+    return timestamp;
   }
 }

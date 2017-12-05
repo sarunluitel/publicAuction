@@ -11,6 +11,7 @@
 package Agent;
 
 import AuctionHouse.AuctionHouse;
+import Message.Message;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -28,10 +29,13 @@ import javafx.stage.Stage;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class AgentGUIController extends Application
 {
+  private final SimpleDateFormat time = new SimpleDateFormat("h:mm:ss");
+  
   @FXML
   private TextField bankIP, auctionIP, input;
   @FXML
@@ -170,9 +174,10 @@ public class AgentGUIController extends Application
     
     if(!request.equals(""))
     {
+      Message bankIn = agent.MsgFrmBank, auctionIn = agent.MsgFrmAuction;
       history += request + "\n";
-      if(agent.MsgFrmBank!=null) history += agent.MsgFrmBank.getSignature() + agent.MsgFrmBank.getMessage()+ "\n";
-      if(agent.MsgFrmAuction!=null) history += agent.MsgFrmAuction.getSignature() + agent.MsgFrmAuction.getMessage()+ "\n";
+      if(agent.MsgFrmBank!=null) history += time.format(new Date(bankIn.getTimestamp())) + " | " + bankIn.getSignature() + bankIn.getMessage()+ "\n";
+      if(agent.MsgFrmAuction!=null) history += time.format(new Date(auctionIn.getTimestamp())) + " | " + auctionIn.getSignature() + auctionIn.getMessage()+ "\n";
       textArea.setText(history);
       
       agent.setMessageText(request);
