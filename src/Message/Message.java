@@ -1,3 +1,12 @@
+/*
+ * CS351L Project #4: PublicAuction.
+ * Jacob Hurst, Jaehee Shin, Sarun Luitel, Vincent Huber.
+ * 12/01/17
+ *
+ * Message.java - messages passed between sockets rather than using text for simplicity.
+ * Messages contain a sender, signature, message, item, amount, key, and timestamp.
+ */
+
 package Message;
 
 import java.io.Serializable;
