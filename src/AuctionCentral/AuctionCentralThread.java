@@ -47,21 +47,21 @@ class AuctionCentralThread extends Thread
 
         while (true)
         {
-          if(in.available() != 0) input = ((Message) in.readObject());
           if (input != null)
           {
             System.out.println(input.getSignature() + input.getMessage());
             
-            if(in.available()!=0)input = ((Message) in.readObject());
+//            if(in.available()!=0)input = ((Message) in.readObject());
             output = auctionCentralProtocol.handleRequest(input);
   
             System.out.println("[AuctionCentral]: Sending " + output.getMessage() + " to " + socket.toString());
             
             out.writeObject(output);
             out.flush();
-  
+            
             input = null;
           }
+          if(in.available() != 0) input = ((Message) in.readObject());
         }
       }
       catch (ClassNotFoundException e)

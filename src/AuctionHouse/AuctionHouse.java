@@ -191,7 +191,6 @@ public class AuctionHouse implements Serializable
         
         while (true)
         {
-          if(in.available() != 0) input = ((Message) in.readObject());
           if (input != null)
           {
             System.out.println(input.getSignature() + input.getMessage());
@@ -199,12 +198,14 @@ public class AuctionHouse implements Serializable
             output = auctionHouseProtocol.handleRequest(input);
             if(!output.getMessage().isEmpty())
             {
+              System.out.println(house.name + ": Sending " + output.getMessage() + " to " + socket.toString());
               out.writeObject(output);
               out.flush();
             }
             
             input = null;
           }
+          if(in.available() != 0) input = ((Message) in.readObject());
         }
       }
       catch (ClassNotFoundException e)
