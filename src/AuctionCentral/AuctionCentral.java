@@ -46,6 +46,7 @@ class AuctionCentral
       {
         new AuctionCentralThread(serverSocket.accept()).start();
       }
+      
     }
     catch (IOException e)
     {
