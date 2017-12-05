@@ -39,9 +39,13 @@ public class AuctionHouseProtocol
         System.out.println(house.getName() + ": " + message);
         break;
       case "bid":
-        message = "accepted.";
+        message = "accepted";
         response = new Message(this, house.getName() + ": ", message, /*house.getItem()*/"", request.getKey(), 100);
         System.out.println(house.getName() + ": " + message);
+        break;
+      case "confirmation":
+        message = "";
+        response = new Message(null, house.getName() + ": ", message, "", -1, -1);
         break;
       default:
         message = "Error - request not recognized.";
