@@ -23,20 +23,19 @@ Version 1 contains the initial GUI. In this version, all connections are made an
 Agent will display a GUI - in this GUI, there will be two textfields to input your IP addresses for the Bank & Auction Central - provide the IP addresses in their respective textfields and then click "Connect" to connect to the servers. <br>
 5) Once the connections have been made, you may begin submitting messages to Auction Central (updates are provided automatically from Bank) & view Auction Central's responses. <br>
 6) As updates from Bank are automatic & Auction Central relays messages to Auction Houses & the Bank, the only commands that the agent needs to worry about are the commands it sends the Auction Central. <br><br>
-See the list of Auction Central commands below for more details. <br>
+* See the list of Auction Central commands below for more details. <br>
 
 # Auction Central's list of commands:
 * "repository"  Provides latest listings of auction houses. <br>
-* "connect" - Connects agent to an auction house (NOT SUPPORTED IN V1). <br><br>
+* "connect" - Connects agent to an auction house (NOT SUPPORTED IN V1). <br>
 * Note: additional internal commands passed automatically between houses & bank. <br>
 
 # Auction House list of commands:
 * "current" - Provides current items being sold at auction house. <br>
-* "bid" - Requests bid on selected item & is returned whether the bid was accepted or declined. <br><br>
+* "bid" - Requests bid on selected item & is returned whether the bid was accepted or declined. <br>
 * Note: additional internal commands passed automatically between auction central. <br>
 
 # Bank list of commands:
-<br>
 * Note: all internal commands passed & received.
 
 # Known Bugs:
