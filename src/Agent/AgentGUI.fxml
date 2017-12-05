@@ -17,7 +17,7 @@
     <TextField fx:id="input" layoutX="150.0" layoutY="412.0" prefHeight="30.0" prefWidth="300.0" promptText="Bid" />
     <Button fx:id="btnBid" defaultButton="true" layoutX="210.0" layoutY="460.0" mnemonicParsing="false" onAction="#placeBid" prefHeight="30.0" prefWidth="200.0" text="Bid" />
       <ComboBox fx:id="itemsComboBox" layoutX="150.0" layoutY="374.0" prefHeight="25.0" prefWidth="300.0" promptText="Select Items to Bid on" />
-      <Text fx:id="txtBankBalance" fill="#0eeb1d" layoutX="466.0" layoutY="96.0" strokeType="OUTSIDE" strokeWidth="0.0" text="\Balance: $0.00" wrappingWidth="131.13671875">
+      <Text fx:id="txtBankBalance" fill="#0eeb1d" layoutX="466.0" layoutY="96.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Balance: $0.00" wrappingWidth="131.13671875">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
