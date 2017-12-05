@@ -175,7 +175,7 @@ public class AgentGUIController extends Application
     if(!request.equals(""))
     {
       Message bankIn = agent.MsgFrmBank, auctionIn = agent.MsgFrmAuction;
-      history += request + "\n";
+      history += time.format(new Date(System.currentTimeMillis())) + " | " + agent.getAgentName() + request + "\n";
       if(agent.MsgFrmBank!=null) history += time.format(new Date(bankIn.getTimestamp())) + " | " + bankIn.getSignature() + bankIn.getMessage()+ "\n";
       if(agent.MsgFrmAuction!=null) history += time.format(new Date(auctionIn.getTimestamp())) + " | " + auctionIn.getSignature() + auctionIn.getMessage()+ "\n";
       textArea.setText(history);

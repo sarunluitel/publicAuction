@@ -65,11 +65,11 @@ public class Agent extends Thread implements Serializable
    */
   private String randomName(int input)
   {
-    String name = "Agent";
-    if (input % 4 == 0) name = "Jacob";
-    else if (input % 4 == 1) name = "Jaehee";
-    else if (input % 4 == 2) name = "Sarun";
-    else if (input % 4 == 3) name = "Vince";
+    String name = "[Agent-" + getPublicID() + "]: ";
+    if (input % 4 == 0) name = "[Jacob-" + getPublicID() + "]: ";
+    else if (input % 4 == 1) name = "[Jaehee-" + getPublicID() + "]: ";
+    else if (input % 4 == 2) name = "[Sarun-" + getPublicID() + "]: ";
+    else if (input % 4 == 3) name = "[Vincent-" + getPublicID() + "]: ";
     return name;
   }
   
