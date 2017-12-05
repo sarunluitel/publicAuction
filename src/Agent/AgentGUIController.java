@@ -107,18 +107,18 @@ public class AgentGUIController extends Application
     new AnimationTimer() {
       @Override
       public void handle(long now) {
-        if(agent.MsgFrmBank!=null)
+        if(agent.bankInput!=null)
         {
-          txtBankBalance.setText("$$$ - "+agent.MsgFrmBank.getAmount());
+          txtBankBalance.setText("Balance: $" + agent.bankInput.getAmount() + ".00");
         }
-        if(agent.MsgFrmAuction!=null)
+        if(agent.auctionInput!=null)
         {
-          if(agent.MsgFrmAuction.getMessage().equals("inventory"))
+          if(agent.auctionInput.getMessage().equals("inventory"))
           {
             ObservableList<String> list = FXCollections.observableArrayList();
             String listings = "";
             
-            List houses = ((List)agent.MsgFrmAuction.getSender());
+            List houses = ((List)agent.auctionInput.getSender());
             for(int i = 0; i < houses.size(); i++)
             {
               LinkedList inventory = ((LinkedList)houses.get(i));
@@ -174,10 +174,10 @@ public class AgentGUIController extends Application
     
     if(!request.equals(""))
     {
-      Message bankIn = agent.MsgFrmBank, auctionIn = agent.MsgFrmAuction;
+      Message bankIn = agent.bankInput, auctionIn = agent.auctionInput;
       history += time.format(new Date(System.currentTimeMillis())) + " | " + agent.getAgentName() + request + "\n";
-      if(agent.MsgFrmBank!=null) history += time.format(new Date(bankIn.getTimestamp())) + " | " + bankIn.getSignature() + bankIn.getMessage()+ "\n";
-      if(agent.MsgFrmAuction!=null) history += time.format(new Date(auctionIn.getTimestamp())) + " | " + auctionIn.getSignature() + auctionIn.getMessage()+ "\n";
+      if(bankIn != null) history += time.format(new Date(bankIn.getTimestamp())) + " | " + bankIn.getSignature() + bankIn.getMessage()+ "\n";
+      if(auctionIn != null) history += time.format(new Date(auctionIn.getTimestamp())) + " | " + auctionIn.getSignature() + auctionIn.getMessage()+ "\n";
       textArea.setText(history);
       
       agent.setMessageText(request);

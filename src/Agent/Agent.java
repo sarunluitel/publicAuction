@@ -27,7 +27,7 @@ public class Agent extends Thread implements Serializable
   private String messageText = "";
   
   private InetAddress bankAddress, auctionAddress;
-  public Message MsgFrmAuction, MsgFrmBank;
+  public Message bankInput, bankOutput, auctionInput, auctionOutput;
   
   /**
    * Sets the IP address for the bank.
@@ -125,7 +125,6 @@ public class Agent extends Thread implements Serializable
 
         try
         {
-          Message bankInput, bankOutput, auctionInput, auctionOutput;
           System.out.println(this.name + "Log in successful!");
 
           bankOut.writeObject(new Message(this, this.getAgentName(), "new", "", this.agentBankKey, -1));
@@ -167,9 +166,6 @@ public class Agent extends Thread implements Serializable
 
             System.out.println(this.getAgentName() + "Reading from bank...");
             if(bankIn.available() != 0) bankInput = ((Message) bankIn.readObject());
-            
-            MsgFrmAuction=auctionInput;
-            MsgFrmBank= bankInput;
           }
           
           bankIn.close();
