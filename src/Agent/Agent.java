@@ -126,11 +126,11 @@ public class Agent extends Thread implements Serializable
         try
         {
           Message bankInput, bankOutput, auctionInput, auctionOutput;
-          System.out.println(this.name + ": Log in successful!");
+          System.out.println(this.name + "Log in successful!");
 
-          bankOut.writeObject(new Message(this, this.getAgentName() + ": ", "new", "", this.agentBankKey, -1));
+          bankOut.writeObject(new Message(this, this.getAgentName(), "new", "", this.agentBankKey, -1));
           bankOut.flush();
-          auctionOut.writeObject(new Message(this, this.getAgentName() + ": ", "new", auctionAddress.toString(), this.agentCentralKey, -1));
+          auctionOut.writeObject(new Message(this, this.getAgentName(), "new", auctionAddress.toString(), this.agentCentralKey, -1));
           auctionOut.flush();
 
           while (true)
@@ -138,10 +138,10 @@ public class Agent extends Thread implements Serializable
             bankInput = auctionInput = null;
             if (!messageText.equals(""))
             {
-              System.out.println(this.getAgentName() + ": Submitting message = " + messageText + " to auction & bank.");
+              System.out.println(this.getAgentName() + "Submitting message = " + messageText + " to auction & bank.");
               
-              auctionOutput = new Message(this, this.getAgentName() + ": ", messageText, "", agentCentralKey, 0);
-              bankOutput = new Message(this, this.getAgentName() + ": ", messageText, "", agentBankKey, 0);
+              auctionOutput = new Message(this, this.getAgentName(), messageText, "", agentCentralKey, 0);
+              bankOutput = new Message(this, this.getAgentName(), messageText, "", agentBankKey, 0);
               
               auctionOut.writeObject(auctionOutput);
               auctionOut.flush();
@@ -162,10 +162,10 @@ public class Agent extends Thread implements Serializable
               }
             }
 
-            System.out.println(this.getAgentName() + ": Reading from auction central...");
+            System.out.println(this.getAgentName() + "Reading from auction central...");
             if(auctionIn.available() != 0) auctionInput = ((Message) auctionIn.readObject());
 
-            System.out.println(this.getAgentName() + ": Reading from bank...");
+            System.out.println(this.getAgentName() + "Reading from bank...");
             if(bankIn.available() != 0) bankInput = ((Message) bankIn.readObject());
             
             MsgFrmAuction=auctionInput;
