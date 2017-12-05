@@ -17,9 +17,7 @@ import java.net.Socket;
 class BankProtocol implements Serializable
 {
   private Socket socket;
-
   private Message message;
-//  public Message setup;
 
   private BankAccount account;
 
@@ -33,7 +31,8 @@ class BankProtocol implements Serializable
   {
     this.socket = socket;
     this.message = message;
-//    setup = handleRequest(message);
+    //    public Message setup;
+    //    setup = handleRequest(message);
   }
 
   /**
@@ -46,7 +45,6 @@ class BankProtocol implements Serializable
   {
     Message response;
     String message;
-    System.out.println(request.getMessage()+"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
     switch (request.getMessage())
     {
       case "auction central":
@@ -95,7 +93,6 @@ class BankProtocol implements Serializable
         response = new Message(null, "[Bank]: ", message, "Goodbye!", request.getKey(), account.getBalance());
         System.out.println("[Bank]: " + message);
         break;
-
       default:
         message = "Error - request not recognized.";
         int balance = (account != null) ? account.getBalance() : -1;

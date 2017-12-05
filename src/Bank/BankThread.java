@@ -64,14 +64,17 @@ class BankThread extends Thread
             input = null;
           }
         }
-      } catch (ClassNotFoundException e)
+      }
+      catch (ClassNotFoundException e)
       {
         System.err.println(e.getMessage());
       }
+      
       in.close();
       out.close();
       socket.close();
-    } catch (IOException e)
+    }
+    catch (IOException e)
     {
       e.printStackTrace();
     }

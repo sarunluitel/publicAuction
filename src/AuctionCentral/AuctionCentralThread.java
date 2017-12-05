@@ -12,7 +12,6 @@ import Message.Message;
 
 import java.io.*;
 import java.net.Socket;
-import java.net.SocketException;
 
 class AuctionCentralThread extends Thread
 {
@@ -64,14 +63,17 @@ class AuctionCentralThread extends Thread
             input = null;
           }
         }
-      } catch (ClassNotFoundException e)
+      }
+      catch (ClassNotFoundException e)
       {
         System.err.println(e.getMessage());
       }
+      
       in.close();
       out.close();
       socket.close();
-    } catch (IOException e)
+    }
+    catch (IOException e)
     {
       e.printStackTrace();
     }

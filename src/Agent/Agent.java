@@ -16,7 +16,6 @@ import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Random;
-import AuctionHouse.AuctionHouse.Item;
 
 public class Agent extends Thread implements Serializable
 {
@@ -26,17 +25,16 @@ public class Agent extends Thread implements Serializable
   private final String name;
 
   private String messageText = "";
-  private boolean messageSubmitted = false;
-
+  
   private InetAddress bankAddress, auctionAddress;
   public Message MsgFrmAuction, MsgFrmBank;
 
-  public void setBankAddress(InetAddress bankAddress)
+  void setBankAddress(InetAddress bankAddress)
   {
     this.bankAddress = bankAddress;
   }
 
-  public void setAuctionAddress(InetAddress auctionAddress)
+  void setAuctionAddress(InetAddress auctionAddress)
   {
     this.auctionAddress = auctionAddress;
   }
@@ -44,38 +42,37 @@ public class Agent extends Thread implements Serializable
   public Agent()
   {
     publicID = new Random().nextInt(1000);
-    name = giveRandName(new Random().nextInt(20));
+    name = randomName(new Random().nextInt(20));
     agentBankKey = (int) (Math.random() * 1000000);
     agentCentralKey = (int) (Math.random() * 1000000);
   }
 
-  private String giveRandName(int input)
+  private String randomName(int input)
   {
-    if (input % 4 == 0) return "Jacob";
-    else if (input % 4 == 1) return "Jaehee";
-    else if (input % 4 == 2) return "Sarun";
-    else if (input % 4 == 3) return "Vince";
-
-    return "NoName";
+    String name = "Agent";
+    if (input % 4 == 0) name = "Jacob";
+    else if (input % 4 == 1) name = "Jaehee";
+    else if (input % 4 == 2) name = "Sarun";
+    else if (input % 4 == 3) name = "Vince";
+    return name;
   }
-  public String getAgentPublicID()
-  {
-    return "[Agent-" + publicID + "]";
-  }
+  
+//  public String getAgentPublicID()
+//  {
+//    return "[Agent-" + publicID + "]";
+//  }
 
   public int getPublicID()
   {
     return publicID;
   }
 
-  // getName is a built in method after extending thread class. renamed to getAgentName.
   public String getAgentName()
   {
     return name;
   }
-
-
-  public void setMessageText(String messageText)
+  
+  void setMessageText(String messageText)
   {
     this.messageText = messageText;
   }
@@ -121,19 +118,18 @@ public class Agent extends Thread implements Serializable
               auctionOut.flush();
               bankOut.writeObject(bankOutput);
               bankOut.flush();
-
-
+              
               messageText = "";
-            } else
+            }
+            else
             {
               synchronized (this)
               {
                 try
                 {
                   this.wait();
-                } catch (InterruptedException ignored)
-                {
                 }
+                catch (InterruptedException ignored) {}
               }
             }
 
@@ -144,7 +140,6 @@ public class Agent extends Thread implements Serializable
             if(bankIn.available() != 0) bankInput = ((Message) bankIn.readObject());
             MsgFrmAuction=auctionInput;
             MsgFrmBank= bankInput;
-           // System.out.println(MsgFrmBank.getAmount());
             
             if (bankInput != null)
             {
@@ -164,15 +159,18 @@ public class Agent extends Thread implements Serializable
           auctionIn.close();
           auctionOut.close();
           auctionCentralSocket.close();
-        } catch (ClassNotFoundException e)
+        }
+        catch (ClassNotFoundException e)
         {
           e.printStackTrace();
         }
-      } catch (IOException e)
+      }
+      catch (IOException e)
       {
         e.printStackTrace();
       }
-    } catch (IOException e)
+    }
+    catch (IOException e)
     {
       e.printStackTrace();
     }

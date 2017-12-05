@@ -21,14 +21,20 @@ import java.util.Scanner;
 
 public class AuctionHouse implements Serializable
 {
-  public class Item implements Serializable
+  private String name;
+  private int index;
+  private int publicId;
+  private LinkedList<String> itemList = new LinkedList<>();
+  private LinkedList<Item> itemsForSale = new LinkedList<>();
+  
+  class Item implements Serializable
   {
-    private String itemName;
+    private final String itemName;
     private int agentKey;
     private int bidAmount;
 
 
-    public Item(int num)
+    Item(int num)
     {
       itemName = "Items" + num;
       bidAmount = 100;
@@ -59,31 +65,24 @@ public class AuctionHouse implements Serializable
       agentKey = agent;
     }
   }
-
-  private String name;
-  private int index;
-  private int publicId;
-  private LinkedList<String> itemList = new LinkedList<>();
-  private LinkedList<Item> itemsForSale = new LinkedList<>();
   
   /**
    * Default constructor.
    * <p>
    * Generates a random public ID.
    */
-  public AuctionHouse()
+  private AuctionHouse()
   {
     name = "[House-...] ";
     setItems();
   }
   
-  public void setIndex(int index) {
+  private void setIndex(int index) {
     name = "[House-" + index + "] ";
     this.index = index;
-    System.out.println(name);
   }
   
-  public int getIndex() {
+  private int getIndex() {
     return index;
   }
   
@@ -98,7 +97,7 @@ public class AuctionHouse implements Serializable
   /**
    * @return auction house public id
    */
-  public int getPublicId()
+  private int getPublicId()
   {
     return publicId;
   }
@@ -128,8 +127,6 @@ public class AuctionHouse implements Serializable
 
   }
 
-//FUCK YOU GITHUB
-
   /**
    * Main method for auction house.
    *
@@ -140,21 +137,21 @@ public class AuctionHouse implements Serializable
   {
     AuctionHouse house = new AuctionHouse();
     Scanner scan = new Scanner(System.in);
+    
     System.out.println("Enter Auction Central's IP: ");
     String address = scan.nextLine();
+    
     Socket socket = new Socket(InetAddress.getByName(address), 1111);
+    
     try (ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
          ObjectInputStream in = new ObjectInputStream(socket.getInputStream()))
     {
       try
       {
-        System.out.println("Connected");
-        Message input = null, output = null;
-
-        //TEST
+        Message input, output;
+        
         out.writeObject(new Message(house, house.getName(), "register", "", -1, -1));
         out.flush();
-        System.out.println("Sent Register");
         
         input = ((Message)in.readObject());
         house.setIndex(input.getAmount());
@@ -165,22 +162,26 @@ public class AuctionHouse implements Serializable
           if(in.available() != 0) input = ((Message) in.readObject());
           if (input != null)
           {
-            System.out.println(input.getMessage());
+            System.out.println(input.getSignature() + input.getMessage());
             
             output = new Message(house, house.getName(), "de-register", "", house.getPublicId(), house.getIndex());
             out.writeObject(output);
             out.flush();
+            
             input = null;
           }
         }
-      } catch (ClassNotFoundException e)
+      }
+      catch (ClassNotFoundException e)
       {
         System.err.println(e.getMessage());
       }
+      
       in.close();
       out.close();
       socket.close();
-    } catch (IOException e)
+    }
+    catch (IOException e)
     {
       e.printStackTrace();
     }

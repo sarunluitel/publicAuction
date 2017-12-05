@@ -1,9 +1,8 @@
-/**
+/*
  * CS351L Project #4: PublicAuction.
- *
- * @authors: Jacob Hurst, Jaehee Shin, Sarun Luitel, Vincent Huber.
+ * Jacob Hurst, Jaehee Shin, Sarun Luitel, Vincent Huber.
  * 11/27/17
- * <p>
+ *
  * BankAccount.java - Bank accounts to associate with agents.
  */
 
@@ -17,6 +16,7 @@ class BankAccount
   private final int publicID;
   private int balance;
   private ArrayList<Integer> holds;
+  
   /**
    * Default constructor.
    *
@@ -29,9 +29,7 @@ class BankAccount
     this.name = name;
     this.publicID = publicID;
     this.balance = balance;
-    this.holds = new ArrayList<>();
-//    balance - amount
-//    holds [] = amount
+    holds = new ArrayList<>();
   }
 
   /**

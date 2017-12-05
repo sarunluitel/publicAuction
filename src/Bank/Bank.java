@@ -16,7 +16,7 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.util.ArrayList;
 
-public class Bank
+class Bank
 {
   private static ArrayList<BankAccount> accounts = new ArrayList<>();
 
@@ -73,7 +73,8 @@ public class Bank
     {
       System.out.println("[Bank]: " + serverSocket.toString() + ".");
       while (true) new BankThread(serverSocket.accept()).start();
-    } catch (IOException e)
+    }
+    catch (IOException e)
     {
       System.err.println("[Bank]: Error connecting...");
       System.exit(-1);

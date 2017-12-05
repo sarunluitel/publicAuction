@@ -22,16 +22,13 @@ import java.util.Map;
 class AuctionCentralProtocol implements Serializable
 {
   private static Map<Integer, AuctionHouse> auctionRepository = Collections.synchronizedMap(new HashMap<Integer, AuctionHouse>());
-
-  private Socket bankSocket = null;
+  
   private ObjectInputStream bankI;
   private ObjectOutputStream bankO;
-
+  
   private Socket socket;
   private Object object;
-  private Message message;
-  public Message setup;
-
+  
   private Agent agent;
   private static int agentCount;
 
@@ -47,28 +44,26 @@ class AuctionCentralProtocol implements Serializable
   AuctionCentralProtocol(Socket socket, Message message) throws IOException
   {
     this.socket = socket;
-    this.message = message;
-    if (message.getSender() instanceof Agent)
+    this.object = message.getSender();
+    if(object instanceof Agent)
     {
-      agent = ((Agent) message.getSender());
+      this.agent = ((Agent)object);
       agentCount++;
 
       System.out.println(agent.getAgentName() + ": Connected to AuctionCentral.");
       System.out.println("[AuctionCentral]: " + agentCount + " agent(s) are connected!");
-    } else this.object = message.getSender();
-
-    if (bankSocket == null && !message.getMessage().equals("register"))
+    }
+    
+    if (!message.getMessage().equals("register"))
     {
-      System.out.println("[AuctionCentral]: Connected to bank.");
-      /* update this to take an address for the bank server - diff. from LocalHost. */
-      bankSocket = new Socket(InetAddress.getByName(message.getItem().substring(1)), 2222);
+      Socket bankSocket = new Socket(InetAddress.getByName(message.getItem().substring(1)), 2222);
       bankO = new ObjectOutputStream(bankSocket.getOutputStream());
       bankI = new ObjectInputStream(bankSocket.getInputStream());
-
+      System.out.println("[AuctionCentral]: Connected to bank.");
+  
       bankO.writeObject(new Message(null, "[AuctionCentral]: ", "auction central", "", 0, 0));
       bankO.flush();
     }
-    setup = handleRequest(message);
   }
 
   /**
@@ -112,7 +107,7 @@ class AuctionCentralProtocol implements Serializable
       case "transaction":
         message = "Mitigating transaction...";
         response = new Message(null, "[AuctionCentral]: ", message, "Mitigated transaction", request.getKey(), 0);
-        //handleTransaction(message.get)
+        //handleTransaction()
         System.out.println("[AuctionCentral]: " + message);
         break;
       case "EXIT":
@@ -129,28 +124,29 @@ class AuctionCentralProtocol implements Serializable
     return response;
   }
   
-  /* tell bank to find agent account with ID & perform action if possible
-     then respond according to bank confirmation to de-register auction houses,
-     get public ID and de-register there.                                       */
-
-  /**
-   * Mitigates transaction requests between agents and houses.
-   *
-   * @param agentBid
-   * @param agentID
-   * @param houseID
-   * @return response to transaction request.
-   * @throws IOException
-   */
-  private String handleTransaction(String agentBid, String agentID, String houseID) throws IOException
-  {
-    //don't allow bid if it has not yet been accepted by bank
-    bankO.writeUTF("[AuctionCentral]: block:" + agentBid + ":" + agentID);
-    bankO.writeUTF("[AuctionCentral]: unblock:" + agentBid + ":" + agentID);
-    bankO.writeUTF("[AuctionCentral]: move:" + agentBid + ":" + agentID + ":" + houseID);
-    //if item is sold check if house is empty de-register house if so.
-    bankO.flush();
-
-    return bankI.readUTF();
-  }
+//  /* tell bank to find agent account with ID & perform action if possible
+//     then respond according to bank confirmation to de-register auction houses,
+//     get public ID and de-register there.                                       */
+// --Commented out by Inspection START (12/4/2017 9:01 PM):
+//  /**
+//   * Mitigates transaction requests between agents and houses.
+//   *
+//   * @param agentBid
+//   * @param agentID
+//   * @param houseID
+//   * @return response to transaction request.
+//   * @throws IOException
+//   */
+//  private String handleTransaction(String agentBid, String agentID, String houseID) throws IOException
+//  {
+//    //don't allow bid if it has not yet been accepted by bank
+//    bankO.writeUTF("[AuctionCentral]: block:" + agentBid + ":" + agentID);
+//    bankO.writeUTF("[AuctionCentral]: unblock:" + agentBid + ":" + agentID);
+//    bankO.writeUTF("[AuctionCentral]: move:" + agentBid + ":" + agentID + ":" + houseID);
+//    //if item is sold check if house is empty de-register house if so.
+//    bankO.flush();
+//
+//    return bankI.readUTF();
+//  }
+// --Commented out by Inspection STOP (12/4/2017 9:01 PM)
 }

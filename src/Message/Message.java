@@ -4,14 +4,14 @@ import java.io.Serializable;
 
 public class Message implements Serializable
 {
-  private Object sender;
+  private final Object sender;
 
-  private String signature;
-  private String message;
-  private String item;
+  private final String signature;
+  private final String message;
+  private final String item;
 
-  private int amount;
-  private int key;
+  private final int amount;
+  private final int key;
 
   public Message(Object sender, String signature, String message, String item, int key, int amount)
   {

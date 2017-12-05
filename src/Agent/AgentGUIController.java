@@ -20,7 +20,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyCode;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -52,7 +51,6 @@ public class AgentGUIController extends Application
     txtTotalBidPlaced.setVisible(false);
     txtBankBalance.setVisible(false);
     itemsComboBox.setVisible(false);
-
   }
 
   /**
@@ -81,28 +79,26 @@ public class AgentGUIController extends Application
       itemsComboBox.setVisible(true);
 
       agent.setMessageText("");
+      
       synchronized (agent)
       {
         agent.notify();
       }
-
-    } catch (UnknownHostException e)
+    }
+    catch (UnknownHostException e)
     {
       e.printStackTrace();
       System.exit(-1);
     }
 
-    // run code to setup connections after we get addresses to bank and Auction Central
     agent.start();
-
 
     new AnimationTimer() {
       @Override
       public void handle(long now) {
         if(agent.MsgFrmBank!=null)
         {
-        txtBankBalance.setText("$$$ - "+agent.MsgFrmBank.getAmount());
-
+          txtBankBalance.setText("$$$ - "+agent.MsgFrmBank.getAmount());
         }
       }
     }.start();
@@ -126,17 +122,19 @@ public class AgentGUIController extends Application
   @FXML
   private void placeBid()
   {
-    //Just hit enter to place Bid!
     String request = input.getText();
+    input.setText("");
+    
     if(!request.equals(""))
     {
-
       history += request + "\n";
-     if(agent.MsgFrmBank!=null) history += agent.MsgFrmBank.getSignature() + agent.MsgFrmBank.getMessage()+ "\n";
+      if(agent.MsgFrmBank!=null) history += agent.MsgFrmBank.getSignature() + agent.MsgFrmBank.getMessage()+ "\n";
+      if(agent.MsgFrmAuction!=null) history += agent.MsgFrmAuction.getSignature() + agent.MsgFrmAuction.getMessage()+ "\n";
       textArea.setText(history);
+      
       agent.setMessageText(request);
-      input.setText("");
     }
+    
     synchronized (agent)
     {
       agent.notify();
