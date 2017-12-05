@@ -22,7 +22,7 @@
             <Font name="System Bold" size="14.0" />
          </font>
       </Text>
-      <Text fx:id="txtTotalBidPlaced" fill="#0ba3e5" layoutX="36.0" layoutY="95.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Bids: " wrappingWidth="41.13671875">
+      <Text fx:id="txtTotalBidPlaced" fill="#0ba3e5" layoutX="36.0" layoutY="95.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Bid status:" wrappingWidth="41.13671875">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
