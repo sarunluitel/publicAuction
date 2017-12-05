@@ -76,6 +76,7 @@ class AuctionCentralProtocol implements Serializable
   {
     Message response;
     String message;
+    System.out.println("AC handling -> " + request.getMessage());
     switch (request.getMessage())
     {
       case "new":
@@ -87,16 +88,17 @@ class AuctionCentralProtocol implements Serializable
         int ID = (int)(Math.random() * 1000000);
         AuctionHouse auctionHouse = ((AuctionHouse)request.getSender());
         
-        message = "Registering " + auctionHouse.getName() + "...";
+        message = "registered";
         auctionRepository.put(ID, auctionHouse);
         
-        response = new Message(null, "[AuctionCentral]: ", message, "Registered", ID, auctionRepository.size());
+        response = new Message(null, "[AuctionCentral]: ", message, auctionHouse.getName(), ID, auctionRepository.size());
         System.out.println("[AuctionCentral]: " + message);
         break;
       case "de-register":
-        auctionRepository.remove(request.getKey());
-        message = "De-registering " + auctionRepository +  "...";
-        response = new Message(null, "[AuctionCentral]: ", message, "De-registered", request.getKey(), auctionRepository.size());
+        auctionHouse = auctionRepository.remove(request.getKey());
+        message = "de-registered";
+        
+        response = new Message(null, "[AuctionCentral]: ", message, auctionHouse.getName(), request.getKey(), auctionRepository.size());
         System.out.println("[AuctionCentral]: " + message);
         break;
       case "repository":

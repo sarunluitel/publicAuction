@@ -45,6 +45,7 @@ class BankProtocol implements Serializable
   {
     Message response;
     String message;
+    System.out.println("B handling -> " + request.getMessage());
     switch (request.getMessage())
     {
       case "auction central":

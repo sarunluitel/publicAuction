@@ -104,7 +104,7 @@ public class AuctionHouse implements Serializable
    * Sets index and name of house.
    * @param index
    */
-  private void setIndex(int index) {
+  void setIndex(int index) {
     name = "[House-" + index + "] ";
     this.index = index;
   }
@@ -112,7 +112,7 @@ public class AuctionHouse implements Serializable
   /**
    * @return index of this house.
    */
-  private int getIndex() {
+  int getIndex() {
     return index;
   }
   
@@ -127,7 +127,7 @@ public class AuctionHouse implements Serializable
   /**
    * @return auction house public ID.
    */
-  private int getPublicID()
+  int getPublicID()
   {
     return publicID;
   }
@@ -136,7 +136,7 @@ public class AuctionHouse implements Serializable
    * Sets the public ID of house.
    * @param ID
    */
-  private void setPublicID(int ID)
+  void setPublicID(int ID)
   {
     publicID = ID;
   }
@@ -180,8 +180,8 @@ public class AuctionHouse implements Serializable
         out.flush();
         
         input = ((Message)in.readObject());
-        house.setIndex(input.getAmount());
-        house.setPublicID(input.getKey());
+        
+        AuctionHouseProtocol auctionHouseProtocol = new AuctionHouseProtocol(house, socket, input);
         
         while (true)
         {
@@ -190,9 +190,12 @@ public class AuctionHouse implements Serializable
           {
             System.out.println(input.getSignature() + input.getMessage());
             
-            output = new Message(house, house.getName(), "de-register", "", house.getPublicID(), house.getIndex());
-            out.writeObject(output);
-            out.flush();
+            output = auctionHouseProtocol.handleRequest(input);
+            if(!output.getMessage().isEmpty())
+            {
+              out.writeObject(output);
+              out.flush();
+            }
             
             input = null;
           }
