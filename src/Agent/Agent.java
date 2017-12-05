@@ -127,6 +127,8 @@ public class Agent extends Thread implements Serializable
         {
           Message bankInput, bankOutput, auctionInput, auctionOutput;
           System.out.println(this.name + ": Log in successful!");
+          System.out.println(this.name + "'s bankSocket : " + bankSocket.toString());
+          System.out.println(this.name + "'s auctionSocket : " + auctionCentralSocket.toString());
 
           bankOut.writeObject(new Message(this, this.getAgentName() + ": ", "new", "", this.agentBankKey, -1));
           bankOut.flush();
@@ -143,8 +145,8 @@ public class Agent extends Thread implements Serializable
               auctionOutput = new Message(this, this.getAgentName() + ": ", messageText, "", agentCentralKey, 0);
               bankOutput = new Message(this, this.getAgentName() + ": ", messageText, "", agentBankKey, 0);
               
-              auctionOut.writeObject(auctionOutput);
-              auctionOut.flush();
+//              auctionOut.writeObject(auctionOutput);
+//              auctionOut.flush();
               bankOut.writeObject(bankOutput);
               bankOut.flush();
               
@@ -186,7 +188,7 @@ public class Agent extends Thread implements Serializable
           bankSocket.close();
 
           auctionIn.close();
-          auctionOut.close();
+//          auctionOut.close();
           auctionCentralSocket.close();
         }
         catch (ClassNotFoundException e)

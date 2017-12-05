@@ -53,7 +53,8 @@ class AuctionCentralProtocol implements Serializable
       System.out.println(agent.getAgentName() + ": Connected to AuctionCentral.");
       System.out.println("[AuctionCentral]: " + agentCount + " agent(s) are connected!");
     }
-    
+
+    /*
     if (!message.getMessage().equals("register"))
     {
       Socket bankSocket = new Socket(InetAddress.getByName(message.getItem().substring(1)), 2222);
@@ -64,6 +65,7 @@ class AuctionCentralProtocol implements Serializable
       bankO.writeObject(new Message(null, "[AuctionCentral]: ", "auction central", "", 0, 0));
       bankO.flush();
     }
+    */
   }
 
   /**
@@ -81,7 +83,7 @@ class AuctionCentralProtocol implements Serializable
       case "new":
         message = "Initializing...";
         response = new Message(null, "[AuctionCentral]: ", message, "Initialized", request.getKey(), 0);
-        System.out.println("[AuctionCentral]: " + message);
+        System.out.println("[AuctionCentral] " + socket.toString()+" : " + message);
         break;
       case "register":
         int ID = (int)(Math.random() * 1000000);

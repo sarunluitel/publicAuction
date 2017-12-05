@@ -10,7 +10,9 @@ package AuctionCentral;
 
 import Message.Message;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 class AuctionCentralThread extends Thread
@@ -42,24 +44,26 @@ class AuctionCentralThread extends Thread
         input = ((Message) in.readObject());
 
         AuctionCentralProtocol auctionCentralProtocol = new AuctionCentralProtocol(socket, input);
-//        out.writeObject(auctionCentralProtocol.setup);
-//        out.flush();
 
         while (true)
         {
-          if(in.available() != 0) input = ((Message) in.readObject());
+          if (in.available() != 0)
+          {
+            input = ((Message) in.readObject());
+          }
           if (input != null)
           {
+
             System.out.println(input.getSignature() + input.getMessage());
-            
-            if(in.available()!=0)input = ((Message) in.readObject());
+
+            if (in.available() != 0) input = ((Message) in.readObject());
             output = auctionCentralProtocol.handleRequest(input);
-  
+
             System.out.println("[AuctionCentral]: Sending " + output.getMessage() + " to " + socket.toString());
-            
+
             out.writeObject(output);
             out.flush();
-  
+
             input = null;
           }
         }
@@ -68,7 +72,7 @@ class AuctionCentralThread extends Thread
       {
         System.err.println(e.getMessage());
       }
-      
+
       in.close();
       out.close();
       socket.close();

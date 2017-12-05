@@ -60,9 +60,9 @@ class BankThread extends Thread
             
             out.writeObject(output);
             out.flush();
-            
-            input = null;
           }
+
+          input = ((Message) in.readObject());
         }
       }
       catch (ClassNotFoundException e)
