@@ -32,7 +32,7 @@ class AuctionCentral
   {
     //AuctionCentral auctionCentral = new AuctionCentral();
     System.out.println("[AuctionCentral]: IP = " + InetAddress.getLocalHost() + ".");
-    System.out.println("Enter Auction Central's IP: ");
+    System.out.println("Enter the Bank's IP: ");
     Scanner scan = new Scanner(System.in);
     String address = scan.nextLine();
 
@@ -44,7 +44,6 @@ class AuctionCentral
       /**
        * Connecting to Bank
        */
-
       try (ObjectOutputStream bankOut = new ObjectOutputStream(socket.getOutputStream());
            ObjectInputStream bankIn = new ObjectInputStream(socket.getInputStream()))
       {
