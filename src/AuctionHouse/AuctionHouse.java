@@ -30,7 +30,7 @@ public class AuctionHouse implements Serializable
   /**
    * Inner class for item listings with house.
    */
-  class Item implements Serializable
+  public class Item implements Serializable
   {
     private final String itemName;
     private int agentKey;
@@ -40,7 +40,7 @@ public class AuctionHouse implements Serializable
      * Default constructor
      * @param index
      */
-    Item(int index)
+    public Item(int index)
     {
       itemName = "Item-" + index;
       bidAmount = 100;
@@ -97,6 +97,7 @@ public class AuctionHouse implements Serializable
   private AuctionHouse()
   {
     name = "[House-...] ";
+    
     setItems();
   }
   
@@ -151,6 +152,11 @@ public class AuctionHouse implements Serializable
       itemsForSale.add(new Item(i));
       itemsForSale.get(i).setCurrentBid(100);
     }
+  }
+  
+  LinkedList<Item> getInventory()
+  {
+    return itemsForSale;
   }
 
   /**

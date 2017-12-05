@@ -25,12 +25,12 @@ public class AuctionHouseProtocol
     switch(request.getMessage())
     {
       case "registered":
-        message = "";
-        
         house.setIndex(request.getAmount());
         house.setPublicID(request.getKey());
         
-        response = new Message(this, house.getName() + ": ", message, "", -1, -1);
+        message = "inventory";
+        
+        response = new Message(house.getInventory(), house.getName() + ": ", message, "", house.getPublicID(), -1);
         System.out.println(house.getName() + ": " + message);
         break;
       case "de-registered":

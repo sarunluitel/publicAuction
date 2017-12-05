@@ -49,7 +49,7 @@ class BankProtocol implements Serializable
     switch (request.getMessage())
     {
       case "auction central":
-        message = "Connection made with auction central.";
+        message = "";
         response = new Message(null, "[Bank]: ", message, "Connected", request.getKey(), request.getAmount());
         System.out.println("[Bank]: " + message);
         break;

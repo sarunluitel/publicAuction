@@ -58,8 +58,11 @@ class BankThread extends Thread
   
             System.out.println("[Bank]: Sending " + output.getMessage() + " to " + socket.toString());
             
-            out.writeObject(output);
-            out.flush();
+            if(!output.getMessage().isEmpty())
+            {
+              out.writeObject(output);
+              out.flush();
+            }
             
             input = null;
           }

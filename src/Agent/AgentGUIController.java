@@ -10,8 +10,11 @@
 
 package Agent;
 
+import AuctionHouse.AuctionHouse;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -25,6 +28,7 @@ import javafx.stage.Stage;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.*;
 
 public class AgentGUIController extends Application
 {
@@ -102,6 +106,30 @@ public class AgentGUIController extends Application
         if(agent.MsgFrmBank!=null)
         {
           txtBankBalance.setText("$$$ - "+agent.MsgFrmBank.getAmount());
+        }
+        if(agent.MsgFrmAuction!=null)
+        {
+          if(agent.MsgFrmAuction.getMessage().equals("inventory"))
+          {
+            ObservableList<String> list = FXCollections.observableArrayList();
+            String listings = "";
+            
+            List houses = ((List)agent.MsgFrmAuction.getSender());
+            for(int i = 0; i < houses.size(); i++)
+            {
+              LinkedList inventory = ((LinkedList)houses.get(i));
+              String house = "[House-" + i + "]: ";
+              for(int j = 0; j < inventory.size(); j++)
+              {
+                AuctionHouse.Item item = ((AuctionHouse.Item)inventory.get(j));
+                listings += house + item.getItemName() + "-" + item.getBidAmount() + "\n";
+                list.add(listings);
+              }
+              System.out.println(listings);
+            }
+            System.out.println("Setting item combo box");
+            itemsComboBox.setItems(list);
+          }
         }
       }
     }.start();
