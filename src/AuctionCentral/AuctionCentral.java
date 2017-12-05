@@ -44,20 +44,7 @@ class AuctionCentral
       System.out.println("[AuctionCentral]: " + serverSocket.toString() + ".");
       while (true)
       {
-        try
-        {
-          System.out.println("?1");
-          serverSocket.setSoTimeout(5000);
-          serverSocket.accept();
-          System.out.println("?2");
-          new AuctionCentralThread(serverSocket.accept()).start();
-          System.out.println("?3");
-
-        }
-        catch (IOException e)
-        {
-          System.out.println("?");
-        }
+        new AuctionCentralThread(serverSocket.accept()).start();
       }
     }
     catch (IOException e)
