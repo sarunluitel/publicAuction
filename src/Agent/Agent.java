@@ -28,17 +28,28 @@ public class Agent extends Thread implements Serializable
   
   private InetAddress bankAddress, auctionAddress;
   public Message MsgFrmAuction, MsgFrmBank;
-
+  
+  /**
+   * Sets the IP address for the bank.
+   * @param bankAddress
+   */
   void setBankAddress(InetAddress bankAddress)
   {
     this.bankAddress = bankAddress;
   }
-
+  
+  /**
+   * Sets the IP address for auction central.
+   * @param auctionAddress
+   */
   void setAuctionAddress(InetAddress auctionAddress)
   {
     this.auctionAddress = auctionAddress;
   }
-
+  
+  /**
+   * Default constructor.
+   */
   public Agent()
   {
     publicID = new Random().nextInt(1000);
@@ -46,7 +57,12 @@ public class Agent extends Thread implements Serializable
     agentBankKey = (int) (Math.random() * 1000000);
     agentCentralKey = (int) (Math.random() * 1000000);
   }
-
+  
+  /**
+   * Helper method for names in constructor.
+   * @param input
+   * @return random name
+   */
   private String randomName(int input)
   {
     String name = "Agent";
@@ -61,22 +77,35 @@ public class Agent extends Thread implements Serializable
 //  {
 //    return "[Agent-" + publicID + "]";
 //  }
-
+  
+  /**
+   * @return public ID associated with agent.
+   */
   public int getPublicID()
   {
     return publicID;
   }
-
+  
+  /**
+   * @return name associated with agent.
+   */
   public String getAgentName()
   {
     return name;
   }
   
+  /**
+   * Used by GUIController to set messages as user enters them.
+   * @param messageText
+   */
   void setMessageText(String messageText)
   {
     this.messageText = messageText;
   }
-
+  
+  /**
+   * Run method for agent thread - handles messaging.
+   */
   @Override
   public void run()
   {

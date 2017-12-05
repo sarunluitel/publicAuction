@@ -23,43 +23,66 @@ public class AuctionHouse implements Serializable
 {
   private String name;
   private int index;
-  private int publicId;
+  private int publicID;
   private LinkedList<String> itemList = new LinkedList<>();
   private LinkedList<Item> itemsForSale = new LinkedList<>();
   
+  /**
+   * Inner class for item listings with house.
+   */
   class Item implements Serializable
   {
     private final String itemName;
     private int agentKey;
     private int bidAmount;
-
-
-    Item(int num)
+    
+    /**
+     * Default constructor
+     * @param index
+     */
+    Item(int index)
     {
-      itemName = "Items" + num;
+      itemName = "Item-" + index;
       bidAmount = 100;
     }
-
+  
+    /**
+     * @return the item's name.
+     */
     public String getItemName()
     {
       return itemName;
     }
-
+  
+    /**
+     * @return the current highest bid on item.
+     */
     public int getBidAmount()
     {
       return bidAmount;
     }
-
+  
+    /**
+     * @return the current highest bidder key on item.
+     */
     public int getAgent()
     {
       return agentKey;
     }
-
+  
+    /**
+     * Sets the current bid.
+     * @param bid
+     */
     private void setCurrentBid(int bid)
     {
       bidAmount = bid;
     }
-
+  
+    /**
+     * Sets the current bidder.
+     * @param agent
+     */
     private void setAgentKey(int agent)
     {
       agentKey = agent;
@@ -68,7 +91,7 @@ public class AuctionHouse implements Serializable
   
   /**
    * Default constructor.
-   * <p>
+   *
    * Generates a random public ID.
    */
   private AuctionHouse()
@@ -77,11 +100,18 @@ public class AuctionHouse implements Serializable
     setItems();
   }
   
+  /**
+   * Sets index and name of house.
+   * @param index
+   */
   private void setIndex(int index) {
     name = "[House-" + index + "] ";
     this.index = index;
   }
   
+  /**
+   * @return index of this house.
+   */
   private int getIndex() {
     return index;
   }
@@ -95,27 +125,24 @@ public class AuctionHouse implements Serializable
   }
 
   /**
-   * @return auction house public id
+   * @return auction house public ID.
    */
-  private int getPublicId()
+  private int getPublicID()
   {
-    return publicId;
+    return publicID;
   }
 
   /**
-   * Method sets publicId
-   * Used by AuctionCentral
-   * @param id
+   * Sets the public ID of house.
+   * @param ID
    */
-  private void setPublicId(int id)
+  private void setPublicID(int ID)
   {
-    publicId = id;
+    publicID = ID;
   }
 
   /**
-   * Method to set items available to sell
-   * <p>
-   * No parameters
+   * Sets the items available for bidding.
    */
   private void setItems()
   {
@@ -124,7 +151,6 @@ public class AuctionHouse implements Serializable
       itemsForSale.add(new Item(i));
       itemsForSale.get(i).setCurrentBid(100);
     }
-
   }
 
   /**
@@ -155,7 +181,7 @@ public class AuctionHouse implements Serializable
         
         input = ((Message)in.readObject());
         house.setIndex(input.getAmount());
-        house.setPublicId(input.getKey());
+        house.setPublicID(input.getKey());
         
         while (true)
         {
@@ -164,7 +190,7 @@ public class AuctionHouse implements Serializable
           {
             System.out.println(input.getSignature() + input.getMessage());
             
-            output = new Message(house, house.getName(), "de-register", "", house.getPublicId(), house.getIndex());
+            output = new Message(house, house.getName(), "de-register", "", house.getPublicID(), house.getIndex());
             out.writeObject(output);
             out.flush();
             

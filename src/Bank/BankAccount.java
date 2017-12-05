@@ -55,7 +55,10 @@ class BankAccount
   {
     return balance;
   }
-
+  
+  /**
+   * Adds holds on this account as needed.
+   */
   public void addHolds()
   {
   }

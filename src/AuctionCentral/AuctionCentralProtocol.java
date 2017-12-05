@@ -34,7 +34,7 @@ class AuctionCentralProtocol implements Serializable
 
   /**
    * Default constructor.
-   * <p>
+   *
    * Takes a socket and an object to identify who it is speaking with.
    *
    * @param socket

@@ -41,7 +41,10 @@ public class AgentGUIController extends Application
 
   private Agent agent;
   private String history = "";
-
+  
+  /**
+   * Initializes state of GUI components.
+   */
   @FXML
   public void initialize()
   {
@@ -104,12 +107,21 @@ public class AgentGUIController extends Application
     }.start();
 
   }
-
+  
+  /**
+   * Main entry point for AgentGUIController.
+   * @param args
+   */
   public static void main(String args[])
   {
     launch(args);
   }
-
+  
+  /**
+   * Sets the primary stage.
+   * @param primaryStage
+   * @throws Exception
+   */
   @Override
   public void start(Stage primaryStage) throws Exception
   {
@@ -117,8 +129,11 @@ public class AgentGUIController extends Application
     primaryStage.setScene(new Scene(root));
     primaryStage.show();
   }
-
-
+  
+  
+  /**
+   * Handles user input.
+   */
   @FXML
   private void placeBid()
   {
