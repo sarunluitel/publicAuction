@@ -6,15 +6,10 @@ Project: PublicAuction***</b><br>
 # Overview:
 <details>
 <summary>Public Auction is a socket-based simulation of a real-time auction!</summary>
-<br>
 Agents are created/cleared dynamically as users connect/disconnect to the servers (Bank & AuctionCentral).<br>
-Upon connecting, agent's are given a bank account with a private key & an initial deposit. From there, the Agent's connection to Auction Central is made & the agent may begin bidding when Auction Houses are opened. <br><br>
-
-Auction Houses are created dynamically & exit when they no longer have items to sell. Auction Houses are registered & accessed via Auction Central. <br><br>
-
-Auction Central (static @ known address) acts as a middle-man between the agent, the agent's bank, & the auction house by mitigating transactions & providing updates from houses. <br><br>
-
-The Bank (static @ known address) opens agent bank accounts & accepts fund requests from auction central. <br><br>
+Upon connecting, agent's are given a bank account with a private key & an initial deposit. From there, the Agent's connection to Auction Central is made & the agent may begin bidding when Auction Houses are opened. <br>
+Auction Houses are created dynamically & exit when they no longer have items to sell. Auction Houses are registered & accessed via Auction Central. <br>
+Auction Central (static @ known address) acts as a middle-man between the agent, the agent's bank, & the auction house by mitigating transactions & providing updates from houses. <br> The Bank (static @ known address) opens agent bank accounts & accepts fund requests from auction central. <br>
 </details>
 
 # Versions:
