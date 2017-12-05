@@ -134,7 +134,14 @@ public class Agent extends Thread implements Serializable
 
           while (!messageText.equals("EXIT"))
           {
-            bankInput = auctionInput = null;
+            System.out.println(this.getAgentName() + "Reading from auction central...");
+            if(auctionIn.available() != 0) auctionInput = ((Message) auctionIn.readObject());
+  
+            System.out.println(this.getAgentName() + "Reading from bank...");
+            if(bankIn.available() != 0) bankInput = ((Message) bankIn.readObject());
+            
+//            bankInput = auctionInput = null;
+            
             if (!messageText.equals(""))
             {
               System.out.println(this.getAgentName() + "Submitting message = " + messageText + " to auction & bank.");
@@ -160,12 +167,6 @@ public class Agent extends Thread implements Serializable
                 catch (InterruptedException ignored) {}
               }
             }
-            
-            System.out.println(this.getAgentName() + "Reading from auction central...");
-            if(auctionIn.available() != 0) auctionInput = ((Message) auctionIn.readObject());
-
-            System.out.println(this.getAgentName() + "Reading from bank...");
-            if(bankIn.available() != 0) bankInput = ((Message) bankIn.readObject());
           }
           
           bankIn.close();
