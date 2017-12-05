@@ -36,55 +36,33 @@ class AuctionCentral
     Scanner scan = new Scanner(System.in);
     String address = scan.nextLine();
 
-    try (ServerSocket serverSocket = new ServerSocket(1111, 50, InetAddress.getLocalHost());
-         Socket socket = new Socket(InetAddress.getByName(address), 2222))
+    //try (Socket bankSocket = new Socket(InetAddress.getByName(address), 2222))
+
+
+    try (ServerSocket serverSocket = new ServerSocket(1111, 50, InetAddress.getLocalHost()))
     {
       System.out.println("[AuctionCentral]: " + serverSocket.toString() + ".");
-
-      /**
-       * Connecting to Bank
-       */
-
-      try (ObjectOutputStream bankOut = new ObjectOutputStream(socket.getOutputStream());
-           ObjectInputStream bankIn = new ObjectInputStream(socket.getInputStream()))
+      while (true)
       {
-        System.out.println("[AuctionCentral]: " + socket.toString() + " I'm connected!(to Bank)");
-
-        Message bankInput, bankOutput;
-
-        bankOut.writeObject(new Message(null, "[AuctionCentral]: ", "", "", 1234, -1));
-        bankOut.flush();
-
-        while (true)
+        try
         {
-          try
-          {
-            serverSocket.setSoTimeout(5000);
-            System.out.println("huh?");
-            System.out.println("accept? " + serverSocket.accept());
-            new AuctionCentralThread(serverSocket.accept()).start();
-          }
-          catch (IOException e)
-          {
-            //System.out.println("[AuctionCentral]: No Clients");
-          }
+          System.out.println("?1");
+          serverSocket.setSoTimeout(5000);
+          serverSocket.accept();
+          System.out.println("?2");
+          new AuctionCentralThread(serverSocket.accept()).start();
+          System.out.println("?3");
 
-          System.out.println("[AuctionCentral]: Reading from bank...");
-          //if(bankIn.available() != 0) bankInput = ((Message) bankIn.readObject());
-
-          bankOut.writeObject(new Message(null, "[AuctionCentral]: hmm....", "", "", 1234, -1));
-          bankOut.flush();
         }
-      }
-      catch (IOException e)
-      {
-        System.err.println("[AuctionCentral]: Error connecting...2");
-        System.exit(-1);
+        catch (IOException e)
+        {
+          System.out.println("?");
+        }
       }
     }
     catch (IOException e)
     {
-      System.err.println("[AuctionCentral]: Error connecting...3");
+      System.err.println("[AuctionCentral]: Error connecting...");
       System.exit(-1);
     }
 

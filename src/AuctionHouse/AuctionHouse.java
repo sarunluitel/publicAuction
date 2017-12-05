@@ -219,6 +219,7 @@ public class AuctionHouse implements Serializable
     }
     catch (IOException e)
     {
+      System.err.println(e.getMessage());
       e.printStackTrace();
     }
   }

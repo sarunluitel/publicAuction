@@ -35,8 +35,8 @@ class BankThread extends Thread
    */
   public void run()
   {
-    try (ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-         ObjectInputStream in = new ObjectInputStream(socket.getInputStream()))
+    try(ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+        ObjectInputStream in = new ObjectInputStream(socket.getInputStream()))
     {
       try
       {
