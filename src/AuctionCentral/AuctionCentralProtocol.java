@@ -15,13 +15,12 @@ import Message.Message;
 import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 class AuctionCentralProtocol implements Serializable
 {
   private static Map<Integer, AuctionHouse> auctionRepository = Collections.synchronizedMap(new HashMap<Integer, AuctionHouse>());
+  private static List<LinkedList> inventories = Collections.synchronizedList(new LinkedList<>());
   
   private ObjectInputStream bankI;
   private ObjectOutputStream bankO;
@@ -31,7 +30,8 @@ class AuctionCentralProtocol implements Serializable
   
   private Agent agent;
   private static int agentCount;
-
+  
+  
   /**
    * Default constructor.
    *
@@ -78,6 +78,7 @@ class AuctionCentralProtocol implements Serializable
   {
     Message response;
     String message;
+    System.out.println("AC handling -> " + request.getMessage());
     switch (request.getMessage())
     {
       case "new":
@@ -89,21 +90,31 @@ class AuctionCentralProtocol implements Serializable
         int ID = (int)(Math.random() * 1000000);
         AuctionHouse auctionHouse = ((AuctionHouse)request.getSender());
         
-        message = "Registering " + auctionHouse.getName() + "...";
+        message = "registered";
         auctionRepository.put(ID, auctionHouse);
         
-        response = new Message(null, "[AuctionCentral]: ", message, "Registered", ID, auctionRepository.size());
+        response = new Message(null, "[AuctionCentral]: ", message, auctionHouse.getName(), ID, auctionRepository.size());
+        System.out.println("[AuctionCentral]: " + message);
+        break;
+      case "inventory":
+        auctionHouse = auctionRepository.get(request.getKey());
+        LinkedList inventory = ((LinkedList)request.getSender());
+        inventories.add(request.getKey(), inventory);
+        
+        message = "";
+        response = new Message(null, "[AuctionCentral]: ", message, auctionHouse.getName(), request.getKey(), -1);
         System.out.println("[AuctionCentral]: " + message);
         break;
       case "de-register":
-        auctionRepository.remove(request.getKey());
-        message = "De-registering " + auctionRepository +  "...";
-        response = new Message(null, "[AuctionCentral]: ", message, "De-registered", request.getKey(), auctionRepository.size());
+        auctionHouse = auctionRepository.remove(request.getKey());
+        message = "de-registered";
+  
+        response = new Message(null, "[AuctionCentral]: ", message, auctionHouse.getName(), request.getKey(), auctionRepository.size());
         System.out.println("[AuctionCentral]: " + message);
         break;
       case "repository":
-        message = auctionRepository.toString();
-        response = new Message(null, "[AuctionCentral]: ", message, "House list", request.getKey(), auctionRepository.size());
+        message = "inventory";
+        response = new Message(inventories, "[AuctionCentral]: ", message, "House list", request.getKey(), auctionRepository.size());
         System.out.println("[AuctionCentral]: " + message);
         break;
       case "transaction":

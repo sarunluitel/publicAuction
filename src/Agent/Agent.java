@@ -27,7 +27,7 @@ public class Agent extends Thread implements Serializable
   private String messageText = "";
   
   private InetAddress bankAddress, auctionAddress;
-  public Message MsgFrmAuction, MsgFrmBank;
+  public Message bankInput, bankOutput, auctionInput, auctionOutput;
   
   /**
    * Sets the IP address for the bank.
@@ -65,11 +65,11 @@ public class Agent extends Thread implements Serializable
    */
   private String randomName(int input)
   {
-    String name = "Agent";
-    if (input % 4 == 0) name = "Jacob";
-    else if (input % 4 == 1) name = "Jaehee";
-    else if (input % 4 == 2) name = "Sarun";
-    else if (input % 4 == 3) name = "Vince";
+    String name = "[Agent-" + getPublicID() + "]: ";
+    if (input % 4 == 0) name = "[Jacob-" + getPublicID() + "]: ";
+    else if (input % 4 == 1) name = "[Jaehee-" + getPublicID() + "]: ";
+    else if (input % 4 == 2) name = "[Sarun-" + getPublicID() + "]: ";
+    else if (input % 4 == 3) name = "[Vincent-" + getPublicID() + "]: ";
     return name;
   }
   
@@ -125,28 +125,35 @@ public class Agent extends Thread implements Serializable
 
         try
         {
-          Message bankInput, bankOutput, auctionInput, auctionOutput;
+          System.out.println(this.name + "Log in successful!");
           System.out.println(this.name + ": Log in successful!");
           System.out.println(this.name + "'s bankSocket : " + bankSocket.toString());
           System.out.println(this.name + "'s auctionSocket : " + auctionCentralSocket.toString());
 
-          bankOut.writeObject(new Message(this, this.getAgentName() + ": ", "new", "", this.agentBankKey, -1));
+          bankOut.writeObject(new Message(this, this.getAgentName(), "new", "", this.agentBankKey, -1));
           bankOut.flush();
-          auctionOut.writeObject(new Message(this, this.getAgentName() + ": ", "new", auctionAddress.toString(), this.agentCentralKey, -1));
+          auctionOut.writeObject(new Message(this, this.getAgentName(), "new", auctionAddress.toString(), this.agentCentralKey, -1));
           auctionOut.flush();
 
-          while (true)
+          while (!messageText.equals("EXIT"))
           {
-            bankInput = auctionInput = null;
+            System.out.println(this.getAgentName() + "Reading from auction central...");
+            if(auctionIn.available() != 0) auctionInput = ((Message) auctionIn.readObject());
+
+            System.out.println(this.getAgentName() + "Reading from bank...");
+            if(bankIn.available() != 0) bankInput = ((Message) bankIn.readObject());
+
+//            bankInput = auctionInput = null;
+
             if (!messageText.equals(""))
             {
-              System.out.println(this.getAgentName() + ": Submitting message = " + messageText + " to auction & bank.");
+              System.out.println(this.getAgentName() + "Submitting message = " + messageText + " to auction & bank.");
               
-              auctionOutput = new Message(this, this.getAgentName() + ": ", messageText, "", agentCentralKey, 0);
-              bankOutput = new Message(this, this.getAgentName() + ": ", messageText, "", agentBankKey, 0);
+              auctionOutput = new Message(this, this.getAgentName(), messageText, "", agentCentralKey, 0);
+              bankOutput = new Message(this, this.getAgentName(), messageText, "", agentBankKey, 0);
               
-//              auctionOut.writeObject(auctionOutput);
-//              auctionOut.flush();
+              //auctionOut.writeObject(auctionOutput);
+              //auctionOut.flush();
               bankOut.writeObject(bankOutput);
               bankOut.flush();
               
@@ -163,32 +170,14 @@ public class Agent extends Thread implements Serializable
                 catch (InterruptedException ignored) {}
               }
             }
-
-            System.out.println(this.getAgentName() + ": Reading from auction central...");
-            if(auctionIn.available() != 0) auctionInput = ((Message) auctionIn.readObject());
-
-            System.out.println(this.getAgentName() + ": Reading from bank...");
-            if(bankIn.available() != 0) bankInput = ((Message) bankIn.readObject());
-            MsgFrmAuction=auctionInput;
-            MsgFrmBank= bankInput;
-            
-            if (bankInput != null)
-            {
-              if (bankInput.getMessage().equals("EXIT")) break;
-              System.out.println(bankInput.getSignature() + bankInput.getMessage());
-            }
-            if (auctionInput != null)
-            {
-              if (auctionInput.getMessage().equals("EXIT")) break;
-              System.out.println(auctionInput.getSignature() + auctionInput.getMessage());
-            }
           }
+
           bankIn.close();
           bankOut.close();
           bankSocket.close();
 
           auctionIn.close();
-//          auctionOut.close();
+          auctionOut.close();
           auctionCentralSocket.close();
         }
         catch (ClassNotFoundException e)

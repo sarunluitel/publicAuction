@@ -10,8 +10,12 @@
 
 package Agent;
 
+import AuctionHouse.AuctionHouse;
+import Message.Message;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -25,9 +29,13 @@ import javafx.stage.Stage;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class AgentGUIController extends Application
 {
+  private final SimpleDateFormat time = new SimpleDateFormat("h:mm:ss");
+  
   @FXML
   private TextField bankIP, auctionIP, input;
   @FXML
@@ -99,9 +107,33 @@ public class AgentGUIController extends Application
     new AnimationTimer() {
       @Override
       public void handle(long now) {
-        if(agent.MsgFrmBank!=null)
+        if(agent.bankInput!=null)
         {
-          txtBankBalance.setText("$$$ - "+agent.MsgFrmBank.getAmount());
+          txtBankBalance.setText("Balance: $" + agent.bankInput.getAmount() + ".00");
+        }
+        if(agent.auctionInput!=null)
+        {
+          if(agent.auctionInput.getMessage().equals("inventory"))
+          {
+            ObservableList<String> list = FXCollections.observableArrayList();
+            String listings = "";
+            
+            List houses = ((List)agent.auctionInput.getSender());
+            for(int i = 0; i < houses.size(); i++)
+            {
+              LinkedList inventory = ((LinkedList)houses.get(i));
+              String house = "[House-" + i + "]: ";
+              for(int j = 0; j < inventory.size(); j++)
+              {
+                AuctionHouse.Item item = ((AuctionHouse.Item)inventory.get(j));
+                listings += house + item.getItemName() + "-" + item.getBidAmount() + "\n";
+                list.add(listings);
+              }
+              System.out.println(listings);
+            }
+            System.out.println("Setting item combo box");
+            itemsComboBox.setItems(list);
+          }
         }
       }
     }.start();
@@ -142,9 +174,10 @@ public class AgentGUIController extends Application
     
     if(!request.equals(""))
     {
-      history += request + "\n";
-      if(agent.MsgFrmBank!=null) history += agent.MsgFrmBank.getSignature() + agent.MsgFrmBank.getMessage()+ "\n";
-      if(agent.MsgFrmAuction!=null) history += agent.MsgFrmAuction.getSignature() + agent.MsgFrmAuction.getMessage()+ "\n";
+      Message bankIn = agent.bankInput, auctionIn = agent.auctionInput;
+      history += time.format(new Date(System.currentTimeMillis())) + " | " + agent.getAgentName() + request + "\n";
+      if(bankIn != null) history += time.format(new Date(bankIn.getTimestamp())) + " | " + bankIn.getSignature() + bankIn.getMessage()+ "\n";
+      if(auctionIn != null) history += time.format(new Date(auctionIn.getTimestamp())) + " | " + auctionIn.getSignature() + auctionIn.getMessage()+ "\n";
       textArea.setText(history);
       
       agent.setMessageText(request);

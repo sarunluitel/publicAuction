@@ -30,7 +30,7 @@ public class AuctionHouse implements Serializable
   /**
    * Inner class for item listings with house.
    */
-  class Item implements Serializable
+  public class Item implements Serializable
   {
     private final String itemName;
     private int agentKey;
@@ -40,7 +40,7 @@ public class AuctionHouse implements Serializable
      * Default constructor
      * @param index
      */
-    Item(int index)
+    public Item(int index)
     {
       itemName = "Item-" + index;
       bidAmount = 100;
@@ -97,6 +97,7 @@ public class AuctionHouse implements Serializable
   private AuctionHouse()
   {
     name = "[House-...] ";
+    
     setItems();
   }
   
@@ -104,7 +105,7 @@ public class AuctionHouse implements Serializable
    * Sets index and name of house.
    * @param index
    */
-  private void setIndex(int index) {
+  void setIndex(int index) {
     name = "[House-" + index + "] ";
     this.index = index;
   }
@@ -112,7 +113,7 @@ public class AuctionHouse implements Serializable
   /**
    * @return index of this house.
    */
-  private int getIndex() {
+  int getIndex() {
     return index;
   }
   
@@ -127,7 +128,7 @@ public class AuctionHouse implements Serializable
   /**
    * @return auction house public ID.
    */
-  private int getPublicID()
+  int getPublicID()
   {
     return publicID;
   }
@@ -136,7 +137,7 @@ public class AuctionHouse implements Serializable
    * Sets the public ID of house.
    * @param ID
    */
-  private void setPublicID(int ID)
+  void setPublicID(int ID)
   {
     publicID = ID;
   }
@@ -151,6 +152,11 @@ public class AuctionHouse implements Serializable
       itemsForSale.add(new Item(i));
       itemsForSale.get(i).setCurrentBid(100);
     }
+  }
+  
+  LinkedList<Item> getInventory()
+  {
+    return itemsForSale;
   }
 
   /**
@@ -180,22 +186,26 @@ public class AuctionHouse implements Serializable
         out.flush();
         
         input = ((Message)in.readObject());
-        house.setIndex(input.getAmount());
-        house.setPublicID(input.getKey());
+        
+        AuctionHouseProtocol auctionHouseProtocol = new AuctionHouseProtocol(house, socket, input);
         
         while (true)
         {
-          if(in.available() != 0) input = ((Message) in.readObject());
           if (input != null)
           {
             System.out.println(input.getSignature() + input.getMessage());
             
-            output = new Message(house, house.getName(), "de-register", "", house.getPublicID(), house.getIndex());
-            out.writeObject(output);
-            out.flush();
+            output = auctionHouseProtocol.handleRequest(input);
+            if(!output.getMessage().isEmpty())
+            {
+              System.out.println(house.name + ": Sending " + output.getMessage() + " to " + socket.toString());
+              out.writeObject(output);
+              out.flush();
+            }
             
             input = null;
           }
+          if(in.available() != 0) input = ((Message) in.readObject());
         }
       }
       catch (ClassNotFoundException e)
