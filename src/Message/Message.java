@@ -48,7 +48,7 @@ public class Message implements Serializable
     this.key = key;
     
     timestamp = System.currentTimeMillis();
-    System.out.println(time.format(new Date(timestamp) + " | " + signature + message + " *CREATED*"));
+    System.out.println(time.format(new Date(timestamp)) + " | " + signature + message + " *CREATED*");
   }
   
   /**
