@@ -109,39 +109,54 @@ public class Agent extends Thread implements Serializable
   @Override
   public void run()
   {
+    System.out.println("A connecting");
     try
     {
       Socket bankSocket = new Socket(bankAddress, 2222);
+      System.out.println("A connected B");
       Socket auctionCentralSocket = new Socket(auctionAddress, 1111);
+      System.out.println("A connected AC");
       try
       {
         ObjectOutputStream auctionOut = new ObjectOutputStream(auctionCentralSocket.getOutputStream());
         auctionOut.flush();
+        System.out.println("A - AC out stream opened");
         ObjectOutputStream bankOut = new ObjectOutputStream(bankSocket.getOutputStream());
         bankOut.flush();
+        System.out.println("A - B out stream opened");
 
         ObjectInputStream auctionIn = new ObjectInputStream(auctionCentralSocket.getInputStream());
+        System.out.println("A - AC in stream opened");
         ObjectInputStream bankIn = new ObjectInputStream(bankSocket.getInputStream());
-
+        System.out.println("A - B in stream opened");
+        
         try
         {
           System.out.println(this.name + "Log in successful!");
-          System.out.println(this.name + ": Log in successful!");
-          System.out.println(this.name + "'s bankSocket : " + bankSocket.toString());
-          System.out.println(this.name + "'s auctionSocket : " + auctionCentralSocket.toString());
-
+          System.out.println(this.name + "BankSocket = " + bankSocket.toString());
+          System.out.println(this.name + "AuctionSocket = " + auctionCentralSocket.toString());
+  
+          System.out.println("A writing init to B");
+          
           bankOut.writeObject(new Message(this, this.getAgentName(), "new", "", this.agentBankKey, -1));
           bankOut.flush();
+          
+          System.out.println("A sent init to B\nA writing init to AC");
+          
           auctionOut.writeObject(new Message(this, this.getAgentName(), "new", auctionAddress.toString(), this.agentCentralKey, -1));
           auctionOut.flush();
-
+          
+          System.out.println("A sent init to AC");
+          
           while (!messageText.equals("EXIT"))
           {
             System.out.println(this.getAgentName() + "Reading from auction central...");
-            if(auctionIn.available() != 0) auctionInput = ((Message) auctionIn.readObject());
+//            if(auctionIn.available() != 0)
+              auctionInput = ((Message) auctionIn.readObject());
 
             System.out.println(this.getAgentName() + "Reading from bank...");
-            if(bankIn.available() != 0) bankInput = ((Message) bankIn.readObject());
+//            if(bankIn.available() != 0)
+              bankInput = ((Message) bankIn.readObject());
 
 //            bankInput = auctionInput = null;
 
@@ -151,11 +166,16 @@ public class Agent extends Thread implements Serializable
               
               auctionOutput = new Message(this, this.getAgentName(), messageText, "", agentCentralKey, 0);
               bankOutput = new Message(this, this.getAgentName(), messageText, "", agentBankKey, 0);
-              
-              //auctionOut.writeObject(auctionOutput);
-              //auctionOut.flush();
+  
+              System.out.println("A writing to AC");
+              auctionOut.writeObject(auctionOutput);
+              auctionOut.flush();
+              System.out.println("A sent to AC");
+  
+              System.out.println("A writing to B");
               bankOut.writeObject(bankOutput);
               bankOut.flush();
+              System.out.println("A sent to B");
               
               messageText = "";
             }
@@ -165,11 +185,13 @@ public class Agent extends Thread implements Serializable
               {
                 try
                 {
+                  System.out.println("A waiting");
                   this.wait();
                 }
                 catch (InterruptedException ignored) {}
               }
             }
+            System.out.println("A notified");
           }
 
           bankIn.close();

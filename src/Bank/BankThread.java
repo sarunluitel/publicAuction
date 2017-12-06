@@ -35,12 +35,15 @@ class BankThread extends Thread
    */
   public void run()
   {
+    System.out.println("B connecting");
     try(ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
         ObjectInputStream in = new ObjectInputStream(socket.getInputStream()))
     {
       try
       {
+        System.out.println("B streams opened");
         Message input, output;
+        System.out.println("B reading init");
         input = ((Message) in.readObject());
 
         BankProtocol bankProtocol = new BankProtocol(socket, input);
@@ -58,14 +61,18 @@ class BankThread extends Thread
   
             System.out.println("[Bank]: Sending " + output.getMessage() + " to " + socket.toString());
             
-            if(!output.getMessage().isEmpty())
+            if(output.getAmount() != -1)
             {
+              System.out.println("B sending");
               out.writeObject(output);
               out.flush();
+              System.out.println("B sent");
             }
             //input = null;
           }
+          System.out.println("B reading");
           input = ((Message) in.readObject());
+          System.out.println("B done reading");
           // ????? : if(in.available() != 0)
           //if(in.available() != 0) input = ((Message) in.readObject());
         }
@@ -84,6 +91,4 @@ class BankThread extends Thread
       e.printStackTrace();
     }
   }
-
-
 }

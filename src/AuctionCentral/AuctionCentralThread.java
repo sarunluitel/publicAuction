@@ -35,16 +35,19 @@ class AuctionCentralThread extends Thread
    */
   public void run()
   {
+    System.out.println("AC connected");
     try (ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
          ObjectInputStream in = new ObjectInputStream(socket.getInputStream()))
     {
       try
       {
+        System.out.println("AC streams opened");
         Message input, output;
         input = ((Message) in.readObject());
 
         AuctionCentralProtocol auctionCentralProtocol = new AuctionCentralProtocol(socket, input);
-
+        System.out.println("AC protocol made");
+        
         while (true)
         {
           if (input != null)
@@ -55,13 +58,16 @@ class AuctionCentralThread extends Thread
             output = auctionCentralProtocol.handleRequest(input);
 
             System.out.println("[AuctionCentral]: Sending " + output.getMessage() + " to " + socket.toString());
-
             out.writeObject(output);
             out.flush();
-
+            System.out.println("AC sent");
+            
             input = null;
           }
-          if(in.available() != 0) input = ((Message) in.readObject());
+//          if(in.available() != 0)
+          System.out.println("AC reading");
+          input = ((Message) in.readObject());
+          System.out.println("AC done reading");
         }
       }
       catch (ClassNotFoundException e)

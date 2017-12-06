@@ -174,17 +174,20 @@ public class AuctionHouse implements Serializable
     String address = scan.nextLine();
     
     Socket socket = new Socket(InetAddress.getByName(address), 1111);
-    
+    System.out.println("AH connected");
     try (ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
          ObjectInputStream in = new ObjectInputStream(socket.getInputStream()))
     {
       try
       {
+        System.out.println("AH streams opened");
         Message input, output;
-        
+  
+        System.out.println("AH sending init");
         out.writeObject(new Message(house, house.getName(), "register", "", -1, -1));
         out.flush();
-        
+  
+        System.out.println("AH reading init");
         input = ((Message)in.readObject());
         
         AuctionHouseProtocol auctionHouseProtocol = new AuctionHouseProtocol(house, socket, input);
@@ -196,16 +199,20 @@ public class AuctionHouse implements Serializable
             System.out.println(input.getSignature() + input.getMessage());
             
             output = auctionHouseProtocol.handleRequest(input);
-            if(!output.getMessage().isEmpty())
+            if(!output.getMessage().equals(""))
             {
               System.out.println(house.name + ": Sending " + output.getMessage() + " to " + socket.toString());
               out.writeObject(output);
               out.flush();
+              System.out.println("AH sent");
             }
             
             input = null;
           }
-          if(in.available() != 0) input = ((Message) in.readObject());
+//          if(in.available() != 0)
+          System.out.println("AH reading");
+          input = ((Message) in.readObject());
+          System.out.println("AH done reading");
         }
       }
       catch (ClassNotFoundException e)
