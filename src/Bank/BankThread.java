@@ -66,6 +66,7 @@ class BankThread extends Thread
               System.out.println("B sending");
               out.writeObject(output);
               out.flush();
+              out.reset();
               System.out.println("B sent");
             }
             //input = null;

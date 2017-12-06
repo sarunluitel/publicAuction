@@ -14,12 +14,10 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.Scanner;
 
 class AuctionCentralThread extends Thread
 {
   private final Socket socket;
-  public Message input, output;
 
   /**
    * Default constructor.
@@ -32,47 +30,45 @@ class AuctionCentralThread extends Thread
     this.socket = socket;
   }
 
-
-
   /**
    * Run method for auction central thread.
    */
   public void run()
   {
+    System.out.println("AC connected");
     try (ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
          ObjectInputStream in = new ObjectInputStream(socket.getInputStream()))
     {
       try
       {
+        System.out.println("AC streams opened");
         Message input, output;
         input = ((Message) in.readObject());
 
-        AuctionCentralProtocol protocol = new AuctionCentralProtocol(socket, input);
-//        out.writeObject(bankProtocol.setup);
-//        out.flush();
-
+        AuctionCentralProtocol auctionCentralProtocol = new AuctionCentralProtocol(socket, input);
+        System.out.println("AC protocol made");
+        
         while (true)
         {
           if (input != null)
           {
             System.out.println(input.getSignature() + input.getMessage());
 
-//            if(in.available() != 0) input = ((Message) in.readObject());
-            output = protocol.handleRequest(input);
+//            if(in.available()!=0)input = ((Message) in.readObject());
+            output = auctionCentralProtocol.handleRequest(input);
 
-            System.out.println("[AuctionCentralThread]: Sending " + output.getMessage() + " to " + socket.toString());
-
-            if(!output.getMessage().isEmpty())
-            {
-              out.writeObject(output);
-              out.flush();
-            }
-            //input = null;
+            System.out.println("[AuctionCentral]: Sending " + output.getMessage() + " to " + socket.toString());
+            out.writeObject(output);
+            out.flush();
+            out.reset();
+            System.out.println("AC sent");
+            
+            input = null;
           }
-
+//          if(in.available() != 0)
+          System.out.println("AC reading");
           input = ((Message) in.readObject());
-          // ????? : if(in.available() != 0)
-          //if(in.available() != 0) input = ((Message) in.readObject());
+          System.out.println("AC done reading");
         }
       }
       catch (ClassNotFoundException e)
@@ -89,55 +85,4 @@ class AuctionCentralThread extends Thread
       e.printStackTrace();
     }
   }
-//
-//  /**
-//   * Run method for auction central thread.
-//   */
-//  public void run()
-//  {
-//    try
-//    {
-//      ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-//      out.flush();
-//
-//      ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
-//
-//      try
-//      {
-//        if (in.available() != 0) input = ((Message) in.readObject());
-//        AuctionCentralProtocol auctionCentralProtocol = new AuctionCentralProtocol(socket, input);
-//
-//        while (true)
-//        {
-//          if (input != null)
-//          {
-//            System.out.println(input.getSignature() + input.getMessage());
-//
-////            if(in.available()!=0)input = ((Message) in.readObject());
-//            output = auctionCentralProtocol.handleRequest(input);
-//
-//            System.out.println("[AuctionCentral]: Sending " + output.getMessage() + " to " + socket.toString());
-//
-//            out.writeObject(output);
-//            out.flush();
-//
-//            input = null;
-//          }
-//          if(in.available() != 0) input = ((Message) in.readObject());
-//        }
-//      }
-//      catch (ClassNotFoundException e)
-//      {
-//        System.err.println(e.getMessage());
-//      }
-//
-//      in.close();
-//      out.close();
-//      socket.close();
-//    }
-//    catch (IOException e)
-//    {
-//      e.printStackTrace();
-//    }
-//  }
 }
