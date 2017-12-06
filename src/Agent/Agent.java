@@ -109,28 +109,41 @@ public class Agent extends Thread implements Serializable
   @Override
   public void run()
   {
+    System.out.println("A connecting");
     try(Socket bankSocket = new Socket(bankAddress, 2222);
         Socket auctionCentralSocket = new Socket(auctionAddress, 1111))
     {
-
-      try(ObjectOutputStream auctionOut = new ObjectOutputStream(auctionCentralSocket.getOutputStream());
-          ObjectOutputStream bankOut = new ObjectOutputStream(bankSocket.getOutputStream());
-          ObjectInputStream auctionIn = new ObjectInputStream(new BufferedInputStream(auctionCentralSocket.getInputStream()));
-          ObjectInputStream bankIn = new ObjectInputStream(new BufferedInputStream(bankSocket.getInputStream())))
+      System.out.println("A connected");
+      try
       {
-
+        System.out.println("A auction out stream");
+        ObjectOutputStream auctionOut = new ObjectOutputStream(auctionCentralSocket.getOutputStream());
+        auctionOut.flush();
+        System.out.println("A out opened");
+  
+        System.out.println("A bank out stream");
+        ObjectOutputStream bankOut = new ObjectOutputStream(bankSocket.getOutputStream());
+        bankOut.flush();
+        System.out.println("A out opened");
+  
+        System.out.println("A in a stream");
+        ObjectInputStream auctionIn = new ObjectInputStream(new BufferedInputStream(auctionCentralSocket.getInputStream()));
+        System.out.println("A in a opened\nA in b stream");
+        ObjectInputStream bankIn = new ObjectInputStream(new BufferedInputStream(bankSocket.getInputStream()));
+        System.out.println("A in b opened");
         try
         {
           System.out.println(this.name + "Log in successful!");
-          System.out.println(this.name + ": Log in successful!");
-          System.out.println(this.name + "'s bankSocket : " + bankSocket.toString());
-          System.out.println(this.name + "'s auctionSocket : " + auctionCentralSocket.toString());
-
+  
+          System.out.println("A init to B");
           bankOut.writeObject(new Message(this, this.getAgentName(), "new", "", this.agentBankKey, -1));
           bankOut.flush();
+          System.out.println("A init sent to B");
+          System.out.println("A init to AC");
           auctionOut.writeObject(new Message(this, this.getAgentName(), "new", auctionAddress.toString(), this.agentCentralKey, -1));
           auctionOut.flush();
-
+          System.out.println("A init sent to AC");
+          
           while (!messageText.equals("EXIT"))
           {
             System.out.println(this.getAgentName() + "Reading from auction central...");
@@ -138,7 +151,7 @@ public class Agent extends Thread implements Serializable
             System.out.println(this.getAgentName() + "Finished Reading from auction central..."+auctionInput.getSignature());
 
             System.out.println(this.getAgentName() + "Reading from bank...");
-             bankInput = ((Message) bankIn.readObject());
+            bankInput = ((Message) bankIn.readObject());
             System.out.println(this.getAgentName() + "Finished Reading from bank..."+bankInput.getSignature());
 
 
@@ -148,11 +161,15 @@ public class Agent extends Thread implements Serializable
               
               auctionOutput = new Message(this, this.getAgentName(), messageText, "", agentCentralKey, 0);
               bankOutput = new Message(this, this.getAgentName(), messageText, "", agentBankKey, 0);
-              
+  
+              System.out.println("A to AC");
               auctionOut.writeObject(auctionOutput);
               auctionOut.flush();
+              System.out.println("A sent to AC");
+              System.out.println("A to B");
               bankOut.writeObject(bankOutput);
               bankOut.flush();
+              System.out.println("A sent to B");
               
               messageText = "";
             }
@@ -162,10 +179,12 @@ public class Agent extends Thread implements Serializable
               {
                 try
                 {
+                  System.out.println("A enter wait");
                   this.wait();
                 }
                 catch (InterruptedException ignored) {}
               }
+              System.out.println("A exit wait");
             }
           }
 

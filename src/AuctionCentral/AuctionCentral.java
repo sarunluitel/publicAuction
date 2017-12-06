@@ -54,6 +54,7 @@ class AuctionCentral
       {
 //        serverSocket.setSoTimeout(5000);
         auctionCentralListener.addCount();
+        
         new AuctionCentralThread(serverSocket.accept()).start();
         System.out.println("Test " + auctionCentralListener.getCount() + "," + auctionCentralListener.getState());
       }

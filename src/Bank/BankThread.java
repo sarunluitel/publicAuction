@@ -36,9 +36,12 @@ class BankThread extends Thread
   public void run()
   {
     System.out.println("B connecting");
-    try(ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-        ObjectInputStream in = new ObjectInputStream(socket.getInputStream()))
+    try
     {
+      ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+      out.flush();
+      
+      ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
       try
       {
         System.out.println("B streams opened");

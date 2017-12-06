@@ -94,7 +94,7 @@ class AuctionCentralProtocol implements Serializable
     switch (request.getMessage())
     {
       case "new":
-        message = "Initializing...";
+        message = "";
         response = new Message(null, "[AuctionCentral]: ", message, "Initialized", request.getKey(), 0);
         System.out.println("[AuctionCentral] " + socket.toString()+" : " + message);
         break;
