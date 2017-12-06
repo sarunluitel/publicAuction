@@ -141,7 +141,6 @@ public class Agent extends Thread implements Serializable
              bankInput = ((Message) bankIn.readObject());
             System.out.println(this.getAgentName() + "Finished Reading from bank..."+bankInput.getSignature());
 
-//            bankInput = auctionInput = null;
 
             if (!messageText.equals(""))
             {
