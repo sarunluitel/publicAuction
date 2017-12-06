@@ -47,13 +47,8 @@ class AuctionCentralThread extends Thread
 
         while (true)
         {
-          if (in.available() != 0)
-          {
-            input = ((Message) in.readObject());
-          }
           if (input != null)
           {
-
             System.out.println(input.getSignature() + input.getMessage());
 
 //            if(in.available()!=0)input = ((Message) in.readObject());
