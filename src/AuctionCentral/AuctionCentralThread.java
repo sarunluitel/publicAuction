@@ -60,6 +60,7 @@ class AuctionCentralThread extends Thread
             System.out.println("[AuctionCentral]: Sending " + output.getMessage() + " to " + socket.toString());
             out.writeObject(output);
             out.flush();
+            out.reset();
             System.out.println("AC sent");
             
             input = null;

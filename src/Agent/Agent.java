@@ -201,11 +201,13 @@ public class Agent extends Thread implements Serializable
               System.out.println("A writing to AC");
               auctionOut.writeObject(auctionOutput);
               auctionOut.flush();
+              auctionOut.reset();
               System.out.println("A sent to AC");
   
               System.out.println("A writing to B");
               bankOut.writeObject(bankOutput);
               bankOut.flush();
+              bankOut.reset();
               System.out.println("A sent to B");
               
               messageText = "";
