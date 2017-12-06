@@ -50,7 +50,7 @@ class BankProtocol implements Serializable
     {
       case "auction central":
         message = "";
-        response = new Message(null, "[Bank]: ", message, "Connected", request.getKey(), request.getAmount());
+        response = new Message(null, "[Bank]: ", message, "", request.getKey(), -1);
         System.out.println("[Bank]: " + message);
         break;
       case "new":
@@ -68,7 +68,6 @@ class BankProtocol implements Serializable
 
         response = new Message(null, "[Bank]: ", message, "Account created", request.getKey(), account.getBalance());
         break;
-
       case "balance":
         message = "See amount for balance.";
         response = new Message(null, "[Bank]: ", message, "Balance provided", request.getKey(), account.getBalance());

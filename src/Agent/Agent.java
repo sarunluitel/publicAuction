@@ -142,6 +142,7 @@ public class Agent extends Thread implements Serializable
 
             System.out.println(this.getAgentName() + "Reading from bank...");
             if(bankIn.available() != 0) bankInput = ((Message) bankIn.readObject());
+
 //            bankInput = auctionInput = null;
 
             if (!messageText.equals(""))
@@ -151,8 +152,8 @@ public class Agent extends Thread implements Serializable
               auctionOutput = new Message(this, this.getAgentName(), messageText, "", agentCentralKey, 0);
               bankOutput = new Message(this, this.getAgentName(), messageText, "", agentBankKey, 0);
               
-              auctionOut.writeObject(auctionOutput);
-              auctionOut.flush();
+              //auctionOut.writeObject(auctionOutput);
+              //auctionOut.flush();
               bankOut.writeObject(bankOutput);
               bankOut.flush();
               
