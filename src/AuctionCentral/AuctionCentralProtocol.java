@@ -76,6 +76,7 @@ class AuctionCentralProtocol implements Serializable
    */
   public Message handleRequest(Message request)
   {
+    
     Message response;
     String message;
     System.out.println("AC handling -> " + request.getMessage());
