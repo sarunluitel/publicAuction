@@ -175,9 +175,11 @@ public class AuctionHouse implements Serializable
     
     Socket socket = new Socket(InetAddress.getByName(address), 1111);
     System.out.println("AH connected");
-    try (ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-         ObjectInputStream in = new ObjectInputStream(socket.getInputStream()))
+    try
     {
+      ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+      out.flush();
+      ObjectInputStream in = new ObjectInputStream(new BufferedInputStream(socket.getInputStream()));
       try
       {
         System.out.println("AH streams opened");
@@ -197,22 +199,26 @@ public class AuctionHouse implements Serializable
           if (input != null)
           {
             System.out.println(input.getSignature() + input.getMessage());
-            
             output = auctionHouseProtocol.handleRequest(input);
+            //input = null;
+
             if(!output.getMessage().equals(""))
             {
               System.out.println(house.name + ": Sending " + output.getMessage() + " to " + socket.toString());
               out.writeObject(output);
               out.flush();
+
+              //tried
+
               System.out.println("AH sent");
+
+              System.out.println("AH reading");
+              input = ((Message) in.readObject());
+              System.out.println("AH done reading");
             }
-            
-            input = null;
+            //tried
           }
-//          if(in.available() != 0)
-          System.out.println("AH reading");
-          input = ((Message) in.readObject());
-          System.out.println("AH done reading");
+        input = null;
         }
       }
       catch (ClassNotFoundException e)

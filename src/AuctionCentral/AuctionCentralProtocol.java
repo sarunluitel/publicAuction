@@ -111,7 +111,7 @@ class AuctionCentralProtocol implements Serializable
       case "inventory":
         auctionHouse = auctionRepository.get(request.getKey());
         LinkedList inventory = ((LinkedList)request.getSender());
-        inventories.add(request.getKey(), inventory);
+        inventories.add(auctionRepository.size()-1, inventory);
         
         message = "";
         response = new Message(null, "[AuctionCentral]: ", message, auctionHouse.getName(), request.getKey(), -1);

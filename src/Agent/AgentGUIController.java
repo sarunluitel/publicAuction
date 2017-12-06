@@ -107,10 +107,20 @@ public class AgentGUIController extends Application
     new AnimationTimer() {
       @Override
       public void handle(long now) {
-        if(agent.bankInput!=null)
+        Message bankIn = agent.bankInput, auctionIn = agent.auctionInput;
+        if(bankIn != null)
         {
-          txtBankBalance.setText("Balance: $" + agent.bankInput.getAmount() + ".00");
+          txtBankBalance.setText("Balance: $" + bankIn.getAmount() + ".00");
+          history += time.format(new Date(bankIn.getTimestamp())) + " | " + bankIn.getSignature() + bankIn.getMessage()+ "\n";
+          agent.bankInput = null;
         }
+        if(auctionIn != null)
+        {
+          history += time.format(new Date(auctionIn.getTimestamp())) + " | " + auctionIn.getSignature() + auctionIn.getMessage()+ "\n";
+          agent.auctionInput = null;
+        }
+        textArea.setText(history);
+
         if(agent.auctionInput!=null)
         {
           if(agent.auctionInput.getMessage().equals("inventory"))
@@ -174,13 +184,11 @@ public class AgentGUIController extends Application
     
     if(!request.equals(""))
     {
-      Message bankIn = agent.bankInput, auctionIn = agent.auctionInput;
-      history += time.format(new Date(System.currentTimeMillis())) + " | " + agent.getAgentName() + request + "\n";
-      if(bankIn != null) history += time.format(new Date(bankIn.getTimestamp())) + " | " + bankIn.getSignature() + bankIn.getMessage()+ "\n";
-      if(auctionIn != null) history += time.format(new Date(auctionIn.getTimestamp())) + " | " + auctionIn.getSignature() + auctionIn.getMessage()+ "\n";
-      textArea.setText(history);
-      
       agent.setMessageText(request);
+
+      history += time.format(new Date(System.currentTimeMillis())) + " | " + agent.getAgentName() + request + "\n";
+
+      textArea.setText(history);
     }
     
     synchronized (agent)
