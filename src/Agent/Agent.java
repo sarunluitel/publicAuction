@@ -109,19 +109,15 @@ public class Agent extends Thread implements Serializable
   @Override
   public void run()
   {
-    try
+    try(Socket bankSocket = new Socket(bankAddress, 2222);
+        Socket auctionCentralSocket = new Socket(auctionAddress, 1111))
     {
-      Socket bankSocket = new Socket(bankAddress, 2222);
-      Socket auctionCentralSocket = new Socket(auctionAddress, 1111);
-      try
-      {
-        ObjectOutputStream auctionOut = new ObjectOutputStream(auctionCentralSocket.getOutputStream());
-        auctionOut.flush();
-        ObjectOutputStream bankOut = new ObjectOutputStream(bankSocket.getOutputStream());
-        bankOut.flush();
 
-        ObjectInputStream auctionIn = new ObjectInputStream(auctionCentralSocket.getInputStream());
-        ObjectInputStream bankIn = new ObjectInputStream(bankSocket.getInputStream());
+      try(ObjectOutputStream auctionOut = new ObjectOutputStream(auctionCentralSocket.getOutputStream());
+          ObjectOutputStream bankOut = new ObjectOutputStream(bankSocket.getOutputStream());
+          ObjectInputStream auctionIn = new ObjectInputStream(new BufferedInputStream(auctionCentralSocket.getInputStream()));
+          ObjectInputStream bankIn = new ObjectInputStream(new BufferedInputStream(bankSocket.getInputStream())))
+      {
 
         try
         {
@@ -138,10 +134,12 @@ public class Agent extends Thread implements Serializable
           while (!messageText.equals("EXIT"))
           {
             System.out.println(this.getAgentName() + "Reading from auction central...");
-            if(auctionIn.available() != 0) auctionInput = ((Message) auctionIn.readObject());
+            auctionInput = ((Message) auctionIn.readObject());
+            System.out.println(this.getAgentName() + "Finished Reading from auction central..."+auctionInput.getSignature());
 
             System.out.println(this.getAgentName() + "Reading from bank...");
-            if(bankIn.available() != 0) bankInput = ((Message) bankIn.readObject());
+             bankInput = ((Message) bankIn.readObject());
+            System.out.println(this.getAgentName() + "Finished Reading from bank..."+bankInput.getSignature());
 
 //            bankInput = auctionInput = null;
 
