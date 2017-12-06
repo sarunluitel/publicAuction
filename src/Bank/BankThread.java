@@ -41,7 +41,7 @@ class BankThread extends Thread
       ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
       out.flush();
       
-      ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+      ObjectInputStream in = new ObjectInputStream(new BufferedInputStream(socket.getInputStream()));
       try
       {
         System.out.println("B streams opened");

@@ -131,7 +131,7 @@ public class AgentGUIController extends Application
               }
               System.out.println(listings);
             }
-            System.out.println("Setting item combo box");
+          //  System.out.println("Setting item combo box");
             itemsComboBox.setItems(list);
           }
         }
