@@ -39,14 +39,24 @@ class AuctionCentral
     //try (Socket bankSocket = new Socket(InetAddress.getByName(address), 2222))
 
 
-    try (ServerSocket serverSocket = new ServerSocket(1111, 50, InetAddress.getLocalHost()))
+    try (ServerSocket serverSocket = new ServerSocket(1111, 50, InetAddress.getLocalHost());
+         Socket bankSocket = new Socket(address,2222))
     {
-      System.out.println("[AuctionCentral]: " + serverSocket.toString() + ".");
+      System.out.println("[AuctionCentral]: serverSocket" + serverSocket.toString() + ".");
+      System.out.println("[AuctionCentral]: bankSocket" + bankSocket.toString() + ".");
+
+      AuctionCentralListener auctionCentralListener = new AuctionCentralListener(bankSocket);
+      auctionCentralListener.start();
+
+      System.out.println("AuctionCentralListener starts");
+
       while (true)
       {
+//        serverSocket.setSoTimeout(5000);
+        auctionCentralListener.addCount();
         new AuctionCentralThread(serverSocket.accept()).start();
+        System.out.println("Test " + auctionCentralListener.getCount() + "," + auctionCentralListener.getState());
       }
-      
     }
     catch (IOException e)
     {
