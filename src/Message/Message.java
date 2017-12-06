@@ -15,7 +15,7 @@ import java.util.Date;
 
 public class Message implements Serializable
 {
-  private final SimpleDateFormat time = new SimpleDateFormat("h:mm:ss");
+  private final SimpleDateFormat time = new SimpleDateFormat("h:mm:ss:ms");
   
   private final Object sender;
 

@@ -151,11 +151,11 @@ public class Agent extends Thread implements Serializable
           while (!messageText.equals("EXIT"))
           {
             System.out.println(this.getAgentName() + "Reading from auction central...");
-//            if(auctionIn.available() != 0)
+            if(auctionIn.available() != 0)
               auctionInput = ((Message) auctionIn.readObject());
 
             System.out.println(this.getAgentName() + "Reading from bank...");
-//            if(bankIn.available() != 0)
+            if(bankIn.available() != 0)
               bankInput = ((Message) bankIn.readObject());
 
 //            bankInput = auctionInput = null;
