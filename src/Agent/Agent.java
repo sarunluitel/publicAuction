@@ -11,6 +11,7 @@
 package Agent;
 
 import Message.Message;
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 
 import java.io.*;
 import java.net.InetAddress;
@@ -28,6 +29,42 @@ public class Agent extends Thread implements Serializable
   
   private InetAddress bankAddress, auctionAddress;
   public Message bankInput, bankOutput, auctionInput, auctionOutput;
+  
+  class Listener extends Thread
+  {
+    private ObjectInputStream auctionIn, bankIn;
+    
+    Listener(ObjectInputStream ais, ObjectInputStream bis)
+    {
+      auctionIn = ais;
+      bankIn = bis;
+    }
+  
+    @Override
+    public void run() {
+      while(true) {
+        try {
+          try {
+            if(auctionIn.available() != 0)
+            {
+              System.out.println(getAgentName() + "Reading from auction central...");
+              auctionInput = ((Message) auctionIn.readObject());
+              System.out.println(auctionInput.getMessage());
+            }
+      
+            if(bankIn.available() != 0)
+            {
+              System.out.println(getAgentName() + "Reading from bank...");
+              bankInput = ((Message) bankIn.readObject());
+              System.out.println(bankInput.getMessage());
+            }
+          }catch(IOException e) {
+          }
+        }catch(ClassNotFoundException c) {
+        }
+      }
+    }
+  }
   
   /**
    * Sets the IP address for the bank.
@@ -148,18 +185,12 @@ public class Agent extends Thread implements Serializable
           
           System.out.println("A sent init to AC");
           
+          Listener listener = new Listener(auctionIn, bankIn);
+          listener.start();
+          
           while (!messageText.equals("EXIT"))
           {
-            System.out.println(this.getAgentName() + "Reading from auction central...");
-            if(auctionIn.available() != 0)
-              auctionInput = ((Message) auctionIn.readObject());
-
-            System.out.println(this.getAgentName() + "Reading from bank...");
-            if(bankIn.available() != 0)
-              bankInput = ((Message) bankIn.readObject());
-
 //            bankInput = auctionInput = null;
-
             if (!messageText.equals(""))
             {
               System.out.println(this.getAgentName() + "Submitting message = " + messageText + " to auction & bank.");
@@ -202,8 +233,9 @@ public class Agent extends Thread implements Serializable
           auctionOut.close();
           auctionCentralSocket.close();
         }
-        catch (ClassNotFoundException e)
+        catch (IOException e)
         {
+          
           e.printStackTrace();
         }
       }
