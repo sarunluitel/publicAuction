@@ -30,8 +30,28 @@ class AuctionCentralProtocol implements Serializable
   
   private Agent agent;
   private static int agentCount;
-  
-  
+
+
+  /**
+   * Default constructor.
+   *
+   * Takes a socket and an object to identify who it is speaking with.
+   *
+   * @param socket
+   * @throws IOException
+   */
+  AuctionCentralProtocol(Socket socket) throws IOException
+  {
+    this.socket = socket;
+    if(object instanceof Agent)
+    {
+      this.agent = ((Agent)object);
+      agentCount++;
+
+      System.out.println(agent.getAgentName() + ": Connected to AuctionCentral.");
+      System.out.println("[AuctionCentral]: " + agentCount + " agent(s) are connected!");
+    }
+  }
   /**
    * Default constructor.
    *
@@ -53,19 +73,11 @@ class AuctionCentralProtocol implements Serializable
       System.out.println(agent.getAgentName() + ": Connected to AuctionCentral.");
       System.out.println("[AuctionCentral]: " + agentCount + " agent(s) are connected!");
     }
+  }
 
-    /*
-    if (!message.getMessage().equals("register"))
-    {
-      Socket bankSocket = new Socket(InetAddress.getByName(message.getItem().substring(1)), 2222);
-      bankO = new ObjectOutputStream(bankSocket.getOutputStream());
-      bankI = new ObjectInputStream(bankSocket.getInputStream());
-      System.out.println("[AuctionCentral]: Connected to bank.");
-  
-      bankO.writeObject(new Message(null, "[AuctionCentral]: ", "auction central", "", 0, 0));
-      bankO.flush();
-    }
-    */
+  public void setMessage(Message message)
+  {
+    this.object = message.getSender();
   }
 
   /**
@@ -76,7 +88,6 @@ class AuctionCentralProtocol implements Serializable
    */
   public Message handleRequest(Message request)
   {
-    
     Message response;
     String message;
     System.out.println("AC handling -> " + request.getMessage());
