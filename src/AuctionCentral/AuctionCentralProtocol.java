@@ -170,7 +170,7 @@ class AuctionCentralProtocol {
 //      case "declined":
 //        break;
       case "winner":
-        message = "remove";
+        message = request.getSignature() + " has won the bid on " + request.getItem() + " for $" + request.getAmount() + "!";
         response = new Message(null, "[AuctionCentral]: ", message, "Mitigated transaction", request.getKey(), 0);
         //handleTransaction()
         System.out.println("[AuctionCentral]: " + message);

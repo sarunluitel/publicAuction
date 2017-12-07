@@ -59,7 +59,22 @@ class BankAccount
   /**
    * Adds holds on this account as needed.
    */
-  public void addHolds()
+  public synchronized void addHold(int amount)
   {
+    holds.add(amount);
+    this.balance -= amount;
+  }
+  
+  public synchronized void removeHold(int amount)
+  {
+    holds.remove(amount);
+    this.balance += amount;
+  }
+  
+  public synchronized void remove(int amount)
+  {
+    this.balance += holds.remove(amount);
+    this.balance -= amount;
+    if(this.balance < 0) this.balance = 0;
   }
 }

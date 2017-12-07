@@ -37,7 +37,11 @@ class AuctionCentralThread extends Thread
       name = "[Bank]: ";
       sockets.put(name, writer.getSocket());
     }
-    if(!writers.contains(writer)) writers.add(writer);
+    if(!writers.contains(writer))
+    {
+      writer.setName("[Bank]: ");
+      writers.add(writer);
+    }
   }
 
   /**
@@ -60,10 +64,8 @@ class AuctionCentralThread extends Thread
         AuctionCentralProtocol auctionCentralProtocol = new AuctionCentralProtocol(current, input);
 //        auctionCentralProtocol.handleRequest(input);
         System.out.println("AC protocol made");
-  
-        name = auctionCentralProtocol.getCurrent();
-        
-        sockets.put(name, current);
+//        sockets.put(name, current);
+        auctionCentralWriter.setName(auctionCentralProtocol.getCurrent());
         writers.add(auctionCentralWriter);
         
         System.out.println("CURRENT CONNECTIONS:");
@@ -82,7 +84,7 @@ class AuctionCentralThread extends Thread
 //            out.writeObject(output);
 //            out.flush();
 //            out.reset();
-            sendMessageToClients(output);
+            broadcast(output);
             System.out.println("AC sent");
             
             input = null;
@@ -111,17 +113,26 @@ class AuctionCentralThread extends Thread
     }
   }
   
-  public synchronized void sendMessageToClients(Message message)
+  private synchronized void broadcast(Message message)
   {
-    if(message.getMessage().equals("ignore")) return;
-    List<AuctionCentralWriter> deadClients = new ArrayList<>();
+    String content = message.getMessage();
+    String name;
+    if(content.equals("ignore")) return;
     
+    List<AuctionCentralWriter> deadClients = new ArrayList<>();
     for(AuctionCentralWriter client: writers)
     {
-      try {
+      try
+      {
+        name = client.getName();
+  
+        if((name.contains("Bank") || name.contains("House")) && (content.contains("Error") || content.contains("Welcome"))) break;
+        
         System.out.println("[AuctionCentral]: Sending " + message.getMessage() + " to " + client.getSocket().toString());
         client.sendMessage(message);
-      } catch (IOException e) {
+      }
+      catch (IOException e)
+      {
         deadClients.add(client);
       }
     }

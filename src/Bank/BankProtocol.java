@@ -13,6 +13,10 @@ import Message.Message;
 
 import java.io.Serializable;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 class BankProtocol implements Serializable
 {
@@ -20,6 +24,7 @@ class BankProtocol implements Serializable
   private Message message;
 
   private BankAccount account;
+  private static Map<Integer, BankAccount> accounts = Collections.synchronizedMap(new HashMap<>());
 
   /**
    * Default constructor.
@@ -56,12 +61,14 @@ class BankProtocol implements Serializable
       case "new":
         String name = ((Agent) request.getSender()).getAgentName();
         int publicID =  ((Agent) request.getSender()).getPublicID();
-
+        
         System.out.println("[Bank]: Creating new account for " + name + ".");
 
         account = new BankAccount(name, publicID, 500);
         Bank.addAccounts(account);
-
+        
+        accounts.put(publicID, account);
+        
         message = "New account = [NAME=" + account.getName() + ", ID=" + account.getPublicID()+ ", BAL=$" + account.getBalance() + ".00].";
         System.out.println("[Bank]: " + message);
         System.out.println("[Bank]: " + Bank.getNumAccounts() + " account(s) are opened!");
@@ -70,21 +77,27 @@ class BankProtocol implements Serializable
         break;
       case "balance":
         message = "updated";
+        account = accounts.get(request.getKey());
         response = new Message(null, "[Bank]: ", message, "Balance provided", request.getKey(), account.getBalance());
         System.out.println("[Bank]: " + message);
         break;
       case "block":
         message = "blocked";
+        account = accounts.get(request.getKey());
+        account.addHold(request.getAmount());
         response = new Message(null, "[Bank]: ", message, "Blocked an amount", request.getKey(), account.getBalance());
         System.out.println("[Bank]: " + message);
         break;
       case "unblock":
         message = "unblocked";
+        account = accounts.get(request.getKey());
+        account.removeHold(request.getAmount());
         response = new Message(null, "[Bank]: ", message, "Blocked an amount", request.getKey(), account.getBalance());
         System.out.println("[Bank]: " + message);
         break;
       case "remove":
         message = "removed";
+        account.remove(request.getAmount());
         response = new Message(null, "[Bank]: ", message, "Funds removed", request.getKey(), account.getBalance());
         System.out.println("[Bank]: " + message);
         break;

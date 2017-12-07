@@ -96,7 +96,7 @@ public class AuctionHouse implements Serializable
    */
   private AuctionHouse()
   {
-    name = "[House-...] ";
+    this.name = "[House-...] ";
     
     setItems();
   }
@@ -106,7 +106,7 @@ public class AuctionHouse implements Serializable
    * @param index
    */
   void setIndex(int index) {
-    name = "[House-" + index + "]: ";
+    this.name = "[House-" + index + "]: ";
     this.index = index;
   }
   
