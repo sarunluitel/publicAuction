@@ -82,21 +82,21 @@ class BankProtocol implements Serializable
         System.out.println("[Bank]: " + message);
         break;
       case "block":
-        message = "blocked";
+        message = "ignore";
         account = accounts.get(request.getKey());
         account.addHold(request.getAmount());
         response = new Message(null, "[Bank]: ", message, "Blocked an amount", request.getKey(), account.getBalance());
         System.out.println("[Bank]: " + message);
         break;
       case "unblock":
-        message = "unblocked";
+        message = "ignore";
         account = accounts.get(request.getKey());
         account.removeHold(request.getAmount());
         response = new Message(null, "[Bank]: ", message, "Blocked an amount", request.getKey(), account.getBalance());
         System.out.println("[Bank]: " + message);
         break;
       case "remove":
-        message = "removed";
+        message = "ignore";
         account.remove(request.getAmount());
         response = new Message(null, "[Bank]: ", message, "Funds removed", request.getKey(), account.getBalance());
         System.out.println("[Bank]: " + message);
