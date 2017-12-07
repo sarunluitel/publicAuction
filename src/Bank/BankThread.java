@@ -64,7 +64,7 @@ class BankThread extends Thread
   
             System.out.println("[Bank]: Sending " + output.getMessage() + " to " + socket.toString());
             
-            if(output.getAmount() != -1)
+            if(!output.getMessage().equals("ignore"))
             {
               System.out.println("B sending");
               out.writeObject(output);

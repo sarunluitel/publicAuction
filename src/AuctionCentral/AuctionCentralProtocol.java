@@ -18,7 +18,10 @@ import java.util.*;
 
 class AuctionCentralProtocol {
   private static Map<Integer, AuctionHouse> auctionRepository = Collections.synchronizedMap(new HashMap<Integer, AuctionHouse>());
-  private static List<LinkedList> inventories = Collections.synchronizedList(new LinkedList<>());
+//  private static List<LinkedList> inventories = Collections.synchronizedList(new LinkedList<>());
+  private String inventory = "";
+  private static ArrayList<AuctionHouse> auctionList = new ArrayList<>();
+  
   
   private Socket socket;
   private Object object;
@@ -123,6 +126,7 @@ class AuctionCentralProtocol {
         
         message = "registered";
         auctionRepository.put(ID, auctionHouse);
+        auctionList.add(auctionHouse);
         
         current = "[House-" + ID + "]";
         
@@ -133,31 +137,40 @@ class AuctionCentralProtocol {
       case "inventory":
         auctionHouse = auctionRepository.get(request.getKey());
         System.out.println(houseCount);
-        LinkedList inventory = ((LinkedList)request.getSender());
-        inventories.add(houseCount-1, inventory);
+        inventory = auctionHouse.getInventory();
+//        inventories.add(houseCount-1, inventory);
         
-        message = "";
+        message = "ignore";
         response = new Message(null, "[AuctionCentral]: ", message, auctionHouse.getName(), request.getKey(), -1);
         System.out.println("[AuctionCentral]: " + message);
         break;
       case "de-register":
         auctionHouse = auctionRepository.remove(request.getKey());
+        auctionList.remove(auctionHouse);
         message = "de-registered";
   
         response = new Message(null, "[AuctionCentral]: ", message, auctionHouse.getName(), request.getKey(), auctionRepository.size());
         System.out.println("[AuctionCentral]: " + message);
         break;
       case "repository":
-        message = "inventory";
-        response = new Message(inventories, "[AuctionCentral]: ", message, "House list", request.getKey(), auctionRepository.size());
+        message = "";
+        System.out.println(auctionList.size());
+        for(AuctionHouse auctionHouse : auctionList)
+        {
+          if(auctionHouse.getInventory().length() < 10) auctionList.remove(auctionHouse);
+          message += auctionHouse.getInventory() + "\n";
+        }
+        System.out.println(message);
+        
+        response = new Message(null, "[AuctionCentral]: \n", message, "", request.getKey(), auctionRepository.size());
         System.out.println("[AuctionCentral]: " + message);
         break;
 //      case "accepted":
 //        break;
 //      case "declined":
 //        break;
-      case "transaction":
-        message = "Mitigating transaction...";
+      case "winner":
+        message = "remove";
         response = new Message(null, "[AuctionCentral]: ", message, "Mitigated transaction", request.getKey(), 0);
         //handleTransaction()
         System.out.println("[AuctionCentral]: " + message);

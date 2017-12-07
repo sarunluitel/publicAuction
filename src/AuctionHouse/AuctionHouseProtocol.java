@@ -34,7 +34,7 @@ public class AuctionHouseProtocol
         System.out.println(house.getName() + ": " + message);
         break;
       case "de-registered":
-        message = "";
+        message = "ignore";
         response = new Message(this, house.getName() + ": ", message, "", -1, -1);
         System.out.println(house.getName() + ": " + message);
         break;
@@ -44,7 +44,7 @@ public class AuctionHouseProtocol
         System.out.println(house.getName() + ": " + message);
         break;
       case "confirmation":
-        message = "";
+        message = "ignore";
         response = new Message(null, house.getName() + ": ", message, "", -1, -1);
         break;
       default:

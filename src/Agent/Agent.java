@@ -175,10 +175,12 @@ public class Agent extends Thread implements Serializable
               System.out.println(this.getAgentName() + "Reading from bank.... about to read size:"+ bankIn.available());
               bankInput = ((Message) bankIn.readObject());
               System.out.println(this.getAgentName() + "Finished Reading from bank..."+bankInput.getSignature()+"Size read"+bankIn.available());
-
+              filterBank(bankInput);
+              
               System.out.println(this.getAgentName() + "Reading from auction central...");
               auctionInput = ((Message) auctionIn.readObject());
               System.out.println(this.getAgentName() + "Finished Reading from auction central..."+auctionInput.getSignature());
+              filterAuction(auctionInput);
             }
             else
             {
@@ -216,6 +218,39 @@ public class Agent extends Thread implements Serializable
     catch (IOException e)
     {
       e.printStackTrace();
+    }
+  }
+  
+  private void filterBank(Message message)
+  {
+    switch(message.getMessage())
+    {
+      case "Error - request not recognized.":
+        bankInput = null;
+        break;
+      case "updated":
+        auctionInput = null;
+        break;
+      default:
+        break;
+    }
+  }
+  
+  private void filterAuction(Message message)
+  {
+    switch(message.getMessage())
+    {
+      case "registered":
+        auctionInput = null;
+        break;
+      case "de-registered":
+        auctionInput = null;
+        break;
+      case "remove":
+        auctionInput = null;
+        break;
+      default:
+        break;
     }
   }
 }

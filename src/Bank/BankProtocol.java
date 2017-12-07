@@ -49,7 +49,7 @@ class BankProtocol implements Serializable
     switch (request.getMessage())
     {
       case "auction central":
-        message = "";
+        message = "ignore";
         response = new Message(null, "[Bank]: ", message, "", request.getKey(), -1);
         System.out.println("[Bank]: " + message);
         break;
@@ -69,22 +69,22 @@ class BankProtocol implements Serializable
         response = new Message(null, "[Bank]: ", message, "Account created", request.getKey(), account.getBalance());
         break;
       case "balance":
-        message = "See amount for balance.";
+        message = "updated";
         response = new Message(null, "[Bank]: ", message, "Balance provided", request.getKey(), account.getBalance());
         System.out.println("[Bank]: " + message);
         break;
       case "block":
-        message = "Blocking " + account.getBalance() + " on " + account.getName() + "'s...";
+        message = "blocked";
         response = new Message(null, "[Bank]: ", message, "Blocked an amount", request.getKey(), account.getBalance());
         System.out.println("[Bank]: " + message);
         break;
       case "unblock":
-        message = "Unblocking " + account.getBalance() + " on " + account.getName() + "'s...";
+        message = "unblocked";
         response = new Message(null, "[Bank]: ", message, "Blocked an amount", request.getKey(), account.getBalance());
         System.out.println("[Bank]: " + message);
         break;
-      case "transaction":
-        message = "Purchase made, removing $" + account.getBalance() + ".00 from " + account.getName() + "'s account...";
+      case "remove":
+        message = "removed";
         response = new Message(null, "[Bank]: ", message, "Funds removed", request.getKey(), account.getBalance());
         System.out.println("[Bank]: " + message);
         break;

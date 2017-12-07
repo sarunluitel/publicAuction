@@ -113,6 +113,7 @@ class AuctionCentralThread extends Thread
   
   public synchronized void sendMessageToClients(Message message)
   {
+    if(message.getMessage().equals("ignore")) return;
     List<AuctionCentralWriter> deadClients = new ArrayList<>();
     
     for(AuctionCentralWriter client: writers)

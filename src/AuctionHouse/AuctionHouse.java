@@ -106,7 +106,7 @@ public class AuctionHouse implements Serializable
    * @param index
    */
   void setIndex(int index) {
-    name = "[House-" + index + "] ";
+    name = "[House-" + index + "]: ";
     this.index = index;
   }
   
@@ -154,9 +154,19 @@ public class AuctionHouse implements Serializable
     }
   }
   
-  LinkedList<Item> getInventory()
+//  LinkedList<Item> getInventory()
+//  {
+//    return itemsForSale;
+//  }
+  
+  public String getInventory()
   {
-    return itemsForSale;
+    String items = "";
+    for(Item item : itemsForSale)
+    {
+      items += name + item.getItemName() + ":" + item.getBidAmount();
+    }
+    return items;
   }
 
   /**
@@ -202,7 +212,7 @@ public class AuctionHouse implements Serializable
             output = auctionHouseProtocol.handleRequest(input);
             //input = null;
 
-            if(!output.getMessage().equals(""))
+            if(!output.getMessage().equals("ignore"))
             {
               System.out.println(house.name + ": Sending " + output.getMessage() + " to " + socket.toString());
               out.writeObject(output);
