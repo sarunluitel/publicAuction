@@ -117,6 +117,7 @@ class AuctionCentralThread extends Thread
   {
     String content = message.getMessage();
     String name;
+    
     if(content.equals("ignore")) return;
     
     List<AuctionCentralWriter> deadClients = new ArrayList<>();
@@ -127,6 +128,8 @@ class AuctionCentralThread extends Thread
         name = client.getName();
   
         if((name.contains("Bank") || name.contains("House")) && (content.contains("Error") || content.contains("Welcome"))) break;
+        if(name.contains("Bank") && content.contains("won")) message = new Message(message.getSender(), message.getSignature(), "remove", message.getItem(), message.getKey(), message.getAmount());
+        if(name.contains("House") && content.contains("won")) break;
         
         System.out.println("[AuctionCentral]: Sending " + message.getMessage() + " to " + client.getSocket().toString());
         client.sendMessage(message);
