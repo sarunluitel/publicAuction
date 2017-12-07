@@ -18,10 +18,9 @@ import java.util.*;
 
 class AuctionCentralProtocol {
   private static Map<Integer, AuctionHouse> auctionRepository = Collections.synchronizedMap(new HashMap<Integer, AuctionHouse>());
-//  private static List<LinkedList> inventories = Collections.synchronizedList(new LinkedList<>());
+  private static List<LinkedList> inventories = Collections.synchronizedList(new LinkedList<>());
   private String inventory = "";
   private static ArrayList<AuctionHouse> auctionList = new ArrayList<>();
-  
   
   private Socket socket;
   private Object object;
@@ -128,6 +127,11 @@ class AuctionCentralProtocol {
         auctionRepository.put(ID, auctionHouse);
         auctionList.add(auctionHouse);
         
+        for(AuctionHouse a : auctionList)
+        {
+          inventories.add(houseCount-1, a.getList());
+        }
+        
         current = "[House-" + ID + "]";
         
         response = new Message(null, "[AuctionCentral]: ", message, auctionHouse.getName(), ID, houseCount);
@@ -141,7 +145,7 @@ class AuctionCentralProtocol {
 //        inventories.add(houseCount-1, inventory);
         
         message = "ignore";
-        response = new Message(null, "[AuctionCentral]: ", message, auctionHouse.getName(), request.getKey(), -1);
+        response = new Message(inventories, "[AuctionCentral]: ", message, auctionHouse.getName(), request.getKey(), -1);
         System.out.println("[AuctionCentral]: " + message);
         break;
       case "de-register":

@@ -176,10 +176,10 @@ public class AuctionHouse implements Serializable
     }
   }
   
-//  LinkedList<Item> getInventory()
-//  {
-//    return itemsForSale;
-//  }
+  public LinkedList<Item> getList()
+  {
+    return itemsForSale;
+  }
   
   public String getInventory()
   {
