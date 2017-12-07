@@ -1,8 +1,10 @@
 package AuctionHouse;
 
 import Message.Message;
+import AuctionHouse.AuctionHouse.Item;
 
 import java.net.Socket;
+import java.util.LinkedList;
 
 public class AuctionHouseProtocol
 {
@@ -39,8 +41,28 @@ public class AuctionHouseProtocol
         System.out.println(house.getName() + ": " + message);
         break;
       case "bid":
-        message = "accepted";
-        response = new Message(this, house.getName() + ": ", message, /*house.getItem()*/"", request.getKey(), 100);
+        LinkedList<Item> itemList = house.getItemsForSale();
+        int itemIndex = 0;
+        boolean itemHere = false;
+        for(int i = 0; i < itemList.size(); i++)
+        {
+          if(itemList.get(i).getItemName().equalsIgnoreCase(request.getItem()))
+          {
+            itemIndex = i;
+            itemHere = true;
+            break;
+          }
+        }
+        if(house.higherBid(itemIndex, request.getAmount()) && itemHere)
+        {
+          message = "accepted";
+          house.setItemBid(itemIndex, request.getAmount(), request.getKey());
+        }
+        else
+        {
+          message = "declined";
+        }
+        response = new Message(this, house.getName() + ": ", message, request.getItem(), request.getKey(), request.getAmount());
         System.out.println(house.getName() + ": " + message);
         break;
       case "confirmation":

@@ -22,9 +22,10 @@ import java.util.Scanner;
 public class AuctionHouse implements Serializable
 {
   private String name;
+
   private int index;
   private int publicID;
-  private LinkedList<String> itemList = new LinkedList<>();
+  //private LinkedList<String> itemList = new LinkedList<>();
   private LinkedList<Item> itemsForSale = new LinkedList<>();
   
   /**
@@ -33,8 +34,8 @@ public class AuctionHouse implements Serializable
   public class Item implements Serializable
   {
     private final String itemName;
-    private int agentKey;
-    private int bidAmount;
+    private int previous, current;
+    private int bidAmount, prevAmount;
     
     /**
      * Default constructor
@@ -44,6 +45,7 @@ public class AuctionHouse implements Serializable
     {
       itemName = "Item-" + index;
       bidAmount = 100;
+      current = -1;
     }
   
     /**
@@ -61,21 +63,38 @@ public class AuctionHouse implements Serializable
     {
       return bidAmount;
     }
+
+    /**
+     * @return the previous highest bid on item.
+     */
+    public int getPrevAmount()
+    {
+      return prevAmount;
+    }
   
     /**
      * @return the current highest bidder key on item.
      */
     public int getAgent()
     {
-      return agentKey;
+      return current;
+    }
+
+    /**
+     * @return the previous highest bidder key on item.
+     */
+    public int getPrevious()
+    {
+      return previous;
     }
   
     /**
      * Sets the current bid.
      * @param bid
      */
-    private void setCurrentBid(int bid)
+    synchronized void setCurrentBid(int bid)
     {
+      prevAmount = bidAmount;
       bidAmount = bid;
     }
   
@@ -83,10 +102,13 @@ public class AuctionHouse implements Serializable
      * Sets the current bidder.
      * @param agent
      */
-    private void setAgentKey(int agent)
+    synchronized void setAgentKey(int agent)
     {
-      agentKey = agent;
+      previous = current;
+      current = agent;
     }
+
+
   }
   
   /**
@@ -170,6 +192,33 @@ public class AuctionHouse implements Serializable
   }
 
   /**
+   * Method used by AuctionHouseProtocol to check the items
+   * @return items
+   */
+  LinkedList<Item> getItemsForSale()
+  {
+    return itemsForSale;
+  }
+
+  boolean higherBid(int itemIndex, int bidValue)
+  {
+    Item item = itemsForSale.get(itemIndex);
+    if(item.getBidAmount() < bidValue)
+    {
+      return true;
+    }
+    return false;
+  }
+
+  void setItemBid(int itemIndex, int bidValue, int agentKey)
+  {
+    itemsForSale.get(itemIndex).setCurrentBid(bidValue);
+    itemsForSale.get(itemIndex).setAgentKey(agentKey);
+  }
+
+
+
+  /**
    * Main method for auction house.
    *
    * @param args
@@ -210,6 +259,23 @@ public class AuctionHouse implements Serializable
           {
             System.out.println(input.getSignature() + input.getMessage());
             output = auctionHouseProtocol.handleRequest(input);
+            if(output.getMessage().equalsIgnoreCase("accepted"))
+            {
+              synchronized (house)
+              {
+                int itemIndex = 0;
+                LinkedList<Item> itemList = house.itemsForSale;
+                for (int i = 0; i < itemList.size(); i++) {
+                  if (itemList.get(i).getItemName().equalsIgnoreCase(output.getItem())) {
+                    itemIndex = i;
+                    break;
+                  }
+                }
+                out.writeObject(new Message(output.getSender(), output.getSignature(), "holdremove",
+                        output.getItem(), itemList.get(itemIndex).getPrevious(), itemList.get(itemIndex).getPrevAmount()));
+                out.flush();
+              }
+            }
             //input = null;
 
             if(!output.getMessage().equals("ignore"))
