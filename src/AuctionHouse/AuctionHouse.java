@@ -12,6 +12,8 @@
 package AuctionHouse;
 
 import Message.Message;
+import javafx.animation.PauseTransition;
+import javafx.util.Duration;
 
 import java.io.*;
 import java.net.InetAddress;
@@ -22,6 +24,7 @@ import java.util.Scanner;
 public class AuctionHouse implements Serializable
 {
   private String name;
+  private PauseTransition testTimer = new PauseTransition(Duration.seconds(30));
 
   private int index;
   private int publicID;
@@ -228,6 +231,10 @@ public class AuctionHouse implements Serializable
   {
     AuctionHouse house = new AuctionHouse();
     Scanner scan = new Scanner(System.in);
+
+    PauseTransition timer1;
+    PauseTransition timer2;
+    PauseTransition timer3;
     
     System.out.println("Enter Auction Central's IP: ");
     String address = scan.nextLine();
