@@ -15,10 +15,10 @@ import Message.Message;
 import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.rmi.MarshalException;
 import java.util.*;
 
-class AuctionCentralProtocol implements Serializable
-{
+class AuctionCentralProtocol implements Serializable {
   private static Map<Integer, AuctionHouse> auctionRepository = Collections.synchronizedMap(new HashMap<Integer, AuctionHouse>());
   private static List<LinkedList> inventories = Collections.synchronizedList(new LinkedList<>());
   
@@ -30,26 +30,25 @@ class AuctionCentralProtocol implements Serializable
   
   private Agent agent;
   private static int agentCount;
-
+  
+  private String current;
   private Message pending;
   private boolean hasPending;
   
   /**
    * Default constructor.
-   *
+   * <p>
    * Takes a socket and an object to identify who it is speaking with.
    *
    * @param socket
    * @throws IOException
    */
-  AuctionCentralProtocol(Socket socket) throws IOException
-  {
+  AuctionCentralProtocol(Socket socket) throws IOException {
     this.socket = socket;
-    if(object instanceof Agent)
-    {
-      this.agent = ((Agent)object);
+    if(object instanceof Agent) {
+      this.agent = ((Agent) object);
       agentCount++;
-
+  
       System.out.println(agent.getAgentName() + ": Connected to AuctionCentral.");
       System.out.println("[AuctionCentral]: " + agentCount + " agent(s) are connected!");
     }
@@ -57,27 +56,34 @@ class AuctionCentralProtocol implements Serializable
   
   /**
    * Default constructor.
-   *
+   * <p>
    * Takes a socket and an object to identify who it is speaking with.
    *
    * @param socket
    * @param message
    * @throws IOException
    */
-  AuctionCentralProtocol(Socket socket, Message message) throws IOException
-  {
+  AuctionCentralProtocol(Socket socket, Message message) throws IOException {
     this.socket = socket;
     this.object = message.getSender();
-    if(object instanceof Agent)
-    {
-      this.agent = ((Agent)object);
+    if(object instanceof Agent) {
+      this.agent = ((Agent) object);
       agentCount++;
-
+  
       System.out.println(agent.getAgentName() + ": Connected to AuctionCentral.");
       System.out.println("[AuctionCentral]: " + agentCount + " agent(s) are connected!");
     }
+    
+    if(message.getSender() instanceof Agent) current = ((Agent) message.getSender()).getAgentName();
+    else if(message.getSender() instanceof AuctionHouse) current = ((AuctionHouse) message.getSender()).getName();
+    else current = "[Unknown-" + ((int) (Math.random() * 1000)) + "]";
   }
-
+  
+  public String getCurrent()
+  {
+    return current;
+  }
+  
   public void setMessage(Message message)
   {
     this.object = message.getSender();
@@ -119,6 +125,8 @@ class AuctionCentralProtocol implements Serializable
         
         message = "registered";
         auctionRepository.put(ID, auctionHouse);
+        
+        current = "[House-" + ID + "]";
         
         response = new Message(null, "[AuctionCentral]: ", message, auctionHouse.getName(), ID, auctionRepository.size());
         System.out.println("[AuctionCentral]: " + message);

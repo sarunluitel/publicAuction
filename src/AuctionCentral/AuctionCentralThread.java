@@ -58,13 +58,10 @@ class AuctionCentralThread extends Thread
         input = ((Message) in.readObject());
 
         AuctionCentralProtocol auctionCentralProtocol = new AuctionCentralProtocol(current, input);
+        auctionCentralProtocol.handleRequest(input);
         System.out.println("AC protocol made");
   
-        Object object = input.getSender();
-        name = "object";
-        if(object instanceof Agent) name = ((Agent)object).getAgentName();
-        else if(object instanceof AuctionHouse) name = ((AuctionHouse)object).getName();
-        else name += ((int)(Math.random())*1000);
+        name = auctionCentralProtocol.getCurrent();
         
         sockets.put(name, current);
         
