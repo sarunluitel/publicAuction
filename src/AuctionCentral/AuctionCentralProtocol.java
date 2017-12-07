@@ -165,14 +165,31 @@ class AuctionCentralProtocol {
           message += auctionHouse.getInventory() + "\n";
         }
         System.out.println(message);
-        
+  
         response = new Message(null, "[AuctionCentral]: \n", message, "", request.getKey(), auctionRepository.size());
         System.out.println("[AuctionCentral]: " + message);
         break;
-//      case "accepted":
-//        break;
-//      case "declined":
-//        break;
+      case "accepted":
+        message = "[Agent-" + request.getKey() + "] is the highest bidder on " + request.getSignature() + request.getItem() + " for an amount of " + request.getAmount();
+        System.out.println(auctionList.size());
+  
+        System.out.println(message);
+  
+        response = new Message(null, "[AuctionCentral]: \n", message, request.getItem(), request.getKey(), request.getAmount());
+        System.out.println("[AuctionCentral]: " + message);
+        break;
+      case "declined":
+        message =  request.getSignature() + "declined your bid on " + request.getItem() + " for an amount of " + request.getAmount() + ".";
+        System.out.println(auctionList.size());
+  
+        System.out.println(message);
+  
+        response = new Message(null, "[AuctionCentral]: \n", message, request.getItem(), request.getKey(), request.getAmount());
+        System.out.println("[AuctionCentral]: " + message);
+        break;
+      case "unblock":
+        response = new Message(null, "[AuctionCentral]: \n", request.getMessage(), request.getItem(), request.getKey(), request.getAmount());
+        break;
       case "winner":
         message = request.getSignature() + " has won the bid on " + request.getItem() + " for $" + request.getAmount() + "!";
         response = new Message(null, "[AuctionCentral]: ", message, "Mitigated transaction", request.getKey(), 0);
