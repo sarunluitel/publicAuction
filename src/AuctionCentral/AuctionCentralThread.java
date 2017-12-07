@@ -24,6 +24,7 @@ import java.util.Map;
 
 class AuctionCentralThread extends Thread
 {
+  private String name;
   private Socket current;
   private static Map<String, Socket> sockets = Collections.synchronizedMap(new HashMap<>());
   
@@ -60,7 +61,7 @@ class AuctionCentralThread extends Thread
         System.out.println("AC protocol made");
   
         Object object = input.getSender();
-        String name = "object";
+        name = "object";
         if(object instanceof Agent) name = ((Agent)object).getAgentName();
         else if(object instanceof AuctionHouse) name = ((AuctionHouse)object).getName();
         else name += ((int)(Math.random())*1000);
@@ -100,7 +101,7 @@ class AuctionCentralThread extends Thread
 
       in.close();
       out.close();
-      sockets.remove(current);
+      sockets.remove(name);
       current.close();
     }
     catch (IOException e)
