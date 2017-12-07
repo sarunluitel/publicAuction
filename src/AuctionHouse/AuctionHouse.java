@@ -296,7 +296,7 @@ public class AuctionHouse implements Serializable
                     System.out.println("Wrong index");
                     break;
                 }
-                out.writeObject(new Message(output.getSender(), output.getSignature(), "holdremove",
+                out.writeObject(new Message(output.getSender(), output.getSignature(), "unblock",
                         output.getItem(), itemList.get(itemIndex).getPrevious(), itemList.get(itemIndex).getPrevAmount()));
                 out.flush();
               }
