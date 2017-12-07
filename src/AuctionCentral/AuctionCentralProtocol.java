@@ -13,23 +13,21 @@ import AuctionHouse.AuctionHouse;
 import Message.Message;
 
 import java.io.*;
-import java.net.InetAddress;
 import java.net.Socket;
-import java.rmi.MarshalException;
 import java.util.*;
 
-class AuctionCentralProtocol implements Serializable {
+class AuctionCentralProtocol {
   private static Map<Integer, AuctionHouse> auctionRepository = Collections.synchronizedMap(new HashMap<Integer, AuctionHouse>());
   private static List<LinkedList> inventories = Collections.synchronizedList(new LinkedList<>());
-  
-  private ObjectInputStream bankI;
-  private ObjectOutputStream bankO;
   
   private Socket socket;
   private Object object;
   
   private Agent agent;
   private static int agentCount;
+  
+  private AuctionHouse auctionHouse;
+  private static int houseCount;
   
   private String current;
   private Message pending;
@@ -121,20 +119,22 @@ class AuctionCentralProtocol implements Serializable {
         break;
       case "register":
         int ID = (int)(Math.random() * 1000000);
-        AuctionHouse auctionHouse = ((AuctionHouse)request.getSender());
+        auctionHouse = ((AuctionHouse)request.getSender());
         
         message = "registered";
         auctionRepository.put(ID, auctionHouse);
         
         current = "[House-" + ID + "]";
         
-        response = new Message(null, "[AuctionCentral]: ", message, auctionHouse.getName(), ID, auctionRepository.size());
+        response = new Message(null, "[AuctionCentral]: ", message, auctionHouse.getName(), ID, houseCount);
         System.out.println("[AuctionCentral]: " + message);
+        houseCount++;
         break;
       case "inventory":
         auctionHouse = auctionRepository.get(request.getKey());
+        System.out.println(houseCount);
         LinkedList inventory = ((LinkedList)request.getSender());
-        inventories.add(auctionRepository.size()-1, inventory);
+        inventories.add(houseCount-1, inventory);
         
         message = "";
         response = new Message(null, "[AuctionCentral]: ", message, auctionHouse.getName(), request.getKey(), -1);

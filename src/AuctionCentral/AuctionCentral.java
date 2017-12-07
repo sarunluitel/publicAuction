@@ -45,18 +45,19 @@ class AuctionCentral
       System.out.println("[AuctionCentral]: serverSocket" + serverSocket.toString() + ".");
       System.out.println("[AuctionCentral]: bankSocket" + bankSocket.toString() + ".");
 
-      AuctionCentralListener auctionCentralListener = new AuctionCentralListener(bankSocket);
-      auctionCentralListener.start();
+//      AuctionCentralListener auctionCentralListener = new AuctionCentralListener(bankSocket);
+//      auctionCentralListener.start();
+//    System.out.println("AuctionCentralListener starts");
 
-      System.out.println("AuctionCentralListener starts");
-
+      AuctionCentralWriter bankWriter = new AuctionCentralWriter(bankSocket);
+      
       while (true)
       {
 //        serverSocket.setSoTimeout(5000);
-        auctionCentralListener.addCount();
+//        auctionCentralListener.addCount();
         
-        new AuctionCentralThread(serverSocket.accept()).start();
-        System.out.println("Test " + auctionCentralListener.getCount() + "," + auctionCentralListener.getState());
+        new AuctionCentralThread(serverSocket.accept(), bankWriter).start();
+//        System.out.println("Test " + auctionCentralListener.getCount() + "," + auctionCentralListener.getState());
       }
     }
     catch (IOException e)

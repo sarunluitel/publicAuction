@@ -8,35 +8,36 @@
 
 package AuctionCentral;
 
-import Agent.Agent;
-import AuctionHouse.AuctionHouse;
-import Bank.*;
 import Message.Message;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 class AuctionCentralThread extends Thread
 {
   private String name;
   private Socket current;
   private static Map<String, Socket> sockets = Collections.synchronizedMap(new HashMap<>());
+  private static ArrayList<AuctionCentralWriter> writers = new ArrayList<>();
   
   /**
    * Default constructor.
    *
    * @param socket
    */
-  public AuctionCentralThread(Socket socket)
+  public AuctionCentralThread(Socket socket, AuctionCentralWriter writer)
   {
     super("[AuctionCentralThread]");
     current = socket;
+    
+    if(!sockets.containsValue(writer.getSocket()))
+    {
+      name = "[Bank]: ";
+      sockets.put(name, writer.getSocket());
+    }
+    if(!writers.contains(writer)) writers.add(writer);
   }
 
   /**
@@ -44,12 +45,11 @@ class AuctionCentralThread extends Thread
    */
   public void run()
   {
+    AuctionCentralWriter auctionCentralWriter;
     System.out.println("AC connected");
     try
     {
-      ObjectOutputStream out = new ObjectOutputStream(current.getOutputStream());
-      out.flush();
-      
+      auctionCentralWriter = new AuctionCentralWriter(current);
       ObjectInputStream in = new ObjectInputStream(current.getInputStream());
       try
       {
@@ -58,12 +58,13 @@ class AuctionCentralThread extends Thread
         input = ((Message) in.readObject());
 
         AuctionCentralProtocol auctionCentralProtocol = new AuctionCentralProtocol(current, input);
-        auctionCentralProtocol.handleRequest(input);
+//        auctionCentralProtocol.handleRequest(input);
         System.out.println("AC protocol made");
   
         name = auctionCentralProtocol.getCurrent();
         
         sockets.put(name, current);
+        writers.add(auctionCentralWriter);
         
         System.out.println("CURRENT CONNECTIONS:");
         System.out.println(sockets);
@@ -76,11 +77,12 @@ class AuctionCentralThread extends Thread
 
 //            if(in.available()!=0)input = ((Message) in.readObject());
             output = auctionCentralProtocol.handleRequest(input);
-
-            System.out.println("[AuctionCentral]: Sending " + output.getMessage() + " to " + current.toString());
-            out.writeObject(output);
-            out.flush();
-            out.reset();
+            
+//            auctionCentralWriter.sendMessage(output);
+//            out.writeObject(output);
+//            out.flush();
+//            out.reset();
+            sendMessageToClients(output);
             System.out.println("AC sent");
             
             input = null;
@@ -97,8 +99,10 @@ class AuctionCentralThread extends Thread
       }
 
       in.close();
-      out.close();
+//      out.close();
+      
       sockets.remove(name);
+      
       current.close();
     }
     catch (IOException e)
@@ -106,4 +110,22 @@ class AuctionCentralThread extends Thread
       e.printStackTrace();
     }
   }
+  
+  public synchronized void sendMessageToClients(Message message)
+  {
+    List<AuctionCentralWriter> deadClients = new ArrayList<>();
+    
+    for(AuctionCentralWriter client: writers)
+    {
+      try {
+        System.out.println("[AuctionCentral]: Sending " + message.getMessage() + " to " + client.getSocket().toString());
+        client.sendMessage(message);
+      } catch (IOException e) {
+        deadClients.add(client);
+      }
+    }
+    
+    writers.removeAll(deadClients);
+  }
+  
 }
