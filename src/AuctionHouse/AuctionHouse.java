@@ -232,9 +232,9 @@ public class AuctionHouse implements Serializable
     AuctionHouse house = new AuctionHouse();
     Scanner scan = new Scanner(System.in);
 
-    PauseTransition timer1;
-    PauseTransition timer2;
-    PauseTransition timer3;
+    PauseTransition timer1 = new PauseTransition(Duration.seconds(30));
+    PauseTransition timer2 = new PauseTransition(Duration.seconds(30));
+    PauseTransition timer3 = new PauseTransition(Duration.seconds(30));
     
     System.out.println("Enter Auction Central's IP: ");
     String address = scan.nextLine();
@@ -277,6 +277,24 @@ public class AuctionHouse implements Serializable
                     itemIndex = i;
                     break;
                   }
+                }
+                switch(itemIndex)
+                {
+                  case 0:
+                    timer1.playFromStart();
+                    timer1.setOnFinished(event -> System.out.println("Timer 1 finished"));
+                    break;
+                  case 1:
+                    timer2.playFromStart();
+                    timer2.setOnFinished(event -> System.out.println("Timer 2 finished"));
+                    break;
+                  case 2:
+                    timer3.playFromStart();
+                    timer3.setOnFinished(event -> System.out.println("Timer 3 finished"));
+                    break;
+                  default:
+                    System.out.println("Wrong index");
+                    break;
                 }
                 out.writeObject(new Message(output.getSender(), output.getSignature(), "holdremove",
                         output.getItem(), itemList.get(itemIndex).getPrevious(), itemList.get(itemIndex).getPrevAmount()));
