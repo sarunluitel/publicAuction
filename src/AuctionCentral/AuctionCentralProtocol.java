@@ -31,7 +31,9 @@ class AuctionCentralProtocol implements Serializable
   private Agent agent;
   private static int agentCount;
 
-
+  private Message pending;
+  private boolean hasPending;
+  
   /**
    * Default constructor.
    *
@@ -52,6 +54,7 @@ class AuctionCentralProtocol implements Serializable
       System.out.println("[AuctionCentral]: " + agentCount + " agent(s) are connected!");
     }
   }
+  
   /**
    * Default constructor.
    *
@@ -79,7 +82,19 @@ class AuctionCentralProtocol implements Serializable
   {
     this.object = message.getSender();
   }
-
+  
+  public boolean hasPending() {
+    return hasPending;
+  }
+  
+  public Message getPending()
+  {
+    Message temp = pending;
+    pending = null;
+    hasPending = false;
+    return temp;
+  }
+  
   /**
    * Handles requests as they are received from socket.
    *
@@ -129,6 +144,10 @@ class AuctionCentralProtocol implements Serializable
         response = new Message(inventories, "[AuctionCentral]: ", message, "House list", request.getKey(), auctionRepository.size());
         System.out.println("[AuctionCentral]: " + message);
         break;
+//      case "accepted":
+//        break;
+//      case "declined":
+//        break;
       case "transaction":
         message = "Mitigating transaction...";
         response = new Message(null, "[AuctionCentral]: ", message, "Mitigated transaction", request.getKey(), 0);
