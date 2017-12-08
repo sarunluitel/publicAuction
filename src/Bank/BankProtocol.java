@@ -75,6 +75,7 @@ class BankProtocol implements Serializable
         response = new Message(null, "[Bank]: ", message, "Account created", request.getKey(), account.getBalance());
         break;
       case "balance":
+        //TODO make bank decrease balance as items are bid on.
         message = "updated";
         account = accounts.get(request.getKey());
         response = new Message(null, "[Bank]: ", message, "Balance provided", request.getKey(), account.getBalance());
