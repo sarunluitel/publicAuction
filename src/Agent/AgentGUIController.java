@@ -89,7 +89,7 @@ public class AgentGUIController extends Application
         {System.out.println("?" + oldVal + ", " + newVal);
           textArea.positionCaret(textArea.getText().length());
           textArea.setScrollTop(textArea.getText().length());
-          System.out.println("L::"+textArea.getText().length() + " , "+textArea.getScrollTop());
+//          System.out.println("L::"+textArea.getText().length() + " , "+textArea.getScrollTop());
         });
 
 
