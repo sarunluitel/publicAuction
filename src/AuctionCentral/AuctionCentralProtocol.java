@@ -134,7 +134,7 @@ class AuctionCentralProtocol {
         
         for(AuctionHouse a : auctionList)
         {
-          inventories.add(houseCount-1, a.getList());
+          inventories.add(houseCount, a.getList());
         }
         
         current = "[House-" + ID + "]";
