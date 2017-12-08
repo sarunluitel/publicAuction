@@ -177,7 +177,6 @@ public class Agent extends Thread implements Serializable
           {
             inventory = agentUpdater.getInventory();
             balance = agentUpdater.getBalance();
-//            System.out.println();
             try { sleep(1); } catch(InterruptedException ignored) {}
             
             if (!messageText.equals(""))

@@ -125,12 +125,13 @@ class AuctionCentralThread extends Thread
     {
       try
       {
+//        Message copy = message;
         name = client.getName();
   
         if((name.contains("Bank") || name.contains("House")) && (content.contains("Error") || content.contains("Welcome"))) continue;
-        if((name.contains("Bank") || name.contains("House")) && (content.contains("Item")))
-          message = new Message(message.getSender(), message.getSignature(), "update", message.getItem(), message.getKey(), message.getAmount());
-        
+//        if((name.contains("Bank") || name.contains("House")) && (content.contains("Item"))) message = new Message(message.getSender(), message.getSignature(), "update", message.getItem(), message.getKey(), message.getAmount());
+//        if(!(name.contains("Bank") || name.contains("House"))) message = copy;
+
         //        request.getSignature() + " has won the bid on " + request.getItem() + " for $" + request.getAmount() + "!";
 //        request.getSignature() + " has won the bid on " + request.getItem() + " for $" + request.getAmount() + "!";
         System.out.println("[AuctionCentral]: Sending " + message.getMessage() + " to " + client.getSocket().toString());

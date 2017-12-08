@@ -132,9 +132,12 @@ public class AgentGUIController extends Application
           textArea.setScrollTop(textArea.getText().length());
 //        }
 
-        if(agent.inventory!=null){
-          String[] list = agent.inventory.split(".");
-          System.out.println("List to be added on the combo box"+agent.inventory);
+        if(agent.inventory!=null)
+        {
+          String[] list = agent.inventory.split("\\.");
+          System.out.println(list.length);
+
+          //System.out.println("List to be added on the combo box"+agent.inventory);
           itemsComboBox.getItems().setAll(list);
         }
 
