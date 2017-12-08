@@ -128,6 +128,7 @@ class AuctionCentralProtocol {
         int ID = (int)(Math.random() * 1000000);
         current = "[House-" + houseCount + "]";
         auctionHouse = ((AuctionHouse)request.getSender());
+        auctionHouse.setName(current);
         
         message = "registered";
         auctionRepository.put(ID, auctionHouse);
