@@ -50,7 +50,7 @@ public class AgentGUIController extends Application
 
   private Agent agent;
   private String history = "";
-  private int bankBalance = 0;
+  private int bankBalance = 500;
 
   /**
    * Initializes state of GUI components.
@@ -124,11 +124,19 @@ public class AgentGUIController extends Application
           history += time.format(new Date(auctionIn.getTimestamp())) + " | " + auctionIn.getSignature() + auctionIn.getMessage() + "\n";
           agent.auctionInput = null;
         }
-        bankBalance = agent.balance;
-        txtBankBalance.setText("Balance: $" + agent.balance + ".00");
-        
-        textArea.setText(history);
-        textArea.setScrollTop(textArea.getText().length());
+
+        if (bankBalance != agent.balance)
+        {
+          System.out.println("$$$$ " + agent.balance + ", " + bankBalance);
+          bankBalance = agent.balance;
+          txtBankBalance.setText("Balance: $" + agent.balance + ".00");
+        }
+
+        if (!textArea.getText().equals(history))
+        {
+          textArea.setText(history);
+          textArea.setScrollTop(textArea.getText().length());
+        }
 
         if (agent.inventory != null)
         {

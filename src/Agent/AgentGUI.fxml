@@ -38,7 +38,7 @@
             <ComboBox fx:id="itemsComboBox" prefHeight="25.0" prefWidth="600.0" translateY="10.0"
                       promptText="Select Items to Bid on"/>
             <TextField fx:id="input" maxWidth="600" prefWidth="600.0" prefHeight="30.0" translateY="15.0"
-                       promptText="Bid"/>
+                       promptText="Enter 'bid' and amount of money (e.g. bid 100)"/>
             <Button fx:id="btnBid" defaultButton="true" mnemonicParsing="false"
                     onAction="#placeBid" prefHeight="30.0" prefWidth="600.0" translateY="20.0" text="Bid"/>
         </VBox>
