@@ -25,7 +25,7 @@ public class Agent extends Thread implements Serializable
   private final String name;
 
   private String messageText = "";
-  private String combo = "";
+  private String combo = " ";
   private int bidAmount;
 
   private InetAddress bankAddress, auctionAddress;
@@ -210,7 +210,9 @@ public class Agent extends Thread implements Serializable
               System.out.println("A sent to B");
 
               messageText = "";
-
+              combo = " ";
+              bidAmount = 0;
+              
               System.out.println(this.getAgentName() + "Reading from bank.... about to read size:" + bankIn.available());
               bankInput = ((Message) bankIn.readObject());
               System.out.println(this.getAgentName() + "Finished Reading from bank..." + bankInput.getSignature() + "Size read" + bankIn.available());

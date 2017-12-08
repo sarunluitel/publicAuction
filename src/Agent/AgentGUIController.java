@@ -176,9 +176,9 @@ public class AgentGUIController extends Application
       textArea.setScrollTop(textArea.getText().length());
       return;
     }
-    
+  
     String combo = " ";
-    if(itemsComboBox.getSelectionModel().getSelectedItem() != null) combo = itemsComboBox.getSelectionModel().getSelectedItem();
+    if(itemsComboBox.getValue() != null) combo = itemsComboBox.getSelectionModel().getSelectedItem();
     System.out.println(combo);
     
     if (!request.equals("") && !request.equalsIgnoreCase("new"))
