@@ -192,6 +192,7 @@ public class Agent extends Thread implements Serializable
                 {
                   houseName = temp[0];
                   itemName = temp[1];
+                  System.out.println("h = " + houseName + ", i = " + itemName);
                 }
                 messageText = "bid";
               }
