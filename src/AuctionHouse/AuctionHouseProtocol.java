@@ -56,6 +56,7 @@ public class AuctionHouseProtocol
         if(house.higherBid(itemIndex, request.getAmount()) && itemHere)
         {
           message = "accepted";
+          System.out.println("Bid accepted: " + request.getAmount());
           house.setItemBid(itemIndex, request.getAmount(), request.getKey());
         }
         else
