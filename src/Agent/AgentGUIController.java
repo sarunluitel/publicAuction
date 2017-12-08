@@ -64,6 +64,7 @@ public class AgentGUIController extends Application
     txtTotalBidPlaced.setVisible(false);
     txtBankBalance.setVisible(false);
     itemsComboBox.setVisible(false);
+    btnBid.setVisible(false);
   }
 
   /**
@@ -87,7 +88,7 @@ public class AgentGUIController extends Application
       textArea.setVisible(true);
 
       txtBankBalance.setVisible(true);
-
+      btnBid.setVisible(true);
       itemsComboBox.setVisible(true);
       input.setVisible(true);
 
