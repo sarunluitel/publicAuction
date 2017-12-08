@@ -32,12 +32,12 @@ public class AuctionHouseProtocol
         
         message = "inventory";
         
-        response = new Message(house, house.getName() + ": ", message, "", house.getPublicID(), -1);
+        response = new Message(house, house.getName(), message, "", house.getPublicID(), -1);
         System.out.println(house.getName() + ": " + message);
         break;
       case "de-registered":
         message = "ignore";
-        response = new Message(house, house.getName() + ": ", message, "", -1, -1);
+        response = new Message(house, house.getName(), message, "", -1, -1);
         System.out.println(house.getName() + ": " + message);
         break;
       case "bid":
@@ -63,16 +63,16 @@ public class AuctionHouseProtocol
         {
           message = "declined";
         }
-        response = new Message(house, house.getName() + ": ", message, request.getItem(), request.getKey(), request.getAmount());
-        System.out.println(house.getName() + ": " + message);
+        response = new Message(house, house.getName(), message, request.getItem(), request.getKey(), request.getAmount());
+        System.out.println(house.getName() + message);
         break;
       case "update":
         message = "inventory";
-        response = new Message(house, house.getName() + ": ", message, house.getInventory(), house.getPublicID(), house.getItemsForSale().size());
+        response = new Message(house, house.getName(), message, house.getInventory(), house.getPublicID(), house.getItemsForSale().size());
         break;
       default:
         message = "ignore";
-        response = new Message(house, house.getName() + ": ", message, "", -1, -1);
+        response = new Message(house, house.getName(), message, "", -1, -1);
         System.out.println(house.getName() + ": " + message);
         break;
     }

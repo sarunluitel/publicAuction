@@ -20,6 +20,8 @@ public class AgentUpdater extends Thread implements Serializable
   private int balance;
   private String inventory;
   
+  private boolean finished = false;
+  
   public AgentUpdater(InetAddress auctionAddress, InetAddress bankAddress, Agent agent)
   {
     this.agent = agent;
@@ -44,6 +46,11 @@ public class AgentUpdater extends Thread implements Serializable
     }
   }
   
+  public void setFinished(boolean flag)
+  {
+    finished = flag;
+  }
+  
   public String getInventory() {
   //  System.out.println(inventory);
     return inventory;
@@ -57,7 +64,7 @@ public class AgentUpdater extends Thread implements Serializable
   @Override
   public void run()
   {
-    while(true)
+    while(!finished)
     {
       try { sleep(1000); } catch(InterruptedException ignored) {}
       try {

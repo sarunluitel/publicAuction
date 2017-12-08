@@ -105,6 +105,10 @@ class BankProtocol implements Serializable
         response = new Message(null, "[Bank]: ", message, "Goodbye!", request.getKey(), account.getBalance());
         System.out.println("[Bank]: " + message);
         break;
+      case "update":
+        message = "ignore";
+        response = new Message(null, "[Bank]: ", message, "Goodbye!", request.getKey(), account.getBalance());
+        break;
       default:
         message = "Error - request not recognized.";
         int balance = (account != null) ? account.getBalance() : -1;

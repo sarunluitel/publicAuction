@@ -214,6 +214,8 @@ public class Agent extends Thread implements Serializable
 //              System.out.println("A exit wait");
 //            }
           }
+          
+          agentUpdater.setFinished(true);
 
           bankIn.close();
           bankOut.close();

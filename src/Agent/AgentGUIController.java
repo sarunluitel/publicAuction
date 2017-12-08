@@ -13,6 +13,7 @@ package Agent;
 import Message.Message;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -113,7 +114,7 @@ public class AgentGUIController extends Application
         Message bankIn = agent.bankInput, auctionIn = agent.auctionInput;
         if (bankIn != null)
         {
-          txtBankBalance.setText("Balance: $" + bankIn.getAmount() + ".00");
+//          txtBankBalance.setText("Balance: $" + bankIn.getAmount() + ".00");
           history += time.format(new Date(bankIn.getTimestamp())) + " | " + bankIn.getSignature() + bankIn.getMessage()+ "\n";
           agent.bankInput = null;
         }
@@ -122,13 +123,14 @@ public class AgentGUIController extends Application
           history += time.format(new Date(auctionIn.getTimestamp())) + " | " + auctionIn.getSignature() + auctionIn.getMessage() + "\n";
           agent.auctionInput = null;
         }
-        if (!txtBankBalance.getText().equals("Balance: $" + agent.balance + ".00")) txtBankBalance.setText("Balance: $" + agent.balance + ".00");
+        
+        txtBankBalance.setText("Balance: $" + agent.balance + ".00");
 
-        if(!textArea.getText().equals(history))
-        {
+//        if(!textArea.getText().equals(history))
+//        {
           textArea.setText(history);
           textArea.setScrollTop(textArea.getText().length());
-        }
+//        }
 
         if(agent.inventory!=null){
           String[] list = agent.inventory.split(".");
@@ -164,6 +166,10 @@ public class AgentGUIController extends Application
     Parent root = FXMLLoader.load(getClass().getResource("AgentGUI.fxml"));
     primaryStage.setScene(new Scene(root));
     primaryStage.show();
+    primaryStage.setOnCloseRequest(event -> {
+      if(agent != null) agent.setMessageText("EXIT");
+      Platform.exit();
+    });
   }
 
   /**

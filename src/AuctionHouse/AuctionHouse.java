@@ -298,7 +298,7 @@ public class AuctionHouse implements Serializable
                 {
                   case "Item-1":
                     timer1.playFromStart();
-                    timer1.setOnFinished((ActionEvent event) -> {
+                    timer1.setOnFinished(event -> {
                       System.out.println("Timer 1 finished");
                      // house.removeItem("Item-1");
                     });
