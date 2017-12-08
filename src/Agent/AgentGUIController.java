@@ -14,7 +14,6 @@ import Message.Message;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -23,7 +22,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -52,7 +50,8 @@ public class AgentGUIController extends Application
 
   private Agent agent;
   private String history = "";
-  
+  private int bankBalance = 0;
+
   /**
    * Initializes state of GUI components.
    */
@@ -115,7 +114,7 @@ public class AgentGUIController extends Application
         if (bankIn != null)
         {
 //          txtBankBalance.setText("Balance: $" + bankIn.getAmount() + ".00");
-          history += time.format(new Date(bankIn.getTimestamp())) + " | " + bankIn.getSignature() + bankIn.getMessage()+ "\n";
+          history += time.format(new Date(bankIn.getTimestamp())) + " | " + bankIn.getSignature() + bankIn.getMessage() + "\n";
           agent.bankInput = null;
         }
         if (auctionIn != null)
@@ -123,16 +122,16 @@ public class AgentGUIController extends Application
           history += time.format(new Date(auctionIn.getTimestamp())) + " | " + auctionIn.getSignature() + auctionIn.getMessage() + "\n";
           agent.auctionInput = null;
         }
-        
+        bankBalance = agent.balance;
         txtBankBalance.setText("Balance: $" + agent.balance + ".00");
 
 //        if(!textArea.getText().equals(history))
 //        {
-          textArea.setText(history);
-          textArea.setScrollTop(textArea.getText().length());
+        textArea.setText(history);
+        textArea.setScrollTop(textArea.getText().length());
 //        }
 
-        if(agent.inventory!=null)
+        if (agent.inventory != null)
         {
           String[] list = agent.inventory.split("\\.");
           System.out.println(list.length);
@@ -146,7 +145,7 @@ public class AgentGUIController extends Application
     }.start();
 
   }
-  
+
   /**
    * Main entry point for AgentGUIController.
    *
@@ -156,6 +155,47 @@ public class AgentGUIController extends Application
   {
     launch(args);
   }
+
+
+  /**
+   * Handles user input.
+   */
+  @FXML
+  private void placeBid()
+  {
+    String request = input.getText();
+    input.setText("");
+    int bidAmount = 0;
+    try
+    {
+      bidAmount = Integer.parseInt(request);
+    } catch (NumberFormatException numberException)
+    {
+    }
+
+    if (bidAmount > bankBalance)
+    {
+      history += time.format(new Date(System.currentTimeMillis())) + " | " + "You don't Have Enough Balance" + "\n";
+      textArea.setText(history);
+      textArea.setScrollTop(textArea.getText().length());
+      return;
+    }
+
+    if (!request.equals("") && !request.equalsIgnoreCase("new") && bidAmount < bankBalance)
+    {
+
+      agent.setMessageText(request);
+
+      history += time.format(new Date(System.currentTimeMillis())) + " | " + agent.getAgentName() + request + "\n";
+
+      if (!textArea.getText().equals(history))
+      {
+        textArea.setText(history);
+        textArea.setScrollTop(textArea.getText().length());
+      }
+    }
+  }
+
 
   /**
    * Sets the primary stage.
@@ -169,37 +209,10 @@ public class AgentGUIController extends Application
     Parent root = FXMLLoader.load(getClass().getResource("AgentGUI.fxml"));
     primaryStage.setScene(new Scene(root));
     primaryStage.show();
-    primaryStage.setOnCloseRequest(event -> {
-      if(agent != null) agent.setMessageText("EXIT");
+    primaryStage.setOnCloseRequest(event ->
+    {
+      if (agent != null) agent.setMessageText("EXIT");
       Platform.exit();
     });
   }
-
-  /**
-   * Handles user input.
-   */
-  @FXML
-  private void placeBid()
-  {
-    String request = input.getText();
-    input.setText("");
-
-    if (!request.equals("") && !request.equalsIgnoreCase("new"))
-    {
-      agent.setMessageText(request);
-
-      history += time.format(new Date(System.currentTimeMillis())) + " | " + agent.getAgentName() + request + "\n";
-
-      if(!textArea.getText().equals(history))
-      {
-        textArea.setText(history);
-        textArea.setScrollTop(textArea.getText().length());
-      }
-    }
-//    synchronized (agent)
-//    {
-//      agent.notify();
-//    }
-  }
-
 }
