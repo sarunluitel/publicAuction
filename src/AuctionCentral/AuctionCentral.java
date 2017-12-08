@@ -26,7 +26,7 @@ class AuctionCentral
    */
   public static void main(String[] args) throws IOException
   {
-    System.out.println("[AuctionCentral]: IP = " + InetAddress.getLocalHost() + ".");
+    System.out.println("[AuctionCentral]: IP = " + InetAddress.getLocalHost());
     System.out.println("Enter the Bank's IP: ");
     Scanner scan = new Scanner(System.in);
     String address = scan.nextLine();
