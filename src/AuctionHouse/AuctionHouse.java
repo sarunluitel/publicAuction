@@ -142,6 +142,11 @@ public class AuctionHouse implements Serializable
     return index;
   }
   
+  public void setName(String name)
+  {
+    this.name = name;
+  }
+  
   /**
    * @return name of this auction house.
    */
@@ -218,9 +223,7 @@ public class AuctionHouse implements Serializable
     itemsForSale.get(itemIndex).setCurrentBid(bidValue);
     itemsForSale.get(itemIndex).setAgentKey(agentKey);
   }
-
-
-
+  
   /**
    * Main method for auction house.
    *

@@ -126,6 +126,7 @@ class AuctionCentralProtocol {
         break;
       case "register":
         int ID = (int)(Math.random() * 1000000);
+        current = "[House-" + houseCount + "]";
         auctionHouse = ((AuctionHouse)request.getSender());
         
         message = "registered";
@@ -136,8 +137,6 @@ class AuctionCentralProtocol {
         {
           inventories.add(houseCount, a.getList());
         }
-        
-        current = "[House-" + ID + "]";
         
         response = new Message(null, "[AuctionCentral]: ", message, auctionHouse.getName(), ID, houseCount);
         System.out.println("[AuctionCentral]: " + message);
