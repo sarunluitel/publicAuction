@@ -162,7 +162,8 @@ public class AgentGUIController extends Application
     int bidAmount;
     try
     {
-      bidAmount = Integer.parseInt(request);
+      String temp[] = request.split("\\s+");
+      bidAmount = Integer.parseInt(temp[1]);
     }
     catch (NumberFormatException e)
     {
