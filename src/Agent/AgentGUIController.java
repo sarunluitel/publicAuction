@@ -210,7 +210,6 @@ public class AgentGUIController extends Application
 
       textArea.setText(history);
       textArea.setScrollTop(textArea.getText().length());
-
     }
 
 //    synchronized (agent)
