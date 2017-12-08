@@ -10,11 +10,7 @@
 
 package AuctionCentral;
 
-import Message.Message;
-
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -30,14 +26,10 @@ class AuctionCentral
    */
   public static void main(String[] args) throws IOException
   {
-    //AuctionCentral auctionCentral = new AuctionCentral();
     System.out.println("[AuctionCentral]: IP = " + InetAddress.getLocalHost() + ".");
     System.out.println("Enter the Bank's IP: ");
     Scanner scan = new Scanner(System.in);
     String address = scan.nextLine();
-
-    //try (Socket bankSocket = new Socket(InetAddress.getByName(address), 2222))
-
 
     try (ServerSocket serverSocket = new ServerSocket(1111, 50, InetAddress.getLocalHost());
          Socket bankSocket = new Socket(address,2222))
@@ -45,19 +37,11 @@ class AuctionCentral
       System.out.println("[AuctionCentral]: serverSocket" + serverSocket.toString() + ".");
       System.out.println("[AuctionCentral]: bankSocket" + bankSocket.toString() + ".");
 
-//      AuctionCentralListener auctionCentralListener = new AuctionCentralListener(bankSocket);
-//      auctionCentralListener.start();
-//    System.out.println("AuctionCentralListener starts");
-
       AuctionCentralWriter bankWriter = new AuctionCentralWriter(bankSocket);
       
       while (true)
       {
-//        serverSocket.setSoTimeout(5000);
-//        auctionCentralListener.addCount();
-        
         new AuctionCentralThread(serverSocket.accept(), bankWriter).start();
-//        System.out.println("Test " + auctionCentralListener.getCount() + "," + auctionCentralListener.getState());
       }
     }
     catch (IOException e)
