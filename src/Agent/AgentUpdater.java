@@ -68,9 +68,9 @@ public class AgentUpdater extends Thread implements Serializable
     {
       try { sleep(1000); } catch(InterruptedException ignored) {}
       try {
-        auctionOut.writeObject(new Message(agent, agent.getAgentName(), "repository", "", agent.getAgentCentralKey(), agent.getAgentBankKey()));
+        auctionOut.writeObject(new Message(agent, "Updater+"+agent.getAgentName(), "repository", "", agent.getAgentCentralKey(), agent.getAgentBankKey()));
         auctionOut.flush();
-        bankOut.writeObject(new Message(agent, agent.getAgentName(), "balance", "", agent.getAgentBankKey(), -1));
+        bankOut.writeObject(new Message(agent, "Updater+"+agent.getAgentName(), "balance", "", agent.getAgentBankKey(), -1));
         bankOut.flush();
   
         try
