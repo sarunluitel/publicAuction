@@ -158,6 +158,7 @@ public class AgentGUIController extends Application
   {
     String request = input.getText();
     input.setText("");
+    
     int bidAmount;
     try
     {
@@ -167,7 +168,7 @@ public class AgentGUIController extends Application
     {
       bidAmount = 0;
     }
-
+  
     if (bidAmount > bankBalance)
     {
       history += time.format(new Date(System.currentTimeMillis())) + " | " + "Error - insufficient funds." + "\n";
@@ -175,11 +176,11 @@ public class AgentGUIController extends Application
       textArea.setScrollTop(textArea.getText().length());
       return;
     }
-
-    if (!request.equals("") && !request.equalsIgnoreCase("new") && bidAmount < bankBalance)
+    
+    if (!request.equals("") && !request.equalsIgnoreCase("new"))
     {
-
       agent.setMessageText(request);
+      agent.setBidAmount(bidAmount);
 
       history += time.format(new Date(System.currentTimeMillis())) + " | " + agent.getAgentName() + request + "\n";
 

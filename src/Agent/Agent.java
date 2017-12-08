@@ -25,6 +25,7 @@ public class Agent extends Thread implements Serializable
   private final String name;
 
   private String messageText = "";
+  private int bidAmount;
 
   private InetAddress bankAddress, auctionAddress;
   public Message bankInput;
@@ -118,6 +119,8 @@ public class Agent extends Thread implements Serializable
     this.messageText = messageText;
   }
 
+  void setBidAmount(int amount) { this.bidAmount = amount;}
+  
   /**
    * Run method for agent thread - handles messaging.
    */
@@ -178,10 +181,17 @@ public class Agent extends Thread implements Serializable
             
             if (!messageText.equals(""))
             {
+              String temp[], houseName = "", itemName = "";
+              if(messageText.contains("bid"))
+              {
+                temp = messageText.split("\\ ");
+                houseName = temp[0];
+                itemName = temp[1];
+              }
               System.out.println(this.getAgentName() + "Submitting message = " + messageText + " to auction & bank.");
 
-              auctionOutput = new Message(this, this.getAgentName(), messageText, "", agentCentralKey, 0);
-              bankOutput = new Message(this, this.getAgentName(), messageText, "", agentBankKey, 500);
+              auctionOutput = new Message(houseName, this.getAgentName(), messageText, itemName, agentBankKey, bidAmount);
+              bankOutput = new Message(houseName, this.getAgentName(), messageText, itemName, agentBankKey, bidAmount);
 
               System.out.println("A to AC");
               auctionOut.writeObject(auctionOutput);
