@@ -179,7 +179,7 @@ public class AuctionHouse implements Serializable
   {
     for (int i = 0; i < 3; i++)
     {
-      itemsForSale.add(new Item(i));
+      itemsForSale.add(new Item(i+1));
       itemsForSale.get(i).setCurrentBid(100);
     }
   }
@@ -209,6 +209,18 @@ public class AuctionHouse implements Serializable
   LinkedList<Item> getItemsForSale()
   {
     return itemsForSale;
+  }
+
+  void removeItem(String itemName)
+  {
+    int index = 0;
+    for (int i = 0; i < itemsForSale.size(); i++) {
+      if (itemsForSale.get(i).getItemName().equalsIgnoreCase(itemName)) {
+        index = i;
+        break;
+      }
+    }
+    itemsForSale.remove(index);
   }
 
   boolean higherBid(int itemIndex, int bidValue)
@@ -284,19 +296,28 @@ public class AuctionHouse implements Serializable
                     break;
                   }
                 }
-                switch(itemIndex)
+                switch(output.getItem())
                 {
-                  case 0:
+                  case "Item-1":
                     timer1.playFromStart();
-                    timer1.setOnFinished(event -> System.out.println("Timer 1 finished"));
+                    timer1.setOnFinished(event -> {
+                      System.out.println("Timer 1 finished");
+                      house.removeItem(output.getItem());
+                    });
                     break;
-                  case 1:
+                  case "Item-2":
                     timer2.playFromStart();
-                    timer2.setOnFinished(event -> System.out.println("Timer 2 finished"));
+                    timer2.setOnFinished(event -> {
+                      System.out.println("Timer 2 finished");
+                      house.removeItem(output.getItem());
+                    });
                     break;
-                  case 2:
+                  case "Item-3":
                     timer3.playFromStart();
-                    timer3.setOnFinished(event -> System.out.println("Timer 3 finished"));
+                    timer3.setOnFinished(event -> {
+                      System.out.println("Timer 3 finished");
+                      house.removeItem(output.getItem());
+                    });
                     break;
                   default:
                     System.out.println("Wrong index");
