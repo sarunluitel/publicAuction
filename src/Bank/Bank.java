@@ -69,7 +69,7 @@ class Bank
   public static void main(String[] args) throws IOException
   {
     System.out.println("[Bank]: IP = " + InetAddress.getLocalHost() + ".");
-    try (ServerSocket serverSocket = new ServerSocket(2222, 50, InetAddress.getLocalHost()))
+    try (ServerSocket serverSocket = new ServerSocket(2222, 100,InetAddress.getLocalHost()))
     {
       System.out.println("[Bank]: " + serverSocket.toString() + ".");
       while (true)

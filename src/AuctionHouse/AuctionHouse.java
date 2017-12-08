@@ -319,7 +319,8 @@ public class AuctionHouse implements Serializable
             }
             //tried
           }
-        input = null;
+//          input = null;
+          input = ((Message)in.readObject());
         }
       }
       catch (ClassNotFoundException e)
