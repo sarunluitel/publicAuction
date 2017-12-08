@@ -60,7 +60,7 @@ public class AgentGUIController extends Application
   {
     textArea.setVisible(false);
     input.setVisible(false);
-    textArea.setEditable(false);
+    textArea.setEditable(true);
     txtTotalBidPlaced.setVisible(false);
     txtBankBalance.setVisible(false);
     itemsComboBox.setVisible(false);
@@ -85,13 +85,6 @@ public class AgentGUIController extends Application
 
       txtTotalBidPlaced.setVisible(true);
       textArea.setVisible(true);
-      textArea.scrollTopProperty().addListener((obs, oldVal, newVal) ->
-        {System.out.println("?" + oldVal + ", " + newVal);
-          textArea.positionCaret(textArea.getText().length());
-          textArea.setScrollTop(textArea.getText().length());
-//          System.out.println("L::"+textArea.getText().length() + " , "+textArea.getScrollTop());
-        });
-
 
       txtBankBalance.setVisible(true);
 
@@ -128,31 +121,12 @@ public class AgentGUIController extends Application
           history += time.format(new Date(auctionIn.getTimestamp())) + " | " + auctionIn.getSignature() + auctionIn.getMessage()+ "\n";
           agent.auctionInput = null;
         }
-        textArea.setText(history);
-//        if(agent.auctionInput!=null)
-//        {
-//          if(agent.auctionInput.getMessage().equals("inventory"))
-//          {
-//            ObservableList<String> list = FXCollections.observableArrayList();
-//            String listings = "";
-//
-//            List houses = ((List)agent.auctionInput.getSender());
-//            for(int i = 0; i < houses.size(); i++)
-//            {
-//              LinkedList inventory = ((LinkedList)houses.get(i));
-//              String house = "[House-" + i + "]: ";
-//              for(int j = 0; j < inventory.size(); j++)
-//              {
-//                AuctionHouse.Item item = ((AuctionHouse.Item)inventory.get(j));
-//                listings += house + item.getItemName() + "-" + item.getBidAmount() + "\n";
-//                list.add(listings);
-//              }
-//              System.out.println(listings);
-//            }
-//          //  System.out.println("Setting item combo box");
-//            itemsComboBox.setItems(list);
-//          }
-//        }
+
+        if(!textArea.getText().equals(history))
+        {
+          textArea.setText(history);
+          textArea.setScrollTop(textArea.getText().length());
+        }
       }
     }.start();
 
@@ -196,7 +170,11 @@ public class AgentGUIController extends Application
 
       history += time.format(new Date(System.currentTimeMillis())) + " | " + agent.getAgentName() + request + "\n";
 
-      textArea.setText(history);
+      if(!textArea.getText().equals(history))
+      {
+        textArea.setText(history);
+        textArea.setScrollTop(textArea.getText().length());
+      }
     }
     
     synchronized (agent)
