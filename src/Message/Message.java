@@ -15,8 +15,6 @@ import java.util.Date;
 
 public class Message implements Serializable
 {
-  private final SimpleDateFormat time = new SimpleDateFormat("h:mm:ss:ms");
-  
   private final Object sender;
 
   private final String signature;
@@ -26,7 +24,7 @@ public class Message implements Serializable
   private final int amount;
   private final int key;
 
-  private long timestamp;
+  private final long timestamp;
   
   /**
    * Default constructor.
@@ -48,7 +46,6 @@ public class Message implements Serializable
     this.key = key;
     
     timestamp = System.currentTimeMillis();
-    System.out.println(time.format(new Date(timestamp)) + " | " + signature + message + " *CREATED*");
   }
   
   /**

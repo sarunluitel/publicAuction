@@ -49,7 +49,7 @@ class BankThread extends Thread
         System.out.println("B reading init");
         input = ((Message) in.readObject());
 
-        BankProtocol bankProtocol = new BankProtocol(socket, input);
+        BankProtocol bankProtocol = new BankProtocol();
 
         while (true)
         {

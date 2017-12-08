@@ -13,30 +13,20 @@ import Message.Message;
 
 import java.io.Serializable;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 class BankProtocol implements Serializable
 {
-  private Socket socket;
-  private Message message;
-
-  private BankAccount account;
   private static Map<Integer, BankAccount> accounts = Collections.synchronizedMap(new HashMap<>());
-
+  private BankAccount account;
+  
+  
   /**
    * Default constructor.
-   *
-   * @param socket
-   * @param message
    */
-  public BankProtocol(Socket socket, Message message)
-  {
-    this.socket = socket;
-    this.message = message;
-  }
+  public BankProtocol() {}
 
   /**
    * Handles requests as they are received from socket.

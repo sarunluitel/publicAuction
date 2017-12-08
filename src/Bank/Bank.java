@@ -29,16 +29,7 @@ class Bank
   {
     accounts.add(account);
   }
-
-  /**
-   * @param account
-   * @return whether the bank account is contained in accounts repo.
-   */
-  static boolean contains(BankAccount account)
-  {
-    return accounts.contains(account);
-  }
-
+  
   /**
    * @return number of accounts.
    */
@@ -46,20 +37,7 @@ class Bank
   {
     return accounts.size();
   }
-
-  /**
-   * @param name
-   * @return Account linked to the name.
-   */
-  static BankAccount getAccount(String name)
-  {
-    for (BankAccount account : accounts)
-    {
-      if (account.getName().equals(name)) return account;
-    }
-    return null;
-  }
-
+  
   /**
    * Main method for bank.
    *

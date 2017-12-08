@@ -13,7 +13,6 @@ package AuctionHouse;
 
 import Message.Message;
 import javafx.animation.PauseTransition;
-import javafx.event.ActionEvent;
 import javafx.util.Duration;
 
 import java.io.*;
@@ -28,7 +27,7 @@ public class AuctionHouse implements Serializable
 
   private int index;
   private int publicID;
-  private LinkedList<Item> itemsForSale = new LinkedList<>();
+  private LinkedList<Item> inventory = new LinkedList<>();
   
   /**
    * Inner class for item listings with house.
@@ -43,7 +42,7 @@ public class AuctionHouse implements Serializable
      * Default constructor
      * @param index
      */
-    public Item(int index)
+    Item(int index)
     {
       itemName = "Item-" + index;
       bidAmount = 100;
@@ -61,7 +60,7 @@ public class AuctionHouse implements Serializable
     /**
      * @return the current highest bid on item.
      */
-    public int getBidAmount()
+    int getBidAmount()
     {
       return bidAmount;
     }
@@ -69,7 +68,7 @@ public class AuctionHouse implements Serializable
     /**
      * @return the previous highest bid on item.
      */
-    public int getPrevAmount()
+    int getPrevAmount()
     {
       return prevAmount;
     }
@@ -85,7 +84,7 @@ public class AuctionHouse implements Serializable
     /**
      * @return the previous highest bidder key on item.
      */
-    public int getPrevious()
+    int getPrevious()
     {
       return previous;
     }
@@ -178,61 +177,52 @@ public class AuctionHouse implements Serializable
   {
     for (int i = 0; i < 3; i++)
     {
-      itemsForSale.add(new Item(i+1));
-      itemsForSale.get(i).setCurrentBid(100);
+      inventory.add(new Item(i+1));
+      inventory.get(i).setCurrentBid(100);
     }
   }
   
-  public LinkedList<Item> getList()
+  public String getListings()
   {
-    return itemsForSale;
-  }
-  
-  public String getInventory()
-  {
-    String items = "";
-    for(Item item : itemsForSale)
+    StringBuilder items = new StringBuilder();
+    for(Item item : inventory)
     {
-      items += this.name + item.getItemName() + " Bid-" + item.getBidAmount() + ".";
+      items.append(this.name).append(item.getItemName()).append(" Bid-").append(item.getBidAmount()).append(".");
     }
-    return items;
+    return items.toString();
   }
 
   /**
    * Method used by AuctionHouseProtocol to check the items
    * @return items
    */
-  LinkedList<Item> getItemsForSale()
+  LinkedList<Item> getInventory()
   {
-    return itemsForSale;
+    return inventory;
   }
 
   void removeItem(String itemName)
   {
     int index = 0;
-    for (int i = 0; i < itemsForSale.size(); i++) {
-      if (itemsForSale.get(i).getItemName().equalsIgnoreCase(itemName)) {
+    for (int i = 0; i < inventory.size(); i++) {
+      if (inventory.get(i).getItemName().equalsIgnoreCase(itemName)) {
         index = i;
         break;
       }
     }
-    itemsForSale.remove(index);
+    inventory.remove(index);
   }
 
   boolean higherBid(int itemIndex, int bidValue)
   {
-    Item item = itemsForSale.get(itemIndex);
-    if(item.getBidAmount() < bidValue)
-    {
-      return true;
-    }
-    return false;
+    Item item = inventory.get(itemIndex);
+    return item.getBidAmount() < bidValue;
   }
 
   void setItemBid(int itemIndex, int bidValue, int agentKey)
   {
-    itemsForSale.get(itemIndex).setCurrentBid(bidValue);
-    itemsForSale.get(itemIndex).setAgentKey(agentKey);
+    inventory.get(itemIndex).setCurrentBid(bidValue);
+    inventory.get(itemIndex).setAgentKey(agentKey);
   }
   
   /**
@@ -272,7 +262,7 @@ public class AuctionHouse implements Serializable
         System.out.println("AH reading init");
         input = ((Message)in.readObject());
         
-        AuctionHouseProtocol auctionHouseProtocol = new AuctionHouseProtocol(house, socket, input);
+        AuctionHouseProtocol auctionHouseProtocol = new AuctionHouseProtocol(house);
         
         while (true)
         {
@@ -285,7 +275,7 @@ public class AuctionHouse implements Serializable
               synchronized (house)
               {
                 int itemIndex = 0;
-                LinkedList<Item> itemList = house.itemsForSale;
+                LinkedList<Item> itemList = house.inventory;
                 for (int i = 0; i < itemList.size(); i++) {
                   if (itemList.get(i).getItemName().equalsIgnoreCase(output.getItem())) {
                     itemIndex = i;
@@ -333,12 +323,12 @@ public class AuctionHouse implements Serializable
               
               System.out.println("AH sent");
 
-              System.out.println("AH reading");
-              input = ((Message) in.readObject());
-              System.out.println("AH done reading");
+//              input = ((Message) in.readObject());
             }
           }
+          System.out.println("AH reading");
           input = ((Message)in.readObject());
+          System.out.println("AH done reading");
         }
       }
       catch (ClassNotFoundException e)

@@ -6,17 +6,13 @@ import AuctionHouse.AuctionHouse.Item;
 import java.net.Socket;
 import java.util.LinkedList;
 
-public class AuctionHouseProtocol
+class AuctionHouseProtocol
 {
   private AuctionHouse house;
-  private Message message;
-  private Socket socket;
   
-  public AuctionHouseProtocol(AuctionHouse house, Socket socket, Message message)
+  public AuctionHouseProtocol(AuctionHouse house)
   {
     this.house = house;
-    this.message = message;
-    this.socket = socket;
   }
   
   public Message handleRequest(Message request)
@@ -41,7 +37,7 @@ public class AuctionHouseProtocol
         System.out.println(house.getName() + ": " + message);
         break;
       case "bid":
-        LinkedList<Item> itemList = house.getItemsForSale();
+        LinkedList<Item> itemList = house.getInventory();
         int itemIndex = 0;
         boolean itemHere = false;
         for(int i = 0; i < itemList.size(); i++)
@@ -75,7 +71,7 @@ public class AuctionHouseProtocol
     if(request.getMessage().contains("Item"))
     {
       message = "inventory";
-      response = new Message(house, house.getName(), message, house.getInventory(), house.getPublicID(), house.getItemsForSale().size());
+      response = new Message(house, house.getName(), message, house.getListings(), house.getPublicID(), house.getInventory().size());
     }
     return response;
   }

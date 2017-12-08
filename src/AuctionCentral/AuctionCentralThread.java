@@ -8,7 +8,6 @@
 
 package AuctionCentral;
 
-import Agent.Agent;
 import Agent.AgentUpdater;
 import Message.Message;
 
@@ -19,9 +18,7 @@ import java.util.*;
 
 class AuctionCentralThread extends Thread
 {
-  private String name;
-  private Socket current;
-  private static Map<String, Socket> sockets = Collections.synchronizedMap(new HashMap<>());
+  private Socket socket;
   private static ArrayList<AuctionCentralWriter> writers = new ArrayList<>();
   
   /**
@@ -32,13 +29,8 @@ class AuctionCentralThread extends Thread
   public AuctionCentralThread(Socket socket, AuctionCentralWriter writer)
   {
     super("[AuctionCentralThread]");
-    current = socket;
+    this.socket = socket;
     
-    if(!sockets.containsValue(writer.getSocket()))
-    {
-      name = "[Bank]: ";
-      sockets.put(name, writer.getSocket());
-    }
     if(!writers.contains(writer))
     {
       writer.setName("[Bank]: ");
@@ -55,23 +47,21 @@ class AuctionCentralThread extends Thread
     System.out.println("AC connected");
     try
     {
-      auctionCentralWriter = new AuctionCentralWriter(current);
-      ObjectInputStream in = new ObjectInputStream(current.getInputStream());
+      auctionCentralWriter = new AuctionCentralWriter(socket);
+      ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
       try
       {
         System.out.println("AC streams opened");
         Message input, output;
         input = ((Message) in.readObject());
 
-        AuctionCentralProtocol auctionCentralProtocol = new AuctionCentralProtocol(current, input);
+        AuctionCentralProtocol auctionCentralProtocol = new AuctionCentralProtocol(socket, input);
         System.out.println("AC protocol made");
         
         auctionCentralWriter.setName(auctionCentralProtocol.getCurrent());
         auctionCentralWriter.setObject(input.getSender());
         writers.add(auctionCentralWriter);
         
-        System.out.println("CURRENT CONNECTIONS:");
-        System.out.println(sockets);
         
         while (true)
         {
@@ -84,7 +74,7 @@ class AuctionCentralThread extends Thread
             broadcast(output);
             System.out.println("AC sent");
             
-            input = null;
+//            input = null;
           }
           System.out.println("AC reading");
           input = ((Message) in.readObject());
@@ -98,9 +88,7 @@ class AuctionCentralThread extends Thread
 
       in.close();
       
-      sockets.remove(name);
-      
-      current.close();
+      socket.close();
     }
     catch (IOException e)
     {

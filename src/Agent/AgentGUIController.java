@@ -158,12 +158,14 @@ public class AgentGUIController extends Application
   {
     String request = input.getText();
     input.setText("");
-    int bidAmount = 0;
+    int bidAmount;
     try
     {
       bidAmount = Integer.parseInt(request);
-    } catch (NumberFormatException numberException)
+    }
+    catch (NumberFormatException e)
     {
+      bidAmount = 0;
     }
 
     if (bidAmount > bankBalance)

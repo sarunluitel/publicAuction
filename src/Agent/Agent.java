@@ -27,7 +27,10 @@ public class Agent extends Thread implements Serializable
   private String messageText = "";
 
   private InetAddress bankAddress, auctionAddress;
-  public Message bankInput, bankOutput, auctionInput, auctionOutput;
+  public Message bankInput;
+  private Message bankOutput;
+  public Message auctionInput;
+  public Message auctionOutput;
 
   public String inventory;
   public int balance;
@@ -92,7 +95,7 @@ public class Agent extends Thread implements Serializable
   /**
    * @return public ID associated with agent.
    */
-  public int getPublicID()
+  private int getPublicID()
   {
     return publicID;
   }
