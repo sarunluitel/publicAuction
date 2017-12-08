@@ -41,7 +41,7 @@ public class AgentGUIController extends Application
   @FXML
   private TextField bankIP, auctionIP, input;
   @FXML
-  private Button connect;
+  private Button btnBid;
   @FXML
   private TextArea textArea;
   @FXML
@@ -64,6 +64,7 @@ public class AgentGUIController extends Application
     txtTotalBidPlaced.setVisible(false);
     txtBankBalance.setVisible(false);
     itemsComboBox.setVisible(false);
+    btnBid.setVisible(false);
   }
 
   /**
