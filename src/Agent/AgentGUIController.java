@@ -170,7 +170,7 @@ public class AgentGUIController extends Application
 
     if (bidAmount > bankBalance)
     {
-      history += time.format(new Date(System.currentTimeMillis())) + " | " + "You don't Have Enough Balance" + "\n";
+      history += time.format(new Date(System.currentTimeMillis())) + " | " + "Error - insufficient funds." + "\n";
       textArea.setText(history);
       textArea.setScrollTop(textArea.getText().length());
       return;
