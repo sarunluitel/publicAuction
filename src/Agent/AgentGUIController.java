@@ -41,7 +41,7 @@ public class AgentGUIController extends Application
   @FXML
   private TextField bankIP, auctionIP, input;
   @FXML
-  private Button connect;
+  private Button btnBid;
   @FXML
   private TextArea textArea;
   @FXML
@@ -60,7 +60,7 @@ public class AgentGUIController extends Application
   {
     textArea.setVisible(false);
     input.setVisible(false);
-    textArea.setEditable(false);
+    textArea.setEditable(true);
     txtTotalBidPlaced.setVisible(false);
     txtBankBalance.setVisible(false);
     itemsComboBox.setVisible(false);
@@ -85,13 +85,6 @@ public class AgentGUIController extends Application
 
       txtTotalBidPlaced.setVisible(true);
       textArea.setVisible(true);
-      textArea.scrollTopProperty().addListener((obs, oldVal, newVal) ->
-        {System.out.println("?" + oldVal + ", " + newVal);
-          textArea.positionCaret(textArea.getText().length());
-          textArea.setScrollTop(textArea.getText().length());
-//          System.out.println("L::"+textArea.getText().length() + " , "+textArea.getScrollTop());
-        });
-
 
       txtBankBalance.setVisible(true);
 
@@ -99,40 +92,44 @@ public class AgentGUIController extends Application
       input.setVisible(true);
 
       agent.setMessageText("");
-      
+
 //      synchronized (agent)
 //      {
 //        agent.notify();
 //      }
-    }
-    catch (UnknownHostException e)
+    } catch (UnknownHostException e)
     {
       e.printStackTrace();
       System.exit(-1);
     }
 
     agent.start();
-    
-    new AnimationTimer() {
+
+    new AnimationTimer()
+    {
       @Override
-      public void handle(long now) {
+      public void handle(long now)
+      {
         Message bankIn = agent.bankInput, auctionIn = agent.auctionInput;
-        if(bankIn != null)
+        if (bankIn != null)
         {
-//          txtBankBalance.setText("Balance: $" + bankIn.getAmount() + ".00");
+          txtBankBalance.setText("Balance: $" + bankIn.getAmount() + ".00");
           history += time.format(new Date(bankIn.getTimestamp())) + " | " + bankIn.getSignature() + bankIn.getMessage()+ "\n";
           agent.bankInput = null;
         }
-        if(auctionIn != null)
+        if (auctionIn != null)
         {
-          history += time.format(new Date(auctionIn.getTimestamp())) + " | " + auctionIn.getSignature() + auctionIn.getMessage()+ "\n";
+          history += time.format(new Date(auctionIn.getTimestamp())) + " | " + auctionIn.getSignature() + auctionIn.getMessage() + "\n";
           agent.auctionInput = null;
         }
-        
-        txtBankBalance.setText("Balance: $" + agent.balance + ".00");
-//        System.out.println(agent.inventory);
+        if (!txtBankBalance.getText().equals("Balance: $" + agent.balance + ".00")) txtBankBalance.setText("Balance: $" + agent.balance + ".00");
 
-        textArea.setText(history);
+        if(!textArea.getText().equals(history))
+        {
+          textArea.setText(history);
+          textArea.setScrollTop(textArea.getText().length());
+        }
+
 //        if(agent.auctionInput!=null)
 //        {
 //          if(agent.auctionInput.getMessage().equals("inventory"))
@@ -164,15 +161,17 @@ public class AgentGUIController extends Application
   
   /**
    * Main entry point for AgentGUIController.
+   *
    * @param args
    */
   public static void main(String args[])
   {
     launch(args);
   }
-  
+
   /**
    * Sets the primary stage.
+   *
    * @param primaryStage
    * @throws Exception
    */
@@ -183,8 +182,7 @@ public class AgentGUIController extends Application
     primaryStage.setScene(new Scene(root));
     primaryStage.show();
   }
-  
-  
+
   /**
    * Handles user input.
    */
@@ -193,19 +191,23 @@ public class AgentGUIController extends Application
   {
     String request = input.getText();
     input.setText("");
-    
-    if(!request.equals(""))
+
+    if (!request.equals(""))
     {
       agent.setMessageText(request);
 
       history += time.format(new Date(System.currentTimeMillis())) + " | " + agent.getAgentName() + request + "\n";
 
-      textArea.setText(history);
+      if(!textArea.getText().equals(history))
+      {
+        textArea.setText(history);
+        textArea.setScrollTop(textArea.getText().length());
+      }
     }
-    
 //    synchronized (agent)
 //    {
 //      agent.notify();
 //    }
   }
+
 }

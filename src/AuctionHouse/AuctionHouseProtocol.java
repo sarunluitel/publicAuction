@@ -71,7 +71,7 @@ public class AuctionHouseProtocol
         response = new Message(house, house.getName() + ": ", message, "", -1, -1);
         break;
       default:
-        message = "Error - request not recognized.";
+        message = "ignore";
         response = new Message(house, house.getName() + ": ", message, "", -1, -1);
         System.out.println(house.getName() + ": " + message);
         break;
