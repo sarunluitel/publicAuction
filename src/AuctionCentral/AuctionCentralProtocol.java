@@ -118,7 +118,7 @@ class AuctionCentralProtocol {
         break;
       case "bid":
         message = new StringBuilder("bid");
-        response = new Message(request.getSender(), "[AuctionCentral]: ", message.toString(), request.getItem(), request.getKey(), request.getAmount());
+        response = new Message(request.getSender(), "[AuctionCentral]: ", message.toString(), request.getItem(), agentKeys.get(request.getKey()), request.getAmount());
         break;
       case "accepted":
         message = new StringBuilder("block");

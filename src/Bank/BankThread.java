@@ -50,7 +50,7 @@ class BankThread extends Thread
         {
           if (input != null)
           {
-            if(!input.getSignature().contains("Updater")) System.out.println(input.getSignature() + input.getMessage());
+            System.out.println(input.getSignature() + input.getMessage());
 
             output = bankProtocol.handleRequest(input);
             
