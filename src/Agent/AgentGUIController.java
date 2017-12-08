@@ -41,7 +41,7 @@ public class AgentGUIController extends Application
   @FXML
   private TextField bankIP, auctionIP, input;
   @FXML
-  private Button connect;
+  private Button btnBid;
   @FXML
   private TextArea textArea;
   @FXML
@@ -92,13 +92,12 @@ public class AgentGUIController extends Application
       input.setVisible(true);
 
       agent.setMessageText("");
-      
-      synchronized (agent)
-      {
-        agent.notify();
-      }
-    }
-    catch (UnknownHostException e)
+
+//      synchronized (agent)
+//      {
+//        agent.notify();
+//      }
+    } catch (UnknownHostException e)
     {
       e.printStackTrace();
       System.exit(-1);
@@ -106,27 +105,55 @@ public class AgentGUIController extends Application
 
     agent.start();
 
-    new AnimationTimer() {
+    new AnimationTimer()
+    {
       @Override
-      public void handle(long now) {
+      public void handle(long now)
+      {
         Message bankIn = agent.bankInput, auctionIn = agent.auctionInput;
-        if(bankIn != null)
+        if (bankIn != null)
         {
           txtBankBalance.setText("Balance: $" + bankIn.getAmount() + ".00");
           history += time.format(new Date(bankIn.getTimestamp())) + " | " + bankIn.getSignature() + bankIn.getMessage()+ "\n";
           agent.bankInput = null;
         }
-        if(auctionIn != null)
+        if (auctionIn != null)
         {
-          history += time.format(new Date(auctionIn.getTimestamp())) + " | " + auctionIn.getSignature() + auctionIn.getMessage()+ "\n";
+          history += time.format(new Date(auctionIn.getTimestamp())) + " | " + auctionIn.getSignature() + auctionIn.getMessage() + "\n";
           agent.auctionInput = null;
         }
+        if (!txtBankBalance.getText().equals("Balance: $" + agent.balance + ".00")) txtBankBalance.setText("Balance: $" + agent.balance + ".00");
 
         if(!textArea.getText().equals(history))
         {
           textArea.setText(history);
           textArea.setScrollTop(textArea.getText().length());
         }
+
+//        if(agent.auctionInput!=null)
+//        {
+//          if(agent.auctionInput.getMessage().equals("inventory"))
+//          {
+//            ObservableList<String> list = FXCollections.observableArrayList();
+//            String listings = "";
+//
+//            List houses = ((List)agent.auctionInput.getSender());
+//            for(int i = 0; i < houses.size(); i++)
+//            {
+//              LinkedList inventory = ((LinkedList)houses.get(i));
+//              String house = "[House-" + i + "]: ";
+//              for(int j = 0; j < inventory.size(); j++)
+//              {
+//                AuctionHouse.Item item = ((AuctionHouse.Item)inventory.get(j));
+//                listings += house + item.getItemName() + "-" + item.getBidAmount() + "\n";
+//                list.add(listings);
+//              }
+//              System.out.println(listings);
+//            }
+//          //  System.out.println("Setting item combo box");
+//            itemsComboBox.setItems(list);
+//          }
+//        }
       }
     }.start();
 
@@ -134,15 +161,17 @@ public class AgentGUIController extends Application
   
   /**
    * Main entry point for AgentGUIController.
+   *
    * @param args
    */
   public static void main(String args[])
   {
     launch(args);
   }
-  
+
   /**
    * Sets the primary stage.
+   *
    * @param primaryStage
    * @throws Exception
    */
@@ -153,8 +182,8 @@ public class AgentGUIController extends Application
     primaryStage.setScene(new Scene(root));
     primaryStage.show();
   }
-  
-  
+
+
   /**
    * Handles user input.
    */
@@ -163,8 +192,8 @@ public class AgentGUIController extends Application
   {
     String request = input.getText();
     input.setText("");
-    
-    if(!request.equals(""))
+
+    if (!request.equals(""))
     {
       agent.setMessageText(request);
 
@@ -176,10 +205,11 @@ public class AgentGUIController extends Application
         textArea.setScrollTop(textArea.getText().length());
       }
     }
-    
-    synchronized (agent)
-    {
-      agent.notify();
-    }
+
+//    synchronized (agent)
+//    {
+//      agent.notify();
+//    }
   }
+
 }

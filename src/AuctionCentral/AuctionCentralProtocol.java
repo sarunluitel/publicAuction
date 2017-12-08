@@ -126,7 +126,7 @@ class AuctionCentralProtocol {
         break;
       case "register":
         int ID = (int)(Math.random() * 1000000);
-        current = "[House-" + houseCount + "]";
+        current = "[House-" + houseCount + "]: ";
         auctionHouse = ((AuctionHouse)request.getSender());
         auctionHouse.setName(current);
         

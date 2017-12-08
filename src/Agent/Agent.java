@@ -29,6 +29,10 @@ public class Agent extends Thread implements Serializable
   private InetAddress bankAddress, auctionAddress;
   public Message bankInput, bankOutput, auctionInput, auctionOutput;
   
+//  private AgentUpdater agentUpdater;
+  public String inventory;
+  public int balance;
+  
   /**
    * Sets the IP address for the bank.
    * @param bankAddress
@@ -56,6 +60,15 @@ public class Agent extends Thread implements Serializable
     name = randomName(new Random().nextInt(20));
     agentBankKey = (int) (Math.random() * 1000000);
     agentCentralKey = (int) (Math.random() * 1000000);
+  }
+  
+  public int getAgentBankKey() {
+    return agentBankKey;
+  }
+  
+  public int getAgentCentralKey()
+  {
+    return agentCentralKey;
   }
   
   /**
@@ -134,7 +147,9 @@ public class Agent extends Thread implements Serializable
         try
         {
           System.out.println(this.name + "Log in successful!");
-  
+          
+          AgentUpdater agentUpdater = new AgentUpdater(auctionAddress, bankAddress, this);
+          
           System.out.println("A init to B");
           bankOut.writeObject(new Message(this, this.getAgentName(), "new", "", this.agentBankKey, -1));
           bankOut.flush();
@@ -151,9 +166,12 @@ public class Agent extends Thread implements Serializable
           System.out.println(this.getAgentName() + "Reading from auction central...");
           auctionInput = ((Message) auctionIn.readObject());
           System.out.println(this.getAgentName() + "Finished Reading from auction central..."+auctionInput.getSignature());
-
+  
+          agentUpdater.start();
           while (!messageText.equals("EXIT"))
           {
+            inventory = agentUpdater.getInventory();
+            balance = agentUpdater.getBalance();
             if (!messageText.equals(""))
             {
               System.out.println(this.getAgentName() + "Submitting message = " + messageText + " to auction & bank.");
@@ -182,19 +200,19 @@ public class Agent extends Thread implements Serializable
               System.out.println(this.getAgentName() + "Finished Reading from auction central..." + auctionInput.getSignature());
               filterAuction(auctionInput);
             }
-            else
-            {
-              synchronized (this)
-              {
-                try
-                {
-                  System.out.println("A enter wait");
-                  this.wait();
-                }
-                catch (InterruptedException ignored) {}
-              }
-              System.out.println("A exit wait");
-            }
+//            else
+//            {
+//              synchronized (this)
+//              {
+//                try
+//                {
+//                  System.out.println("A enter wait");
+//                  this.wait();
+//                }
+//                catch (InterruptedException ignored) {}
+//              }
+//              System.out.println("A exit wait");
+//            }
           }
 
           bankIn.close();
