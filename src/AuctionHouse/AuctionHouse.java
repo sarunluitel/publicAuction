@@ -121,7 +121,7 @@ public class AuctionHouse implements Serializable
    */
   private AuctionHouse()
   {
-    this.name = "[House-...] ";
+    this.name = "[House-...]: ";
     
     setItems();
   }
@@ -191,13 +191,10 @@ public class AuctionHouse implements Serializable
   
   public String getInventory()
   {
-    String temp = name.replace("[", "");
-    temp = name.replace("]", "");
-    
     String items = "";
     for(Item item : itemsForSale)
     {
-      items += temp + ": is selling :" + item.getItemName() + ":" + item.getBidAmount() + ".\n";
+      items += this.name + item.getItemName() + " " + item.getBidAmount() + ".\n";
     }
     return items;
   }
