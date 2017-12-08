@@ -122,7 +122,6 @@ public class AgentGUIController extends Application
 
         if (bankBalance != agent.balance)
         {
-          System.out.println("$$$$ " + agent.balance + ", " + bankBalance);
           bankBalance = agent.balance;
           txtBankBalance.setText("Balance: $" + agent.balance + ".00");
         }
