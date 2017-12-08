@@ -194,7 +194,7 @@ public class AuctionHouse implements Serializable
     String items = "";
     for(Item item : itemsForSale)
     {
-      items += this.name + item.getItemName() + " " + item.getBidAmount() + ".\n";
+      items += this.name + item.getItemName() + " Bid-" + item.getBidAmount() + ".\n";
     }
     return items;
   }
