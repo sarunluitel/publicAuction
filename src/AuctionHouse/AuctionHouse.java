@@ -13,6 +13,7 @@ package AuctionHouse;
 
 import Message.Message;
 import javafx.animation.PauseTransition;
+import javafx.event.ActionEvent;
 import javafx.util.Duration;
 
 import java.io.*;
@@ -194,7 +195,7 @@ public class AuctionHouse implements Serializable
     String items = "";
     for(Item item : itemsForSale)
     {
-      items += this.name + item.getItemName() + " Bid-" + item.getBidAmount() + ".\n";
+      items += this.name + item.getItemName() + " Bid-" + item.getBidAmount() + ".";
     }
     return items;
   }
@@ -297,23 +298,23 @@ public class AuctionHouse implements Serializable
                 {
                   case "Item-1":
                     timer1.playFromStart();
-                    timer1.setOnFinished(event -> {
+                    timer1.setOnFinished((ActionEvent event) -> {
                       System.out.println("Timer 1 finished");
-                      house.removeItem(output.getItem());
+                     // house.removeItem("Item-1");
                     });
                     break;
                   case "Item-2":
                     timer2.playFromStart();
                     timer2.setOnFinished(event -> {
                       System.out.println("Timer 2 finished");
-                      house.removeItem(output.getItem());
+                  //    house.removeItem(output.getItem());
                     });
                     break;
                   case "Item-3":
                     timer3.playFromStart();
                     timer3.setOnFinished(event -> {
                       System.out.println("Timer 3 finished");
-                      house.removeItem(output.getItem());
+                //      house.removeItem(output.getItem());
                     });
                     break;
                   default:

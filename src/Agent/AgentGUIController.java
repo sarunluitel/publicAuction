@@ -130,30 +130,13 @@ public class AgentGUIController extends Application
           textArea.setScrollTop(textArea.getText().length());
         }
 
-//        if(agent.auctionInput!=null)
-//        {
-//          if(agent.auctionInput.getMessage().equals("inventory"))
-//          {
-//            ObservableList<String> list = FXCollections.observableArrayList();
-//            String listings = "";
-//
-//            List houses = ((List)agent.auctionInput.getSender());
-//            for(int i = 0; i < houses.size(); i++)
-//            {
-//              LinkedList inventory = ((LinkedList)houses.get(i));
-//              String house = "[House-" + i + "]: ";
-//              for(int j = 0; j < inventory.size(); j++)
-//              {
-//                AuctionHouse.Item item = ((AuctionHouse.Item)inventory.get(j));
-//                listings += house + item.getItemName() + "-" + item.getBidAmount() + "\n";
-//                list.add(listings);
-//              }
-//              System.out.println(listings);
-//            }
-//          //  System.out.println("Setting item combo box");
-//            itemsComboBox.setItems(list);
-//          }
-//        }
+        if(agent.inventory!=null){
+          String[] list = agent.inventory.split(".");
+          System.out.println("List to be added on the combo box"+list);
+          itemsComboBox.getItems().setAll(list);
+        }
+
+
       }
     }.start();
 
@@ -192,7 +175,7 @@ public class AgentGUIController extends Application
     String request = input.getText();
     input.setText("");
 
-    if (!request.equals(""))
+    if (!request.equals("") && !request.equalsIgnoreCase("new"))
     {
       agent.setMessageText(request);
 

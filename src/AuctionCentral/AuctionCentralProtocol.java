@@ -92,17 +92,17 @@ class AuctionCentralProtocol {
     this.object = message.getSender();
   }
   
-  public boolean hasPending() {
-    return hasPending;
-  }
-  
-  public Message getPending()
-  {
-    Message temp = pending;
-    pending = null;
-    hasPending = false;
-    return temp;
-  }
+//  public boolean hasPending() {
+//    return hasPending;
+//  }
+//
+//  public Message getPending()
+//  {
+//    Message temp = pending;
+//    pending = null;
+//    hasPending = false;
+//    return temp;
+//  }
   
   /**
    * Handles requests as they are received from socket.
@@ -145,12 +145,21 @@ class AuctionCentralProtocol {
         break;
       case "inventory":
         auctionHouse = auctionRepository.get(request.getKey());
-        System.out.println(houseCount);
+        System.out.println(auctionHouse);
+        System.out.println(auctionHouse.getInventory());
+
+        auctionRepository.replace(request.getKey(), auctionHouse, ((AuctionHouse)request.getSender()));
+
+        auctionHouse = auctionRepository.get(request.getKey());
+        System.out.println(auctionHouse);
+        System.out.println(auctionHouse.getInventory());
+
+//        System.out.println(houseCount);
         inventory = auctionHouse.getInventory();
 //        inventories.add(houseCount-1, inventory);
         
         message = "ignore";
-        response = new Message(inventories, "[AuctionCentral]: ", message, auctionHouse.getName(), request.getKey(), -1);
+        response = new Message(auctionHouse, "[AuctionCentral]: ", message, auctionHouse.getName(), request.getKey(), -1);
         System.out.println("[AuctionCentral]: " + message);
         break;
       case "de-register":
@@ -163,11 +172,12 @@ class AuctionCentralProtocol {
         break;
       case "repository":
         message = "";
-        System.out.println(auctionList.size());
-        for(AuctionHouse auctionHouse : auctionList)
+//        System.out.println(auctionList.size());
+        for(AuctionHouse auctionHouse : auctionRepository.values())
         {
-          if(auctionHouse.getInventory().length() < 10) auctionList.remove(auctionHouse);
-          message += auctionHouse.getInventory() + "\n";
+          System.out.println(auctionHouse.getInventory());
+          if(auctionHouse.getInventory().length() < 10) auctionRepository.remove(auctionHouse);
+          message += auctionHouse.getInventory();
         }
         System.out.println(message);
   
