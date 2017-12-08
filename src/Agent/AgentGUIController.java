@@ -111,6 +111,11 @@ public class AgentGUIController extends Application
       public void handle(long now)
       {
         Message bankIn = agent.bankInput, auctionIn = agent.auctionInput;
+        if (bankIn != null) System.out.println(bankIn.getSignature());
+        if (bankIn != null && bankIn.getSignature().contains("Updater")) return;
+        if (auctionIn != null && auctionIn.getSignature().contains("Updater")) return;
+
+
         if (bankIn != null)
         {
 //          txtBankBalance.setText("Balance: $" + bankIn.getAmount() + ".00");
@@ -134,9 +139,6 @@ public class AgentGUIController extends Application
         if (agent.inventory != null)
         {
           String[] list = agent.inventory.split("\\.");
-          System.out.println(list.length);
-
-          //System.out.println("List to be added on the combo box"+agent.inventory);
           itemsComboBox.getItems().setAll(list);
         }
 
