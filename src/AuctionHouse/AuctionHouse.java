@@ -108,8 +108,6 @@ public class AuctionHouse implements Serializable
       previous = current;
       current = agent;
     }
-
-
   }
   
   /**

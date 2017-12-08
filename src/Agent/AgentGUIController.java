@@ -163,7 +163,8 @@ public class AgentGUIController extends Application
     try
     {
       String temp[] = request.split("\\s+");
-      bidAmount = Integer.parseInt(temp[1]);
+      if(temp.length > 0) bidAmount = Integer.parseInt(temp[1]);
+      else bidAmount = 0;
     }
     catch (NumberFormatException e)
     {
