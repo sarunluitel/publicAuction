@@ -10,12 +10,10 @@
 
 package Agent;
 
-import AuctionHouse.AuctionHouse;
 import Message.Message;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -24,6 +22,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -82,13 +81,18 @@ public class AgentGUIController extends Application
     {
       agent.setAuctionAddress(InetAddress.getByName(bankIP.getText()));
       agent.setBankAddress(InetAddress.getByName(auctionIP.getText()));
-//      auctionIP.setVisible(false);
-//      bankIP.setVisible(false);
-//      connect.setVisible(false);
       hBox1.setVisible(false);
 
       txtTotalBidPlaced.setVisible(true);
       textArea.setVisible(true);
+      textArea.scrollTopProperty().addListener((obs, oldVal, newVal) ->
+        {System.out.println("?" + oldVal + ", " + newVal);
+          textArea.positionCaret(textArea.getText().length());
+          textArea.setScrollTop(textArea.getText().length());
+          System.out.println("L::"+textArea.getText().length() + " , "+textArea.getScrollTop());
+        });
+
+
       txtBankBalance.setVisible(true);
 
       itemsComboBox.setVisible(true);
