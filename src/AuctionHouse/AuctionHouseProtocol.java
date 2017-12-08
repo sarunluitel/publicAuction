@@ -15,7 +15,7 @@ import java.util.LinkedList;
 
 class AuctionHouseProtocol
 {
-  private AuctionHouse house;
+  private final AuctionHouse house;
   
   /**
    * Default constructor.

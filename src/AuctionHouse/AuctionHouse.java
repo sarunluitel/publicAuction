@@ -76,7 +76,7 @@ public class AuctionHouse implements Serializable
     /**
      * @return the current highest bidder key on item.
      */
-    public int getAgent()
+    int getAgent()
     {
       return current;
     }
@@ -132,12 +132,9 @@ public class AuctionHouse implements Serializable
   }
   
   /**
-   * @return index of this house.
+   * Sets name of this house.
+   * @param name
    */
-  int getIndex() {
-    return index;
-  }
-  
   public void setName(String name)
   {
     this.name = name;
@@ -253,6 +250,7 @@ public class AuctionHouse implements Serializable
     try
     {
       Item item = house.getInventory().get(itemIndex);
+      house.removeItem("Item-" + itemIndex);
       out.writeObject(new Message(house, house.getName(), "winner", item.itemName, item.getAgent(), item.getBidAmount()));
       out.flush();
     }

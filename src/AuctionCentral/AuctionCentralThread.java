@@ -18,7 +18,7 @@ import java.util.*;
 
 class AuctionCentralThread extends Thread
 {
-  private Socket socket;
+  private final Socket socket;
   private static ArrayList<AuctionCentralWriter> writers = new ArrayList<>();
   
   /**

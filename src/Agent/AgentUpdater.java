@@ -20,9 +20,10 @@ import java.net.Socket;
 public class AgentUpdater extends Thread implements Serializable
 {
   private Message auctionMessage, bankMessage;
-  private Agent agent;
+  private final Agent agent;
   
-  private InetAddress auctionAddress, bankAddress;
+  private final InetAddress auctionAddress;
+  private final InetAddress bankAddress;
   
   private int balance;
   private String inventory;

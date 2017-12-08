@@ -20,8 +20,8 @@ class AuctionCentralProtocol {
   private static Map<Integer, Integer> agentKeys = Collections.synchronizedMap(new HashMap<Integer, Integer>());
   private static Map<Integer, AuctionHouse> auctionRepository = Collections.synchronizedMap(new HashMap<Integer, AuctionHouse>());
   
-  private Socket socket;
-  private Object object;
+  private final Socket socket;
+  private final Object object;
   
   private Agent agent;
   private static int agentCount;
@@ -33,7 +33,7 @@ class AuctionCentralProtocol {
   
   /**
    * Default constructor.
-   * <p>
+   *
    * Takes a socket and an object to identify who it is speaking with.
    *
    * @param socket

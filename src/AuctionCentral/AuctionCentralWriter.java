@@ -16,7 +16,7 @@ import java.net.Socket;
 
 class AuctionCentralWriter
 {
-  private Socket socket;
+  private final Socket socket;
   private ObjectOutputStream out;
   
   private Object object = "";
