@@ -31,7 +31,7 @@ class AuctionCentral
     Scanner scan = new Scanner(System.in);
     String address = scan.nextLine();
 
-    try (ServerSocket serverSocket = new ServerSocket(1111, 50, InetAddress.getLocalHost());
+    try (ServerSocket serverSocket = new ServerSocket(1111, 100, InetAddress.getLocalHost());
          Socket bankSocket = new Socket(address,2222))
     {
       System.out.println("[AuctionCentral]: serverSocket" + serverSocket.toString() + ".");

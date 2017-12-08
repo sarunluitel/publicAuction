@@ -156,66 +156,31 @@ public class Agent extends Thread implements Serializable
           {
             if (!messageText.equals(""))
             {
-              if(messageText.equalsIgnoreCase("bid"))
-              {
-                String temp[] = messageText.split(":");
-                String house = temp[1];
-                String item = temp[2];
-                int amt = Integer.parseInt(temp[3]);
-                
-                messageText = "bid";
+              System.out.println(this.getAgentName() + "Submitting message = " + messageText + " to auction & bank.");
   
-                auctionOutput = new Message(this, house, messageText, "", agentCentralKey, amt);
-//                bankOutput = new Message(this, this.getAgentName(), messageText, "", agentBankKey, 0);
+              auctionOutput = new Message(this, this.getAgentName(), messageText, "", agentCentralKey, 0);
+              bankOutput = new Message(this, this.getAgentName(), messageText, "", agentBankKey, 0);
   
-                System.out.println("A to AC");
-                auctionOut.writeObject(auctionOutput);
-                auctionOut.flush();
-                System.out.println("A sent to AC");
-//                System.out.println("A to B");
-//                bankOut.writeObject(bankOutput);
-//                bankOut.flush();
-//                System.out.println("A sent to B");
+              System.out.println("A to AC");
+              auctionOut.writeObject(auctionOutput);
+              auctionOut.flush();
+              System.out.println("A sent to AC");
+              System.out.println("A to B");
+              bankOut.writeObject(bankOutput);
+              bankOut.flush();
+              System.out.println("A sent to B");
   
-                messageText = "";
+              messageText = "";
   
-//                System.out.println(this.getAgentName() + "Reading from bank.... about to read size:" + bankIn.available());
-//                bankInput = ((Message) bankIn.readObject());
-//                System.out.println(this.getAgentName() + "Finished Reading from bank..." + bankInput.getSignature() + "Size read" + bankIn.available());
-//                filterBank(bankInput);
+              System.out.println(this.getAgentName() + "Reading from bank.... about to read size:" + bankIn.available());
+              bankInput = ((Message) bankIn.readObject());
+              System.out.println(this.getAgentName() + "Finished Reading from bank..." + bankInput.getSignature() + "Size read" + bankIn.available());
+              filterBank(bankInput);
   
-                System.out.println(this.getAgentName() + "Reading from auction central...");
-                auctionInput = ((Message) auctionIn.readObject());
-                System.out.println(this.getAgentName() + "Finished Reading from auction central..." + auctionInput.getSignature());
-                filterAuction(auctionInput);
-              }
-              else {
-                System.out.println(this.getAgentName() + "Submitting message = " + messageText + " to auction & bank.");
-  
-                auctionOutput = new Message(this, this.getAgentName(), messageText, "", agentCentralKey, 0);
-                bankOutput = new Message(this, this.getAgentName(), messageText, "", agentBankKey, 0);
-  
-                System.out.println("A to AC");
-                auctionOut.writeObject(auctionOutput);
-                auctionOut.flush();
-                System.out.println("A sent to AC");
-                System.out.println("A to B");
-                bankOut.writeObject(bankOutput);
-                bankOut.flush();
-                System.out.println("A sent to B");
-  
-                messageText = "";
-  
-                System.out.println(this.getAgentName() + "Reading from bank.... about to read size:" + bankIn.available());
-                bankInput = ((Message) bankIn.readObject());
-                System.out.println(this.getAgentName() + "Finished Reading from bank..." + bankInput.getSignature() + "Size read" + bankIn.available());
-                filterBank(bankInput);
-  
-                System.out.println(this.getAgentName() + "Reading from auction central...");
-                auctionInput = ((Message) auctionIn.readObject());
-                System.out.println(this.getAgentName() + "Finished Reading from auction central..." + auctionInput.getSignature());
-                filterAuction(auctionInput);
-              }
+              System.out.println(this.getAgentName() + "Reading from auction central...");
+              auctionInput = ((Message) auctionIn.readObject());
+              System.out.println(this.getAgentName() + "Finished Reading from auction central..." + auctionInput.getSignature());
+              filterAuction(auctionInput);
             }
             else
             {

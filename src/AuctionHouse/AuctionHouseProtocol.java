@@ -37,7 +37,7 @@ public class AuctionHouseProtocol
         break;
       case "de-registered":
         message = "ignore";
-        response = new Message(this, house.getName() + ": ", message, "", -1, -1);
+        response = new Message(house, house.getName() + ": ", message, "", -1, -1);
         System.out.println(house.getName() + ": " + message);
         break;
       case "bid":
@@ -56,22 +56,23 @@ public class AuctionHouseProtocol
         if(house.higherBid(itemIndex, request.getAmount()) && itemHere)
         {
           message = "accepted";
+          System.out.println("Bid accepted: " + request.getAmount());
           house.setItemBid(itemIndex, request.getAmount(), request.getKey());
         }
         else
         {
           message = "declined";
         }
-        response = new Message(this, house.getName() + ": ", message, request.getItem(), request.getKey(), request.getAmount());
+        response = new Message(house, house.getName() + ": ", message, request.getItem(), request.getKey(), request.getAmount());
         System.out.println(house.getName() + ": " + message);
         break;
       case "confirmation":
         message = "ignore";
-        response = new Message(null, house.getName() + ": ", message, "", -1, -1);
+        response = new Message(house, house.getName() + ": ", message, "", -1, -1);
         break;
       default:
         message = "Error - request not recognized.";
-        response = new Message(null, house.getName() + ": ", message, "", -1, -1);
+        response = new Message(house, house.getName() + ": ", message, "", -1, -1);
         System.out.println(house.getName() + ": " + message);
         break;
     }

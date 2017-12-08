@@ -60,16 +60,15 @@ class BankProtocol implements Serializable
         break;
       case "new":
         String name = ((Agent) request.getSender()).getAgentName();
-        int publicID =  ((Agent) request.getSender()).getPublicID();
         
         System.out.println("[Bank]: Creating new account for " + name + ".");
 
-        account = new BankAccount(name, publicID, 500);
+        account = new BankAccount(name, request.getKey(), 500);
         Bank.addAccounts(account);
         
-        accounts.put(publicID, account);
+        accounts.put(request.getKey(), account);
         
-        message = "New account = [NAME=" + account.getName() + ", ID=" + account.getPublicID()+ ", BAL=$" + account.getBalance() + ".00].";
+        message = "New account = [NAME=" + account.getName() + ", ID=" + account.getPublicID() + ", BAL=$" + account.getBalance() + ".00].";
         System.out.println("[Bank]: " + message);
         System.out.println("[Bank]: " + Bank.getNumAccounts() + " account(s) are opened!");
 
