@@ -13,24 +13,20 @@ package Agent;
 import Message.Message;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-import javax.swing.text.DefaultCaret;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
@@ -45,7 +41,7 @@ public class AgentGUIController extends Application
   @FXML
   private TextField bankIP, auctionIP, input;
   @FXML
-  private Button connect;
+  private Button btnBid;
   @FXML
   private TextArea textArea;
   @FXML
@@ -55,7 +51,7 @@ public class AgentGUIController extends Application
 
   private Agent agent;
   private String history = "";
-
+  
   /**
    * Initializes state of GUI components.
    */
@@ -107,12 +103,11 @@ public class AgentGUIController extends Application
 
       agent.setMessageText("");
 
-      synchronized (agent)
-      {
-        agent.notify();
-      }
-    }
-    catch (UnknownHostException e)
+//      synchronized (agent)
+//      {
+//        agent.notify();
+//      }
+    } catch (UnknownHostException e)
     {
       e.printStackTrace();
       System.exit(-1);
@@ -129,7 +124,7 @@ public class AgentGUIController extends Application
         if (bankIn != null)
         {
           txtBankBalance.setText("Balance: $" + bankIn.getAmount() + ".00");
-          history += time.format(new Date(bankIn.getTimestamp())) + " | " + bankIn.getSignature() + bankIn.getMessage() + "\n";
+          history += time.format(new Date(bankIn.getTimestamp())) + " | " + bankIn.getSignature() + bankIn.getMessage()+ "\n";
           agent.bankInput = null;
         }
         if (auctionIn != null)
@@ -137,14 +132,42 @@ public class AgentGUIController extends Application
           history += time.format(new Date(auctionIn.getTimestamp())) + " | " + auctionIn.getSignature() + auctionIn.getMessage() + "\n";
           agent.auctionInput = null;
         }
+
+        txtBankBalance.setText("Balance: $" + agent.balance + ".00");
+//        System.out.println(agent.inventory);
+
         textArea.setText(history);
         textArea.setScrollTop(textArea.getText().length());
 
+//        if(agent.auctionInput!=null)
+//        {
+//          if(agent.auctionInput.getMessage().equals("inventory"))
+//          {
+//            ObservableList<String> list = FXCollections.observableArrayList();
+//            String listings = "";
+//
+//            List houses = ((List)agent.auctionInput.getSender());
+//            for(int i = 0; i < houses.size(); i++)
+//            {
+//              LinkedList inventory = ((LinkedList)houses.get(i));
+//              String house = "[House-" + i + "]: ";
+//              for(int j = 0; j < inventory.size(); j++)
+//              {
+//                AuctionHouse.Item item = ((AuctionHouse.Item)inventory.get(j));
+//                listings += house + item.getItemName() + "-" + item.getBidAmount() + "\n";
+//                list.add(listings);
+//              }
+//              System.out.println(listings);
+//            }
+//          //  System.out.println("Setting item combo box");
+//            itemsComboBox.setItems(list);
+//          }
+//        }
       }
     }.start();
 
   }
-
+  
   /**
    * Main entry point for AgentGUIController.
    *
@@ -190,10 +213,10 @@ public class AgentGUIController extends Application
 
     }
 
-    synchronized (agent)
-    {
-      agent.notify();
-    }
+//    synchronized (agent)
+//    {
+//      agent.notify();
+//    }
   }
 //
 //  /**

@@ -121,7 +121,7 @@ public class AuctionHouse implements Serializable
    */
   private AuctionHouse()
   {
-    this.name = "[House-...] ";
+    this.name = "[House-...]: ";
     
     setItems();
   }
@@ -194,7 +194,7 @@ public class AuctionHouse implements Serializable
     String items = "";
     for(Item item : itemsForSale)
     {
-      items += name + item.getItemName() + ":" + item.getBidAmount();
+      items += this.name + item.getItemName() + " Bid-" + item.getBidAmount() + ".\n";
     }
     return items;
   }
