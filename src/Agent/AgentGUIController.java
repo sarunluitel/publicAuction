@@ -24,6 +24,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -35,7 +36,9 @@ import java.util.*;
 public class AgentGUIController extends Application
 {
   private final SimpleDateFormat time = new SimpleDateFormat("h:mm:ss");
-  
+
+  @FXML
+  private HBox hBox1;
   @FXML
   private TextField bankIP, auctionIP, input;
   @FXML
@@ -59,7 +62,7 @@ public class AgentGUIController extends Application
     textArea.setVisible(false);
     input.setVisible(false);
     textArea.setEditable(false);
-    txtTotalBidPlaced.setVisible(false);
+    //txtTotalBidPlaced.setVisible(false);
     txtBankBalance.setVisible(false);
     itemsComboBox.setVisible(false);
   }
@@ -79,15 +82,17 @@ public class AgentGUIController extends Application
     {
       agent.setAuctionAddress(InetAddress.getByName(bankIP.getText()));
       agent.setBankAddress(InetAddress.getByName(auctionIP.getText()));
-      auctionIP.setVisible(false);
-      bankIP.setVisible(false);
-      connect.setVisible(false);
+//      auctionIP.setVisible(false);
+//      bankIP.setVisible(false);
+//      connect.setVisible(false);
+      hBox1.setVisible(false);
 
+      //txtTotalBidPlaced.setVisible(true);
       textArea.setVisible(true);
-      input.setVisible(true);
-      txtTotalBidPlaced.setVisible(true);
       txtBankBalance.setVisible(true);
+
       itemsComboBox.setVisible(true);
+      input.setVisible(true);
 
       agent.setMessageText("");
       

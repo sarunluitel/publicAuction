@@ -1,31 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
+<AnchorPane prefWidth="950.0" prefHeight="600.0" xmlns="http://javafx.com/javafx/8.0.111"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="Agent.AgentGUIController">
+    <children>
+        <HBox fx:id="hBox1" alignment="CENTER" prefWidth="950" prefHeight="50">
+            <TextField fx:id="bankIP" layoutY="25.0" prefWidth="200.0" prefHeight="30.0"
+                       promptText="Bank IP address" text="Bank IP address"/>
+            <Button fx:id="connect" mnemonicParsing="false" onAction="#secureConnection"
+                    prefWidth="200.0" prefHeight="30.0" text="Connect"/>
+            <TextField fx:id="auctionIP" prefWidth="200.0" prefHeight="30.0"
+                       promptText="Auction Central IP address" text="Auction Central IP address"/>
+        </HBox>
 
-<AnchorPane prefHeight="515.0" prefWidth="950.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Agent.AgentGUIController">
-  <children>
-    <TextField fx:id="bankIP" layoutX="10.0" layoutY="25.0" prefHeight="30.0" prefWidth="200.0" promptText="Bank IP address" text="Bank IP address" />
-    <TextField fx:id="auctionIP" layoutX="410.0" layoutY="25.0" prefHeight="30.0" prefWidth="200.0" promptText="Auction Central IP address" text="Auction Central IP address" />
-    <Button fx:id="connect" layoutX="210.0" layoutY="25.0" mnemonicParsing="false" onAction="#secureConnection" prefHeight="30.0" prefWidth="200.0" text="Connect" />
-    <TextArea fx:id="textArea" layoutX="150.0" layoutY="75.0" prefHeight="290.0" prefWidth="600.0" />
-    <TextField fx:id="input" layoutX="150.0" layoutY="412.0" prefHeight="30.0" prefWidth="600.0" promptText="Bid" />
-    <Button fx:id="btnBid" defaultButton="true" layoutX="210.0" layoutY="460.0" mnemonicParsing="false" onAction="#placeBid" prefHeight="30.0" prefWidth="200.0" text="Bid" />
-      <ComboBox fx:id="itemsComboBox" layoutX="150.0" layoutY="374.0" prefHeight="25.0" prefWidth="300.0" promptText="Select Items to Bid on" />
-      <Text fx:id="txtBankBalance" fill="#0eeb1d" layoutX="770.0" layoutY="96.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Balance: $0.00" wrappingWidth="100">
-         <font>
-            <Font name="System Bold" size="14.0" />
-         </font>
-      </Text>
-      <Text fx:id="txtTotalBidPlaced" fill="#0ba3e5" layoutX="36.0" layoutY="95.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Bid:" wrappingWidth="41.13671875">
-         <font>
-            <Font name="System Bold" size="14.0" />
-         </font>
-      </Text>
-  </children>
+        <Text fx:id="txtTotalBidPlaced" fill="#0ba3e5" strokeType="OUTSIDE"
+              strokeWidth="0.0" text="Bid:" layoutX="30.0" layoutY="30.0">
+            <font>
+                <Font name="System Bold" size="14.0"/>
+            </font>
+        </Text>
+
+        <TextArea fx:id="textArea" layoutX="170.0" prefWidth="600.0" prefHeight="400.0" />
+
+        <Text fx:id="txtBankBalance" fill="#0eeb1d" strokeType="OUTSIDE"
+              strokeWidth="0.0" text="Balance: $0.00" wrappingWidth="100" layoutX="780.0" layoutY="30.0">
+            <font>
+                <Font name="System Bold" size="14.0"/>
+            </font>
+        </Text>
+
+        <VBox alignment="CENTER" prefWidth="950" maxHeight="100" layoutY="400.0">
+            <ComboBox fx:id="itemsComboBox" prefHeight="25.0" prefWidth="600.0" translateY="5"
+                      promptText="Select Items to Bid on"/>
+            <TextField fx:id="input" maxWidth="600" prefWidth="600.0" prefHeight="30.0" translateY="5.0"
+                       promptText="Bid"/>
+            <Button fx:id="btnBid" defaultButton="true" mnemonicParsing="false"
+                    onAction="#placeBid" prefHeight="30.0" prefWidth="600.0" layoutY="65.0" text="Bid"/>
+        </VBox>
+    </children>
 </AnchorPane>
