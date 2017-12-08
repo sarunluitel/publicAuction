@@ -96,10 +96,10 @@ public class AgentGUIController extends Application
 
       agent.setMessageText("");
       
-      synchronized (agent)
-      {
-        agent.notify();
-      }
+//      synchronized (agent)
+//      {
+//        agent.notify();
+//      }
     }
     catch (UnknownHostException e)
     {
@@ -108,14 +108,14 @@ public class AgentGUIController extends Application
     }
 
     agent.start();
-
+    
     new AnimationTimer() {
       @Override
       public void handle(long now) {
         Message bankIn = agent.bankInput, auctionIn = agent.auctionInput;
         if(bankIn != null)
         {
-          txtBankBalance.setText("Balance: $" + bankIn.getAmount() + ".00");
+//          txtBankBalance.setText("Balance: $" + bankIn.getAmount() + ".00");
           history += time.format(new Date(bankIn.getTimestamp())) + " | " + bankIn.getSignature() + bankIn.getMessage()+ "\n";
           agent.bankInput = null;
         }
@@ -124,6 +124,10 @@ public class AgentGUIController extends Application
           history += time.format(new Date(auctionIn.getTimestamp())) + " | " + auctionIn.getSignature() + auctionIn.getMessage()+ "\n";
           agent.auctionInput = null;
         }
+        
+        txtBankBalance.setText("Balance: $" + agent.balance + ".00");
+//        System.out.println(agent.inventory);
+
         textArea.setText(history);
 //        if(agent.auctionInput!=null)
 //        {
@@ -195,9 +199,9 @@ public class AgentGUIController extends Application
       textArea.setText(history);
     }
     
-    synchronized (agent)
-    {
-      agent.notify();
-    }
+//    synchronized (agent)
+//    {
+//      agent.notify();
+//    }
   }
 }

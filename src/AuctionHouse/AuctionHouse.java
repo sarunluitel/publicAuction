@@ -191,10 +191,13 @@ public class AuctionHouse implements Serializable
   
   public String getInventory()
   {
+    String temp = name.replace("[", "");
+    temp = name.replace("]", "");
+    
     String items = "";
     for(Item item : itemsForSale)
     {
-      items += name + item.getItemName() + ":" + item.getBidAmount();
+      items += temp + ": is selling :" + item.getItemName() + ":" + item.getBidAmount();
     }
     return items;
   }
