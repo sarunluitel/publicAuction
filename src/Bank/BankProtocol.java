@@ -96,6 +96,7 @@ class BankProtocol implements Serializable
         break;
       case "remove":
         message = "ignore";
+        account = accounts.get(request.getKey());
         account.remove(request.getAmount());
         response = new Message(null, "[Bank]: ", message, "Funds removed", request.getKey(), account.getBalance());
         System.out.println("[Bank]: " + message);

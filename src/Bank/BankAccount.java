@@ -37,7 +37,7 @@ class BankAccount
    */
   public String getName()
   {
-    return name;
+    return this.name;
   }
 
   /**
@@ -45,7 +45,7 @@ class BankAccount
    */
   public int getPublicID()
   {
-    return publicID;
+    return this.publicID;
   }
 
   /**
@@ -53,28 +53,30 @@ class BankAccount
    */
   public int getBalance()
   {
-    return balance;
+    return this.balance;
   }
   
   /**
    * Adds holds on this account as needed.
    */
-  public synchronized void addHold(int amount)
+  public void addHold(int amount)
   {
+    this.balance -= amount;
     holds.add(amount);
-    this.balance -= amount;
   }
   
-  public synchronized void removeHold(int amount)
+  public void removeHold(int amount)
   {
-    holds.remove(amount);
     this.balance += amount;
+    if(holds.size() > 0) holds.remove(amount);
   }
   
-  public synchronized void remove(int amount)
+  public void remove(int amount)
   {
-    this.balance += holds.remove(amount);
+    System.out.println(balance + "????????????????????????????????????????????????????????????????2");
     this.balance -= amount;
+    System.out.println(balance + "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1");
+    if(holds.size() > 0) this.balance += holds.remove(amount);
     if(this.balance < 0) this.balance = 0;
   }
 }

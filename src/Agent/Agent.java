@@ -184,7 +184,7 @@ public class Agent extends Thread implements Serializable
               System.out.println(this.getAgentName() + "Submitting message = " + messageText + " to auction & bank.");
 
               auctionOutput = new Message(this, this.getAgentName(), messageText, "", agentCentralKey, 0);
-              bankOutput = new Message(this, this.getAgentName(), messageText, "", agentBankKey, 0);
+              bankOutput = new Message(this, this.getAgentName(), "remove", "", agentBankKey, 500);
 
               System.out.println("A to AC");
               auctionOut.writeObject(auctionOutput);
