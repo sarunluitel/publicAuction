@@ -177,9 +177,15 @@ public class AgentGUIController extends Application
       return;
     }
     
+    String combo = " ";
+    if(itemsComboBox.getSelectionModel().getSelectedItem() == null) return;
+    else combo = itemsComboBox.getSelectionModel().getSelectedItem();
+    System.out.println(combo);
+    
     if (!request.equals("") && !request.equalsIgnoreCase("new"))
     {
       agent.setMessageText(request);
+      agent.setCombo(combo);
       agent.setBidAmount(bidAmount);
 
       history += time.format(new Date(System.currentTimeMillis())) + " | " + agent.getAgentName() + request + "\n";
@@ -191,8 +197,7 @@ public class AgentGUIController extends Application
       }
     }
   }
-
-
+  
   /**
    * Sets the primary stage.
    *

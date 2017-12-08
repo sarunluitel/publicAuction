@@ -25,6 +25,7 @@ public class Agent extends Thread implements Serializable
   private final String name;
 
   private String messageText = "";
+  private String combo = "";
   private int bidAmount;
 
   private InetAddress bankAddress, auctionAddress;
@@ -121,6 +122,8 @@ public class Agent extends Thread implements Serializable
 
   void setBidAmount(int amount) { this.bidAmount = amount;}
   
+  void setCombo(String combo) { this.combo = combo; }
+  
   /**
    * Run method for agent thread - handles messaging.
    */
@@ -184,7 +187,7 @@ public class Agent extends Thread implements Serializable
               String temp[], houseName = "", itemName = "";
               if(messageText.contains("bid"))
               {
-                temp = messageText.split("\\ ");
+                temp = combo.split("\\ ");
                 houseName = temp[0];
                 itemName = temp[1];
               }
