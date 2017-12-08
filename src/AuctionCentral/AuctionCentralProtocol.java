@@ -17,8 +17,11 @@ import java.net.Socket;
 import java.util.*;
 
 class AuctionCentralProtocol {
+  private static Map<Integer, Integer> agentKeys = Collections.synchronizedMap(new HashMap<>());
+  
   private static Map<Integer, AuctionHouse> auctionRepository = Collections.synchronizedMap(new HashMap<Integer, AuctionHouse>());
   private static List<LinkedList> inventories = Collections.synchronizedList(new LinkedList<>());
+  
   private String inventory = "";
   private static ArrayList<AuctionHouse> auctionList = new ArrayList<>();
   
@@ -115,6 +118,8 @@ class AuctionCentralProtocol {
     switch (request.getMessage())
     {
       case "new":
+        agentKeys.put(request.getKey(), request.getAmount());
+        
         message = "Welcome!";
         response = new Message(null, "[AuctionCentral]: ", message, "Initialized", request.getKey(), 0);
         System.out.println("[AuctionCentral] " + socket.toString()+" : " + message);
@@ -169,13 +174,17 @@ class AuctionCentralProtocol {
         response = new Message(null, "[AuctionCentral]: \n", message, "", request.getKey(), auctionRepository.size());
         System.out.println("[AuctionCentral]: " + message);
         break;
+      case "bid":
+        message = "bid";
+        response = new Message(request.getSender(), "[AuctionCentral]: ", message, request.getItem(), request.getKey(), request.getAmount());
+        break;
       case "accepted":
-        message = "[Agent-" + request.getKey() + "] is the highest bidder on " + request.getSignature() + request.getItem() + " for an amount of " + request.getAmount();
+        message = "block";
         System.out.println(auctionList.size());
-  
+  //"[Agent-" + request.getKey() + "] is the highest bidder on " + request.getSignature() + request.getItem() + " for an amount of " + request.getAmount()
         System.out.println(message);
   
-        response = new Message(null, "[AuctionCentral]: \n", message, request.getItem(), request.getKey(), request.getAmount());
+        response = new Message(null, "[AuctionCentral]: \n", message, request.getItem(), agentKeys.get(request.getKey()), request.getAmount());
         System.out.println("[AuctionCentral]: " + message);
         break;
       case "declined":
@@ -188,11 +197,12 @@ class AuctionCentralProtocol {
         System.out.println("[AuctionCentral]: " + message);
         break;
       case "unblock":
-        response = new Message(null, "[AuctionCentral]: \n", request.getMessage(), request.getItem(), request.getKey(), request.getAmount());
+        response = new Message(null, "[AuctionCentral]: \n", request.getMessage(), request.getItem(), agentKeys.get(request.getKey()), request.getAmount());
         break;
       case "winner":
-        message = request.getSignature() + " has won the bid on " + request.getItem() + " for $" + request.getAmount() + "!";
-        response = new Message(null, "[AuctionCentral]: ", message, "Mitigated transaction", request.getKey(), 0);
+        message = "remove";
+
+        response = new Message(null, "[AuctionCentral]: ", message, request.getItem(), agentKeys.get(request.getKey()), request.getAmount());
         //handleTransaction()
         System.out.println("[AuctionCentral]: " + message);
         break;
