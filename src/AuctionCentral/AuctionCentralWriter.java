@@ -13,6 +13,7 @@ public class AuctionCentralWriter
   private Socket socket;
   private ObjectOutputStream out;
   
+  private Object object = "";
   private String name;
   
   public AuctionCentralWriter(Socket socket) throws IOException
@@ -28,12 +29,20 @@ public class AuctionCentralWriter
     this.name = name;
   }
   
+  public void setObject(Object object) {
+    this.object = object;
+  }
+  
   public Socket getSocket() {
     return socket;
   }
   
   public String getName() {
     return name;
+  }
+  
+  public Object getObject() {
+    return object;
   }
   
   public void sendMessage(Message message) throws IOException
