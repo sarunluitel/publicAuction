@@ -178,7 +178,7 @@ public class AgentGUIController extends Application
     }
   
     String combo = " ";
-    if(itemsComboBox.getValue() != null) combo = itemsComboBox.getSelectionModel().getSelectedItem();
+    if(itemsComboBox.getValue() != null) combo = itemsComboBox.getValue();
     System.out.println(combo);
     
     if (!request.equals("") && !request.equalsIgnoreCase("new"))

@@ -184,10 +184,12 @@ public class Agent extends Thread implements Serializable
             
             if (!messageText.equals(""))
             {
-              String temp[], houseName = "", itemName = "";
+              String houseName = "", itemName = "";
               if(messageText.contains("bid"))
               {
-                temp = combo.split("\\s+");
+                System.out.println(combo);
+                String temp[] = combo.split("\\s+");
+                System.out.println(temp.length);
                 if(temp.length > 0)
                 {
                   houseName = temp[0];
