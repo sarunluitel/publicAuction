@@ -8,6 +8,8 @@
 
 package AuctionCentral;
 
+import Agent.Agent;
+import Agent.AgentUpdater;
 import Message.Message;
 
 import java.io.IOException;
@@ -66,6 +68,7 @@ class AuctionCentralThread extends Thread
         System.out.println("AC protocol made");
 //        sockets.put(name, current);
         auctionCentralWriter.setName(auctionCentralProtocol.getCurrent());
+        auctionCentralWriter.setObject(input.getSender());
         writers.add(auctionCentralWriter);
         
         System.out.println("CURRENT CONNECTIONS:");
@@ -127,8 +130,9 @@ class AuctionCentralThread extends Thread
       {
 //        Message copy = message;
         name = client.getName();
-  
+        
         if((name.contains("Bank") || name.contains("House")) && (content.contains("Error") || content.contains("Welcome"))) continue;
+        if((message.getSender() instanceof AgentUpdater) && !(client.getObject() instanceof AgentUpdater)) continue;
 //        if((name.contains("Bank") || name.contains("House")) && (content.contains("Item"))) message = new Message(message.getSender(), message.getSignature(), "update", message.getItem(), message.getKey(), message.getAmount());
 //        if(!(name.contains("Bank") || name.contains("House"))) message = copy;
 

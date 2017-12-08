@@ -8,14 +8,15 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.util.LinkedList;
 
 public class AgentUpdater extends Thread implements Serializable
 {
   private Message auctionMessage, bankMessage;
-  private ObjectOutputStream auctionOut, bankOut;
-  private ObjectInputStream auctionIn, bankIn;
+//  private ObjectOutputStream auctionOut, bankOut;
+//  private ObjectInputStream auctionIn, bankIn;
   private Agent agent;
+  
+  private InetAddress auctionAddress, bankAddress;
   
   private int balance;
   private String inventory;
@@ -25,25 +26,8 @@ public class AgentUpdater extends Thread implements Serializable
   public AgentUpdater(InetAddress auctionAddress, InetAddress bankAddress, Agent agent)
   {
     this.agent = agent;
-    
-    try
-    {
-      Socket auction = new Socket(auctionAddress, 1111);
-      Socket bank = new Socket(bankAddress, 2222);
-      
-      auctionOut = new ObjectOutputStream(auction.getOutputStream());
-      auctionOut.flush();
-      
-      bankOut = new ObjectOutputStream(bank.getOutputStream());
-      bankOut.flush();
-      
-      auctionIn = new ObjectInputStream(auction.getInputStream());
-      bankIn = new ObjectInputStream(bank.getInputStream());
-    }
-    catch(IOException e)
-    {
-      e.printStackTrace();
-    }
+    this.auctionAddress = auctionAddress;
+    this.bankAddress = bankAddress;
   }
   
   public void setFinished(boolean flag)
@@ -64,13 +48,26 @@ public class AgentUpdater extends Thread implements Serializable
   @Override
   public void run()
   {
+    try
+    {
+      Socket auction = new Socket(auctionAddress, 1111);
+      Socket bank = new Socket(bankAddress, 2222);
+    
+      ObjectOutputStream auctionOut = new ObjectOutputStream(auction.getOutputStream());
+      auctionOut.flush();
+    
+      ObjectOutputStream bankOut = new ObjectOutputStream(bank.getOutputStream());
+      bankOut.flush();
+    
+      ObjectInputStream auctionIn = new ObjectInputStream(auction.getInputStream());
+      ObjectInputStream bankIn = new ObjectInputStream(bank.getInputStream());
     while(!finished)
     {
       try { sleep(1000); } catch(InterruptedException ignored) {}
       try {
-        auctionOut.writeObject(new Message(agent, "Updater+"+agent.getAgentName(), "repository", "", agent.getAgentCentralKey(), agent.getAgentBankKey()));
+        auctionOut.writeObject(new Message(this, "Updater+"+agent.getAgentName(), "repository", "", agent.getAgentCentralKey(), agent.getAgentBankKey()));
         auctionOut.flush();
-        bankOut.writeObject(new Message(agent, "Updater+"+agent.getAgentName(), "balance", "", agent.getAgentBankKey(), -1));
+        bankOut.writeObject(new Message(this, "Updater+"+agent.getAgentName(), "balance", "", agent.getAgentBankKey(), -1));
         bankOut.flush();
   
         try
@@ -90,6 +87,11 @@ public class AgentUpdater extends Thread implements Serializable
       {
         e.printStackTrace();
       }
+    }
+    }
+    catch(IOException e)
+    {
+      e.printStackTrace();
     }
   }
 }

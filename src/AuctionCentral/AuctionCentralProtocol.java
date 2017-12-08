@@ -182,7 +182,7 @@ class AuctionCentralProtocol {
         }
         System.out.println(message);
   
-        response = new Message(null, "[AuctionCentral]: \n", message, "", request.getKey(), auctionRepository.size());
+        response = new Message(request.getSender(), "[AuctionCentral]: \n", message, "", request.getKey(), auctionRepository.size());
         System.out.println("[AuctionCentral]: " + message);
         break;
       case "bid":
