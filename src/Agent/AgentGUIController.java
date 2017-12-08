@@ -182,7 +182,7 @@ public class AgentGUIController extends Application
     primaryStage.setScene(new Scene(root));
     primaryStage.show();
   }
-  
+
   /**
    * Handles user input.
    */
@@ -204,7 +204,6 @@ public class AgentGUIController extends Application
         textArea.setScrollTop(textArea.getText().length());
       }
     }
-
 //    synchronized (agent)
 //    {
 //      agent.notify();
