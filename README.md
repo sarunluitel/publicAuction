@@ -13,7 +13,7 @@ Agents are created/cleared dynamically as users connect/disconnect to the server
 <b>Version 1: Initial GUI </b><br>
 Version 1 contains the initial GUI. In this version, all connections are made and Agents & Auction Houses can be created dynamically. Messages need some work as they occasionally cause hold-ups. <br>
 <b>Version 2: Enhanced GUI & Auction </b><br>
-Version 2 builds off of version 1 by fixing bugs, adding a major UI overhaul, and adding automated updates. Messages now send properly and are handled properly on server end, UI provides additional information such as balance, bids, timestamps, and current listings with up-to-date pricing. Automated updaters have been added in the agent class to eliminate the need for manual updates with agent. Automated updates poll for changes from server periodically and update on the agent display. <br>
+Version 2 builds off of Version 1 by fixing bugs, major UI overhauls, and automated updates. Messages now send and are handled properly on server end, UI provides additional information such as balance, bids, timestamps, and current listings with up-to-date pricing. Automated updaters have been added in the agent class to eliminate the need for manual updates with agent. Automated updates poll for changes from server periodically and update on the agent display. <br>
 
 # How to use:
 <b>Version 1:</b><br>
