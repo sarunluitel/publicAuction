@@ -109,11 +109,6 @@ public class AgentGUIController extends Application
       public void handle(long now)
       {
         Message bankIn = agent.bankInput, auctionIn = agent.auctionInput;
-        if (bankIn != null) System.out.println(bankIn.getSignature());
-        if (bankIn != null && bankIn.getSignature().contains("Updater")) return;
-        if (auctionIn != null && auctionIn.getSignature().contains("Updater")) return;
-
-
         if (bankIn != null)
         {
           history += time.format(new Date(bankIn.getTimestamp())) + " | " + bankIn.getSignature() + bankIn.getMessage() + "\n";
@@ -163,7 +158,6 @@ public class AgentGUIController extends Application
     try
     {
       String temp[] = request.split("\\s+");
-      System.out.println(temp.length);
       if(temp.length == 2) bidAmount = Integer.parseInt(temp[1]);
       else bidAmount = 0;
     }
@@ -182,7 +176,6 @@ public class AgentGUIController extends Application
   
     String combo = " ";
     if(itemsComboBox.getValue() != null) combo = itemsComboBox.getValue();
-    System.out.println(combo);
     
     if (!request.equals("") && !request.equalsIgnoreCase("new"))
     {

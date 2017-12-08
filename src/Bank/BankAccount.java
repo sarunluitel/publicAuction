@@ -65,17 +65,24 @@ class BankAccount
     holds.add(amount);
   }
   
+  /**
+   * Removes hold and adds amount back to balance.
+   * @param amount
+   */
   public void removeHold(int amount)
   {
     this.balance += amount;
     if(holds.size() > 0) holds.remove(amount);
   }
   
+  /**
+   * Removes funds.
+   *
+   * @param amount
+   */
   public void remove(int amount)
   {
-    System.out.println(balance + "????????????????????????????????????????????????????????????????2");
     this.balance -= amount;
-    System.out.println(balance + "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1");
     if(holds.size() > 0) this.balance += holds.remove(amount);
     if(this.balance < 0) this.balance = 0;
   }

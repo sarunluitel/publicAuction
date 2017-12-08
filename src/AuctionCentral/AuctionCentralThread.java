@@ -8,7 +8,7 @@
 
 package AuctionCentral;
 
-import Agent.AgentUpdater;
+import Agent.*;
 import Message.Message;
 
 import java.io.IOException;
@@ -44,24 +44,20 @@ class AuctionCentralThread extends Thread
   public void run()
   {
     AuctionCentralWriter auctionCentralWriter;
-    System.out.println("AC connected");
     try
     {
       auctionCentralWriter = new AuctionCentralWriter(socket);
       ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
       try
       {
-        System.out.println("AC streams opened");
         Message input, output;
         input = ((Message) in.readObject());
 
         AuctionCentralProtocol auctionCentralProtocol = new AuctionCentralProtocol(socket, input);
-        System.out.println("AC protocol made");
         
         auctionCentralWriter.setName(auctionCentralProtocol.getCurrent());
         auctionCentralWriter.setObject(input.getSender());
         writers.add(auctionCentralWriter);
-        
         
         while (true)
         {
@@ -72,13 +68,8 @@ class AuctionCentralThread extends Thread
             output = auctionCentralProtocol.handleRequest(input);
             
             broadcast(output);
-            System.out.println("AC sent");
-            
-//            input = null;
           }
-          System.out.println("AC reading");
           input = ((Message) in.readObject());
-          System.out.println("AC done reading");
         }
       }
       catch (ClassNotFoundException e)
@@ -87,7 +78,6 @@ class AuctionCentralThread extends Thread
       }
 
       in.close();
-      
       socket.close();
     }
     catch (IOException e)
@@ -98,6 +88,12 @@ class AuctionCentralThread extends Thread
   
   private synchronized void broadcast(Message message)
   {
+    Message win = new Message(message.getSender(), message.getSignature(), (message.getSignature() + " has won the bid on " + message.getItem() + " for $" + message.getAmount() + "!"), "", 0, 0);
+    Message accept = new Message(message.getSender(), message.getSignature(), message.getSignature() + " is the highest bidder on " + message.getItem() + " for $" + message.getAmount() + "!", "", 0, 0);
+    
+    boolean winner = false;
+    boolean accepted = false;
+    
     String content = message.getMessage();
     String name;
     
@@ -112,10 +108,17 @@ class AuctionCentralThread extends Thread
         
         if((name.contains("Bank") || name.contains("House")) && (content.contains("Error") || content.contains("Welcome"))) continue;
         if((message.getSender() instanceof AgentUpdater) && !(client.getObject() instanceof AgentUpdater)) continue;
-        //        request.getSignature() + " has won the bid on " + request.getItem() + " for $" + request.getAmount() + "!";
-        //        request.getSignature() + " has won the bid on " + request.getItem() + " for $" + request.getAmount() + "!";
-        System.out.println("[AuctionCentral]: Sending " + message.getMessage() + " to " + client.getSocket().toString());
-        client.sendMessage(message);
+        if(client.getObject() instanceof Agent && message.getMessage().contains("remove")) winner = true;
+        if(client.getObject() instanceof Agent && message.getMessage().contains("block")) accepted = true;
+        
+        if(winner) client.sendMessage(win);
+        else if(accepted) client.sendMessage(accept);
+        else
+        {
+          winner = false;
+          accepted = false;
+          client.sendMessage(message);
+        }
       }
       catch (IOException e)
       {

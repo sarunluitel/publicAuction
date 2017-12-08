@@ -34,15 +34,9 @@ class AuctionCentral
     try (ServerSocket serverSocket = new ServerSocket(1111, 100, InetAddress.getLocalHost());
          Socket bankSocket = new Socket(address,2222))
     {
-      System.out.println("[AuctionCentral]: serverSocket" + serverSocket.toString() + ".");
-      System.out.println("[AuctionCentral]: bankSocket" + bankSocket.toString() + ".");
-
+      System.out.println("[AuctionCentral]: Connected to bank, server socket opened!");
       AuctionCentralWriter bankWriter = new AuctionCentralWriter(bankSocket);
-      
-      while (true)
-      {
-        new AuctionCentralThread(serverSocket.accept(), bankWriter).start();
-      }
+      while (true) new AuctionCentralThread(serverSocket.accept(), bankWriter).start();
     }
     catch (IOException e)
     {

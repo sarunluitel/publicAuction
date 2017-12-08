@@ -50,10 +50,7 @@ class Bank
     try (ServerSocket serverSocket = new ServerSocket(2222, 100,InetAddress.getLocalHost()))
     {
       System.out.println("[Bank]: " + serverSocket.toString() + ".");
-      while (true)
-      {
-        new BankThread(serverSocket.accept()).start();
-      }
+      while (true) new BankThread(serverSocket.accept()).start();
     }
     catch (IOException e)
     {

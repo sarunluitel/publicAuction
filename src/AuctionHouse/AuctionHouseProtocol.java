@@ -1,25 +1,40 @@
+/*
+ * CS351L Project #4: PublicAuction.
+ * Jacob Hurst, Jaehee Shin, Sarun Luitel, Vincent Huber.
+ * 12/01/17
+ *
+ * AuctionHouseProtocol.java - Protocol for auction house to follow.
+ */
+
 package AuctionHouse;
 
 import Message.Message;
 import AuctionHouse.AuctionHouse.Item;
 
-import java.net.Socket;
 import java.util.LinkedList;
 
 class AuctionHouseProtocol
 {
   private AuctionHouse house;
   
+  /**
+   * Default constructor.
+   *
+   * @param house
+   */
   public AuctionHouseProtocol(AuctionHouse house)
   {
     this.house = house;
   }
   
+  /**
+   * @param request
+   * @return response to request.
+   */
   public Message handleRequest(Message request)
   {
     Message response;
     String message;
-    System.out.println("AH handling -> " + request.getMessage());
     switch(request.getMessage())
     {
       case "registered":
@@ -29,12 +44,10 @@ class AuctionHouseProtocol
         message = "inventory";
         
         response = new Message(house, house.getName(), message, "", house.getPublicID(), -1);
-        System.out.println(house.getName() + ": " + message);
         break;
       case "de-registered":
         message = "ignore";
         response = new Message(house, house.getName(), message, "", -1, -1);
-        System.out.println(house.getName() + ": " + message);
         break;
       case "bid":
         LinkedList<Item> itemList = house.getInventory();
@@ -52,7 +65,6 @@ class AuctionHouseProtocol
         if(house.higherBid(itemIndex, request.getAmount()) && itemHere)
         {
           message = "accepted";
-          System.out.println("Bid accepted: " + request.getAmount());
           house.setItemBid(itemIndex, request.getAmount(), request.getKey());
         }
         else
@@ -60,12 +72,10 @@ class AuctionHouseProtocol
           message = "declined";
         }
         response = new Message(house, house.getName(), message, request.getItem(), request.getKey(), request.getAmount());
-        System.out.println(house.getName() + message);
         break;
       default:
         message = "ignore";
         response = new Message(house, house.getName(), message, "", -1, -1);
-        System.out.println(house.getName() + ": " + message);
         break;
     }
     if(request.getMessage().contains("Item"))

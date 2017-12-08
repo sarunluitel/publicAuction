@@ -72,7 +72,6 @@ class AuctionCentralProtocol {
   {
     Message response;
     StringBuilder message;
-    System.out.println("AC handling -> " + request.getMessage());
     switch (request.getMessage())
     {
       case "new":
@@ -80,7 +79,6 @@ class AuctionCentralProtocol {
         
         message = new StringBuilder("Welcome!");
         response = new Message(null, "[AuctionCentral]: ", message.toString(), "Initialized", request.getKey(), 0);
-        System.out.println("[AuctionCentral] " + socket.toString()+" : " + message);
         break;
       case "register":
         int ID = (int)(Math.random() * 1000000);
@@ -93,45 +91,30 @@ class AuctionCentralProtocol {
         auctionRepository.put(ID, auctionHouse);
         
         response = new Message(null, "[AuctionCentral]: ", message.toString(), auctionHouse.getName(), ID, houseCount);
-        System.out.println("[AuctionCentral]: " + message);
         houseCount++;
         break;
       case "inventory":
         auctionHouse = auctionRepository.get(request.getKey());
-        System.out.println(auctionHouse);
-        System.out.println(auctionHouse.getListings());
-
         auctionRepository.replace(request.getKey(), auctionHouse, ((AuctionHouse)request.getSender()));
-
         auctionHouse = auctionRepository.get(request.getKey());
-        System.out.println(auctionHouse);
-        System.out.println(auctionHouse.getListings());
-  
-        String inventory = auctionHouse.getListings();
-        
         message = new StringBuilder("ignore");
         response = new Message(auctionHouse, "[AuctionCentral]: ", message.toString(), auctionHouse.getName(), request.getKey(), -1);
-        System.out.println("[AuctionCentral]: " + message);
         break;
       case "de-register":
         auctionHouse = auctionRepository.remove(request.getKey());
         message = new StringBuilder("de-registered");
   
         response = new Message(null, "[AuctionCentral]: ", message.toString(), auctionHouse.getName(), request.getKey(), auctionRepository.size());
-        System.out.println("[AuctionCentral]: " + message);
         break;
       case "repository":
         message = new StringBuilder();
         for(AuctionHouse auctionHouse : auctionRepository.values())
         {
-          System.out.println(auctionHouse.getListings());
           if(auctionHouse.getListings().length() < 10) auctionRepository.remove(auctionHouse);
           message.append(auctionHouse.getListings());
         }
-        System.out.println(message);
   
         response = new Message(request.getSender(), "[AuctionCentral]: \n", message.toString(), "", request.getKey(), auctionRepository.size());
-        System.out.println("[AuctionCentral]: " + message);
         break;
       case "bid":
         message = new StringBuilder("bid");
@@ -139,37 +122,27 @@ class AuctionCentralProtocol {
         break;
       case "accepted":
         message = new StringBuilder("block");
-        System.out.println(message);
   
-        response = new Message(null, "[AuctionCentral]: \n", message.toString(), request.getItem(), agentKeys.get(request.getKey()), request.getAmount());
-        System.out.println("[AuctionCentral]: " + message);
+        response = new Message(null, "[AuctionCentral]: ", message.toString(), request.getItem(), agentKeys.get(request.getKey()), request.getAmount());
         break;
       case "declined":
-        message = new StringBuilder(request.getSignature() + "declined your bid on " + request.getItem() + " for an amount of " + request.getAmount() + ".");
-  
-        System.out.println(message);
-  
-        response = new Message(null, "[AuctionCentral]: \n", message.toString(), request.getItem(), request.getKey(), request.getAmount());
-        System.out.println("[AuctionCentral]: " + message);
+        message = new StringBuilder(request.getSignature() + "declined bid on " + request.getItem() + " for an amount of " + request.getAmount() + ".");
+        response = new Message(null, "[AuctionCentral]: ", message.toString(), request.getItem(), request.getKey(), request.getAmount());
         break;
       case "unblock":
-        response = new Message(null, "[AuctionCentral]: \n", request.getMessage(), request.getItem(), agentKeys.get(request.getKey()), request.getAmount());
+        response = new Message(null, "[AuctionCentral]: ", request.getMessage(), request.getItem(), agentKeys.get(request.getKey()), request.getAmount());
         break;
       case "winner":
         message = new StringBuilder("remove");
-
         response = new Message(null, "[AuctionCentral]: ", message.toString(), request.getItem(), agentKeys.get(request.getKey()), request.getAmount());
-        System.out.println("[AuctionCentral]: " + message);
         break;
       case "EXIT":
         message = new StringBuilder("Goodbye!");
         response = new Message(null, "[AuctionCentral]: ", message.toString(), "Goodbye!", request.getKey(), 0);
-        System.out.println("[AuctionCentral]: " + message);
         break;
       default:
         message = new StringBuilder("Error - request not recognized.");
         response = new Message(null, "[AuctionCentral]: ", message.toString(), "", -1, -1);
-        System.out.println("[AuctionCentral]: " + message);
         break;
     }
     return response;

@@ -26,8 +26,6 @@ class BankThread extends Thread
   {
     super("[BankThread]");
     this.socket = socket;
-
-    System.out.println("[Bank]: " + socket.toString() + " connected!");
   }
 
   /**
@@ -35,7 +33,6 @@ class BankThread extends Thread
    */
   public void run()
   {
-    System.out.println("B connecting");
     try
     {
       ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
@@ -44,9 +41,7 @@ class BankThread extends Thread
       ObjectInputStream in = new ObjectInputStream(new BufferedInputStream(socket.getInputStream()));
       try
       {
-        System.out.println("B streams opened");
         Message input, output;
-        System.out.println("B reading init");
         input = ((Message) in.readObject());
 
         BankProtocol bankProtocol = new BankProtocol();
@@ -58,21 +53,14 @@ class BankThread extends Thread
             System.out.println(input.getSignature() + input.getMessage());
 
             output = bankProtocol.handleRequest(input);
-  
-            System.out.println("[Bank]: Sending " + output.getMessage() + " to " + socket.toString());
             
             if(!output.getMessage().equals("ignore"))
             {
-              System.out.println("B sending");
               out.writeObject(output);
               out.flush();
-              out.reset();
-              System.out.println("B sent");
             }
           }
-          System.out.println("B reading");
           input = ((Message) in.readObject());
-          System.out.println("B done reading");
         }
       }
       catch (ClassNotFoundException e)

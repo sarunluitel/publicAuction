@@ -1,3 +1,11 @@
+/*
+ * CS351L Project #4: PublicAuction.
+ * Jacob Hurst, Jaehee Shin, Sarun Luitel, Vincent Huber.
+ * 12/4/17
+ *
+ * AgentUpdater.java - Threading to periodically update the agent.
+ */
+
 package Agent;
 
 import Message.Message;
@@ -21,6 +29,13 @@ public class AgentUpdater extends Thread implements Serializable
   
   private boolean finished = false;
   
+  /**
+   * Default constructor.
+   *
+   * @param auctionAddress
+   * @param bankAddress
+   * @param agent
+   */
   public AgentUpdater(InetAddress auctionAddress, InetAddress bankAddress, Agent agent)
   {
     this.agent = agent;
@@ -28,21 +43,35 @@ public class AgentUpdater extends Thread implements Serializable
     this.bankAddress = bankAddress;
   }
   
+  /**
+   * Sets thread to finish executing.
+   *
+   * @param flag
+   */
   public void setFinished(boolean flag)
   {
     finished = flag;
   }
   
+  /**
+   * @return updated inventory.
+   */
   public String getInventory()
   {
     return inventory;
   }
   
+  /**
+   * @return updated balance.
+   */
   public int getBalance()
   {
     return balance;
   }
   
+  /**
+   * Run method for updater.
+   */
   @Override
   public void run()
   {

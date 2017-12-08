@@ -12,7 +12,6 @@ import Agent.Agent;
 import Message.Message;
 
 import java.io.Serializable;
-import java.net.Socket;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,7 +20,6 @@ class BankProtocol implements Serializable
 {
   private static Map<Integer, BankAccount> accounts = Collections.synchronizedMap(new HashMap<>());
   private BankAccount account;
-  
   
   /**
    * Default constructor.
@@ -38,13 +36,11 @@ class BankProtocol implements Serializable
   {
     Message response;
     String message;
-    System.out.println("B handling -> " + request.getMessage());
     switch (request.getMessage())
     {
       case "auction central":
         message = "ignore";
         response = new Message(null, "[Bank]: ", message, "", request.getKey(), -1);
-        System.out.println("[Bank]: " + message);
         break;
       case "new":
         String name = ((Agent) request.getSender()).getAgentName();
@@ -66,33 +62,28 @@ class BankProtocol implements Serializable
         message = "updated";
         account = accounts.get(request.getKey());
         response = new Message(null, "[Bank]: ", message, "Balance provided", request.getKey(), account.getBalance());
-        System.out.println("[Bank]: " + message);
         break;
       case "block":
         message = "ignore";
         account = accounts.get(request.getKey());
         account.addHold(request.getAmount());
         response = new Message(null, "[Bank]: ", message, "Blocked an amount", request.getKey(), account.getBalance());
-        System.out.println("[Bank]: " + message);
         break;
       case "unblock":
         message = "ignore";
         account = accounts.get(request.getKey());
         account.removeHold(request.getAmount());
         response = new Message(null, "[Bank]: ", message, "Blocked an amount", request.getKey(), account.getBalance());
-        System.out.println("[Bank]: " + message);
         break;
       case "remove":
         message = "ignore";
         account = accounts.get(request.getKey());
         account.remove(request.getAmount());
         response = new Message(null, "[Bank]: ", message, "Funds removed", request.getKey(), account.getBalance());
-        System.out.println("[Bank]: " + message);
         break;
       case "EXIT":
         message = "Goodbye!";
         response = new Message(null, "[Bank]: ", message, "Goodbye!", request.getKey(), account.getBalance());
-        System.out.println("[Bank]: " + message);
         break;
       case "update":
         message = "ignore";
@@ -102,7 +93,6 @@ class BankProtocol implements Serializable
         message = "Error - request not recognized.";
         int balance = (account != null) ? account.getBalance() : -1;
         response = new Message(null, "[Bank]: ", message, "", -1, balance);
-        System.out.println("[Bank]: " + message);
         break;
     }
     return response;

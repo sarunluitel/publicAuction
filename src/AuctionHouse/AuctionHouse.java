@@ -180,6 +180,9 @@ public class AuctionHouse implements Serializable
     }
   }
   
+  /**
+   * @return String version of the current listings.
+   */
   public String getListings()
   {
     StringBuilder items = new StringBuilder();
@@ -191,14 +194,19 @@ public class AuctionHouse implements Serializable
   }
 
   /**
-   * Method used by AuctionHouseProtocol to check the items
+   * Method used by AuctionHouseProtocol to check the items.
+   *
    * @return items
    */
   LinkedList<Item> getInventory()
   {
     return inventory;
   }
-
+  
+  /**
+   * Removes item with given name.
+   * @param itemName
+   */
   void removeItem(String itemName)
   {
     int index = 0;
@@ -210,17 +218,48 @@ public class AuctionHouse implements Serializable
     }
     inventory.remove(index);
   }
-
+  
+  /**
+   * @param itemIndex
+   * @param bidValue
+   * @return whether a higher bid is in place.
+   */
   boolean higherBid(int itemIndex, int bidValue)
   {
     Item item = inventory.get(itemIndex);
     return item.getBidAmount() < bidValue;
   }
-
+  
+  /**
+   * Sets this bid to the highest bid.
+   * @param itemIndex
+   * @param bidValue
+   * @param agentKey
+   */
   void setItemBid(int itemIndex, int bidValue, int agentKey)
   {
     inventory.get(itemIndex).setCurrentBid(bidValue);
     inventory.get(itemIndex).setAgentKey(agentKey);
+  }
+  
+  /**
+   * Closes bids on timer finish.
+   * @param house
+   * @param out
+   * @param itemIndex
+   */
+  private static void closeBid(AuctionHouse house, ObjectOutputStream out, int itemIndex)
+  {
+    try
+    {
+      Item item = house.getInventory().get(itemIndex);
+      out.writeObject(new Message(house, house.getName(), "winner", item.itemName, item.getAgent(), item.getBidAmount()));
+      out.flush();
+    }
+    catch(IOException e)
+    {
+      e.printStackTrace();
+    }
   }
   
   /**
@@ -242,7 +281,6 @@ public class AuctionHouse implements Serializable
     String address = scan.nextLine();
     
     Socket socket = new Socket(InetAddress.getByName(address), 1111);
-    System.out.println("AH connected");
     try
     {
       ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
@@ -250,14 +288,11 @@ public class AuctionHouse implements Serializable
       ObjectInputStream in = new ObjectInputStream(new BufferedInputStream(socket.getInputStream()));
       try
       {
-        System.out.println("AH streams opened");
         Message input, output;
   
-        System.out.println("AH sending init");
         out.writeObject(new Message(house, house.getName(), "register", "", -1, -1));
         out.flush();
   
-        System.out.println("AH reading init");
         input = ((Message)in.readObject());
         
         AuctionHouseProtocol auctionHouseProtocol = new AuctionHouseProtocol(house);
@@ -274,8 +309,10 @@ public class AuctionHouse implements Serializable
               {
                 int itemIndex = 0;
                 LinkedList<Item> itemList = house.inventory;
-                for (int i = 0; i < itemList.size(); i++) {
-                  if (itemList.get(i).getItemName().equalsIgnoreCase(output.getItem())) {
+                for (int i = 0; i < itemList.size(); i++)
+                {
+                  if (itemList.get(i).getItemName().equalsIgnoreCase(output.getItem()))
+                  {
                     itemIndex = i;
                     break;
                   }
@@ -284,50 +321,33 @@ public class AuctionHouse implements Serializable
                 {
                   case "Item-1":
                     timer1.playFromStart();
-                    timer1.setOnFinished(event -> {
-                      System.out.println("Timer 1 finished");
-                      //house.removeItem("Item-1");
-                    });
+                    timer1.setOnFinished(event -> closeBid(house, out, 1));
                     break;
                   case "Item-2":
                     timer2.playFromStart();
-                    timer2.setOnFinished(event -> {
-                      System.out.println("Timer 2 finished");
-                      //house.removeItem(output.getItem());
-                    });
+                    timer2.setOnFinished(event -> closeBid(house, out, 2));
                     break;
                   case "Item-3":
                     timer3.playFromStart();
-                    timer3.setOnFinished(event -> {
-                      System.out.println("Timer 3 finished");
-                      //house.removeItem(output.getItem());
-                    });
+                    timer3.setOnFinished(event -> closeBid(house, out, 3));
                     break;
                   default:
-                    System.out.println("Wrong index");
                     break;
                 }
-                if(itemList.get(itemIndex).getPrevious() != -1) {
+                if(itemList.get(itemIndex).getPrevious() != -1)
+                {
                   out.writeObject(new Message(output.getSender(), output.getSignature(), "unblock", output.getItem(), itemList.get(itemIndex).getPrevious(), itemList.get(itemIndex).getPrevAmount()));
                   out.flush();
                 }
               }
             }
-            
             if(!output.getMessage().equals("ignore"))
             {
-              System.out.println(house.name + ": Sending " + output.getMessage() + " to " + socket.toString());
               out.writeObject(output);
               out.flush();
-              
-              System.out.println("AH sent");
-
-//              input = ((Message) in.readObject());
             }
           }
-          System.out.println("AH reading");
           input = ((Message)in.readObject());
-          System.out.println("AH done reading");
         }
       }
       catch (ClassNotFoundException e)
