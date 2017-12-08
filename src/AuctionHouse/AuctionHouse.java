@@ -24,7 +24,7 @@ import java.util.Scanner;
 public class AuctionHouse implements Serializable
 {
   private String name;
-  private PauseTransition testTimer = new PauseTransition(Duration.seconds(30));
+//  private PauseTransition testTimer = new PauseTransition(Duration.seconds(30));
 
   private int index;
   private int publicID;
