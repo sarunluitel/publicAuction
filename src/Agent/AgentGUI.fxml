@@ -25,7 +25,7 @@
             </font>
         </Text>
 
-        <TextArea fx:id="textArea" layoutX="175.0" prefWidth="600.0" prefHeight="400.0" translateY="30.0" />
+        <TextArea fx:id="textArea" layoutX="175.0" prefWidth="600.0" prefHeight="400.0" translateY="30.0"/>
 
         <Text fx:id="txtBankBalance" fill="#0eeb1d" strokeType="OUTSIDE"
               strokeWidth="0.0" text="Balance: $0.00" wrappingWidth="100" layoutX="800.0" layoutY="100.0">

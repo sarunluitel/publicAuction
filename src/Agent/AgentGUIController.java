@@ -13,24 +13,28 @@ package Agent;
 import Message.Message;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.event.EventHandler;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import javax.swing.text.DefaultCaret;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
 
 public class AgentGUIController extends Application
 {
@@ -51,7 +55,7 @@ public class AgentGUIController extends Application
 
   private Agent agent;
   private String history = "";
-  
+
   /**
    * Initializes state of GUI components.
    */
@@ -60,7 +64,7 @@ public class AgentGUIController extends Application
   {
     textArea.setVisible(false);
     input.setVisible(false);
-    textArea.setEditable(false);
+    textArea.setEditable(true);
     txtTotalBidPlaced.setVisible(false);
     txtBankBalance.setVisible(false);
     itemsComboBox.setVisible(false);
@@ -85,13 +89,16 @@ public class AgentGUIController extends Application
 
       txtTotalBidPlaced.setVisible(true);
       textArea.setVisible(true);
-      textArea.scrollTopProperty().addListener((obs, oldVal, newVal) ->
-        {System.out.println("?" + oldVal + ", " + newVal);
-          textArea.positionCaret(textArea.getText().length());
-          textArea.setScrollTop(textArea.getText().length());
-//          System.out.println("L::"+textArea.getText().length() + " , "+textArea.getScrollTop());
-        });
 
+//      textArea.setScrollTop(Double.MAX_VALUE);
+//      textArea.setOnScrollStarted(this::handleScrollStarted);
+//      textArea.setOnScrollFinished(this::handleScrollFinished);
+//      textArea.scrollTopProperty().addListener((obs, oldVal, newVal) ->
+//      {
+//        textArea.setScrollTop(textArea.getText().length());
+//        System.out.println("L::"+textArea.getText().length() + " , "+textArea.getScrollTop());
+//        textArea.deselect();
+//      });
 
       txtBankBalance.setVisible(true);
 
@@ -99,7 +106,7 @@ public class AgentGUIController extends Application
       input.setVisible(true);
 
       agent.setMessageText("");
-      
+
       synchronized (agent)
       {
         agent.notify();
@@ -113,62 +120,44 @@ public class AgentGUIController extends Application
 
     agent.start();
 
-    new AnimationTimer() {
+    new AnimationTimer()
+    {
       @Override
-      public void handle(long now) {
+      public void handle(long now)
+      {
         Message bankIn = agent.bankInput, auctionIn = agent.auctionInput;
-        if(bankIn != null)
+        if (bankIn != null)
         {
           txtBankBalance.setText("Balance: $" + bankIn.getAmount() + ".00");
-          history += time.format(new Date(bankIn.getTimestamp())) + " | " + bankIn.getSignature() + bankIn.getMessage()+ "\n";
+          history += time.format(new Date(bankIn.getTimestamp())) + " | " + bankIn.getSignature() + bankIn.getMessage() + "\n";
           agent.bankInput = null;
         }
-        if(auctionIn != null)
+        if (auctionIn != null)
         {
-          history += time.format(new Date(auctionIn.getTimestamp())) + " | " + auctionIn.getSignature() + auctionIn.getMessage()+ "\n";
+          history += time.format(new Date(auctionIn.getTimestamp())) + " | " + auctionIn.getSignature() + auctionIn.getMessage() + "\n";
           agent.auctionInput = null;
         }
         textArea.setText(history);
-//        if(agent.auctionInput!=null)
-//        {
-//          if(agent.auctionInput.getMessage().equals("inventory"))
-//          {
-//            ObservableList<String> list = FXCollections.observableArrayList();
-//            String listings = "";
-//
-//            List houses = ((List)agent.auctionInput.getSender());
-//            for(int i = 0; i < houses.size(); i++)
-//            {
-//              LinkedList inventory = ((LinkedList)houses.get(i));
-//              String house = "[House-" + i + "]: ";
-//              for(int j = 0; j < inventory.size(); j++)
-//              {
-//                AuctionHouse.Item item = ((AuctionHouse.Item)inventory.get(j));
-//                listings += house + item.getItemName() + "-" + item.getBidAmount() + "\n";
-//                list.add(listings);
-//              }
-//              System.out.println(listings);
-//            }
-//          //  System.out.println("Setting item combo box");
-//            itemsComboBox.setItems(list);
-//          }
-//        }
+        textArea.setScrollTop(textArea.getText().length());
+
       }
     }.start();
 
   }
-  
+
   /**
    * Main entry point for AgentGUIController.
+   *
    * @param args
    */
   public static void main(String args[])
   {
     launch(args);
   }
-  
+
   /**
    * Sets the primary stage.
+   *
    * @param primaryStage
    * @throws Exception
    */
@@ -179,8 +168,8 @@ public class AgentGUIController extends Application
     primaryStage.setScene(new Scene(root));
     primaryStage.show();
   }
-  
-  
+
+
   /**
    * Handles user input.
    */
@@ -189,19 +178,33 @@ public class AgentGUIController extends Application
   {
     String request = input.getText();
     input.setText("");
-    
-    if(!request.equals(""))
+
+    if (!request.equals(""))
     {
       agent.setMessageText(request);
 
       history += time.format(new Date(System.currentTimeMillis())) + " | " + agent.getAgentName() + request + "\n";
 
       textArea.setText(history);
+      textArea.setScrollTop(textArea.getText().length());
+
     }
-    
+
     synchronized (agent)
     {
       agent.notify();
     }
   }
+//
+//  /**
+//   * Handles user input.
+//   */
+//  @FXML
+//  private void handleScroll()
+//  {
+//    System.out.println("started");
+//    if (textArea.getScrollTop() == Double.MAX_VALUE) return;
+//    textArea.setScrollTop(Double.MAX_VALUE);
+//  }
+
 }
