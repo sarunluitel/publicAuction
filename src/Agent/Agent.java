@@ -167,13 +167,13 @@ public class Agent extends Thread implements Serializable
           auctionOut.flush();
           System.out.println("A init sent to AC");
 
-          System.out.println(this.getAgentName() + "Reading from bank.... about to read size:" + bankIn.available());
+          System.out.println(this.getAgentName() + "Reading from bank....");
           bankInput = ((Message) bankIn.readObject());
-          System.out.println(this.getAgentName() + "Finished Reading from bank..." + bankInput.getSignature() + "Size read" + bankIn.available());
+          System.out.println(this.getAgentName() + "Finished Reading from bank...");
 
           System.out.println(this.getAgentName() + "Reading from auction central...");
           auctionInput = ((Message) auctionIn.readObject());
-          System.out.println(this.getAgentName() + "Finished Reading from auction central..." + auctionInput.getSignature());
+          System.out.println(this.getAgentName() + "Finished Reading from auction central...");
 
           agentUpdater.start();
           while (!messageText.equals("EXIT"))
