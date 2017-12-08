@@ -309,9 +309,10 @@ public class AuctionHouse implements Serializable
                     System.out.println("Wrong index");
                     break;
                 }
-                out.writeObject(new Message(output.getSender(), output.getSignature(), "unblock",
-                        output.getItem(), itemList.get(itemIndex).getPrevious(), itemList.get(itemIndex).getPrevAmount()));
-                out.flush();
+                if(itemList.get(itemIndex).getPrevious() != -1) {
+                  out.writeObject(new Message(output.getSender(), output.getSignature(), "unblock", output.getItem(), itemList.get(itemIndex).getPrevious(), itemList.get(itemIndex).getPrevAmount()));
+                  out.flush();
+                }
               }
             }
             
