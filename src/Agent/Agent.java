@@ -177,15 +177,9 @@ public class Agent extends Thread implements Serializable
           {
             inventory = agentUpdater.getInventory();
             balance = agentUpdater.getBalance();
-//            System.out.println(inventory+"      "+balance);
-            if (inventory != null)
-            {
-              inventory += " ";
-              inventory = inventory.substring(0, inventory.length() - 1);
-            }
-            balance++;
-            balance--;
-
+//            System.out.println();
+            try { sleep(1); } catch(InterruptedException ignored) {}
+            
             if (!messageText.equals(""))
             {
               System.out.println(this.getAgentName() + "Submitting message = " + messageText + " to auction & bank.");
