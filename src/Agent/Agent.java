@@ -25,32 +25,34 @@ public class Agent extends Thread implements Serializable
   private final String name;
 
   private String messageText = "";
-  
+
   private InetAddress bankAddress, auctionAddress;
   public Message bankInput, bankOutput, auctionInput, auctionOutput;
-  
-//  private AgentUpdater agentUpdater;
+
+  //  private AgentUpdater agentUpdater;
   public String inventory;
   public int balance;
-  
+
   /**
    * Sets the IP address for the bank.
+   *
    * @param bankAddress
    */
   void setBankAddress(InetAddress bankAddress)
   {
     this.bankAddress = bankAddress;
   }
-  
+
   /**
    * Sets the IP address for auction central.
+   *
    * @param auctionAddress
    */
   void setAuctionAddress(InetAddress auctionAddress)
   {
     this.auctionAddress = auctionAddress;
   }
-  
+
   /**
    * Default constructor.
    */
@@ -61,18 +63,20 @@ public class Agent extends Thread implements Serializable
     agentBankKey = (int) (Math.random() * 1000000);
     agentCentralKey = (int) (Math.random() * 1000000);
   }
-  
-  public int getAgentBankKey() {
+
+  public int getAgentBankKey()
+  {
     return agentBankKey;
   }
-  
+
   public int getAgentCentralKey()
   {
     return agentCentralKey;
   }
-  
+
   /**
    * Helper method for names in constructor.
+   *
    * @param input
    * @return random name
    */
@@ -85,12 +89,12 @@ public class Agent extends Thread implements Serializable
     else if (input % 4 == 3) name = "[Vincent-" + getPublicID() + "]: ";
     return name;
   }
-  
+
 //  public String getAgentPublicID()
 //  {
 //    return "[Agent-" + publicID + "]";
 //  }
-  
+
   /**
    * @return public ID associated with agent.
    */
@@ -98,7 +102,7 @@ public class Agent extends Thread implements Serializable
   {
     return publicID;
   }
-  
+
   /**
    * @return name associated with agent.
    */
@@ -106,16 +110,17 @@ public class Agent extends Thread implements Serializable
   {
     return name;
   }
-  
+
   /**
    * Used by GUIController to set messages as user enters them.
+   *
    * @param messageText
    */
   void setMessageText(String messageText)
   {
     this.messageText = messageText;
   }
-  
+
   /**
    * Run method for agent thread - handles messaging.
    */
@@ -123,8 +128,8 @@ public class Agent extends Thread implements Serializable
   public void run()
   {
     System.out.println("A connecting");
-    try(Socket bankSocket = new Socket(bankAddress, 2222);
-        Socket auctionCentralSocket = new Socket(auctionAddress, 1111))
+    try (Socket bankSocket = new Socket(bankAddress, 2222);
+         Socket auctionCentralSocket = new Socket(auctionAddress, 1111))
     {
       System.out.println("A connected");
       try
@@ -133,12 +138,12 @@ public class Agent extends Thread implements Serializable
         ObjectOutputStream auctionOut = new ObjectOutputStream(auctionCentralSocket.getOutputStream());
         auctionOut.flush();
         System.out.println("A out opened");
-  
+
         System.out.println("A bank out stream");
         ObjectOutputStream bankOut = new ObjectOutputStream(bankSocket.getOutputStream());
         bankOut.flush();
         System.out.println("A out opened");
-  
+
         System.out.println("A in a stream");
         ObjectInputStream auctionIn = new ObjectInputStream(new BufferedInputStream(auctionCentralSocket.getInputStream()));
         System.out.println("A in a opened\nA in b stream");
@@ -147,9 +152,9 @@ public class Agent extends Thread implements Serializable
         try
         {
           System.out.println(this.name + "Log in successful!");
-          
+
           AgentUpdater agentUpdater = new AgentUpdater(auctionAddress, bankAddress, this);
-          
+
           System.out.println("A init to B");
           bankOut.writeObject(new Message(this, this.getAgentName(), "new", "", this.agentBankKey, -1));
           bankOut.flush();
@@ -159,26 +164,35 @@ public class Agent extends Thread implements Serializable
           auctionOut.flush();
           System.out.println("A init sent to AC");
 
-          System.out.println(this.getAgentName() + "Reading from bank.... about to read size:"+ bankIn.available());
+          System.out.println(this.getAgentName() + "Reading from bank.... about to read size:" + bankIn.available());
           bankInput = ((Message) bankIn.readObject());
-          System.out.println(this.getAgentName() + "Finished Reading from bank..."+bankInput.getSignature()+"Size read"+bankIn.available());
+          System.out.println(this.getAgentName() + "Finished Reading from bank..." + bankInput.getSignature() + "Size read" + bankIn.available());
 
           System.out.println(this.getAgentName() + "Reading from auction central...");
           auctionInput = ((Message) auctionIn.readObject());
-          System.out.println(this.getAgentName() + "Finished Reading from auction central..."+auctionInput.getSignature());
-  
+          System.out.println(this.getAgentName() + "Finished Reading from auction central..." + auctionInput.getSignature());
+
           agentUpdater.start();
           while (!messageText.equals("EXIT"))
           {
             inventory = agentUpdater.getInventory();
             balance = agentUpdater.getBalance();
+//            System.out.println(inventory+"      "+balance);
+            if (inventory != null)
+            {
+              inventory += " ";
+              inventory = inventory.substring(0, inventory.length() - 1);
+            }
+            balance++;
+            balance--;
+
             if (!messageText.equals(""))
             {
               System.out.println(this.getAgentName() + "Submitting message = " + messageText + " to auction & bank.");
-  
+
               auctionOutput = new Message(this, this.getAgentName(), messageText, "", agentCentralKey, 0);
               bankOutput = new Message(this, this.getAgentName(), messageText, "", agentBankKey, 0);
-  
+
               System.out.println("A to AC");
               auctionOut.writeObject(auctionOutput);
               auctionOut.flush();
@@ -187,14 +201,14 @@ public class Agent extends Thread implements Serializable
               bankOut.writeObject(bankOutput);
               bankOut.flush();
               System.out.println("A sent to B");
-  
+
               messageText = "";
-  
+
               System.out.println(this.getAgentName() + "Reading from bank.... about to read size:" + bankIn.available());
               bankInput = ((Message) bankIn.readObject());
               System.out.println(this.getAgentName() + "Finished Reading from bank..." + bankInput.getSignature() + "Size read" + bankIn.available());
               filterBank(bankInput);
-  
+
               System.out.println(this.getAgentName() + "Reading from auction central...");
               auctionInput = ((Message) auctionIn.readObject());
               System.out.println(this.getAgentName() + "Finished Reading from auction central..." + auctionInput.getSignature());
@@ -224,26 +238,23 @@ public class Agent extends Thread implements Serializable
           auctionIn.close();
           auctionOut.close();
           auctionCentralSocket.close();
-        }
-        catch (ClassNotFoundException e)
+        } catch (ClassNotFoundException e)
         {
           e.printStackTrace();
         }
-      }
-      catch (IOException e)
+      } catch (IOException e)
       {
         e.printStackTrace();
       }
-    }
-    catch (IOException e)
+    } catch (IOException e)
     {
       e.printStackTrace();
     }
   }
-  
+
   private void filterBank(Message message)
   {
-    switch(message.getMessage())
+    switch (message.getMessage())
     {
       case "Error - request not recognized.":
         bankInput = null;
@@ -255,10 +266,10 @@ public class Agent extends Thread implements Serializable
         break;
     }
   }
-  
+
   private void filterAuction(Message message)
   {
-    switch(message.getMessage())
+    switch (message.getMessage())
     {
       case "registered":
         auctionInput = null;

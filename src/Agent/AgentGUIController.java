@@ -134,7 +134,7 @@ public class AgentGUIController extends Application
 
         if(agent.inventory!=null){
           String[] list = agent.inventory.split(".");
-          System.out.println("List to be added on the combo box"+list);
+          System.out.println("List to be added on the combo box"+agent.inventory);
           itemsComboBox.getItems().setAll(list);
         }
 

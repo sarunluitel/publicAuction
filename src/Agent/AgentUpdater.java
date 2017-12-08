@@ -52,12 +52,12 @@ public class AgentUpdater extends Thread implements Serializable
   }
   
   public String getInventory() {
-  //  System.out.println(inventory);
+//    System.out.println(inventory);
     return inventory;
   }
   
   public int getBalance() {
-  //  System.out.println(balance);
+//    System.out.println(balance);
     return balance;
   }
   
