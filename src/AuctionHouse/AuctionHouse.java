@@ -249,7 +249,7 @@ public class AuctionHouse implements Serializable
   {
     try
     {
-      Item item = house.getInventory().get(itemIndex);
+      Item item = house.getInventory().get(itemIndex-1);
       house.removeItem("Item-" + itemIndex);
       out.writeObject(new Message(house, house.getName(), "winner", item.itemName, item.getAgent(), item.getBidAmount()));
       out.flush();
