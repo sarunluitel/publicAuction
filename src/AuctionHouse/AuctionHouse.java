@@ -25,11 +25,9 @@ import java.util.Scanner;
 public class AuctionHouse implements Serializable
 {
   private String name;
-//  private PauseTransition testTimer = new PauseTransition(Duration.seconds(30));
 
   private int index;
   private int publicID;
-  //private LinkedList<String> itemList = new LinkedList<>();
   private LinkedList<Item> itemsForSale = new LinkedList<>();
   
   /**
@@ -300,21 +298,21 @@ public class AuctionHouse implements Serializable
                     timer1.playFromStart();
                     timer1.setOnFinished(event -> {
                       System.out.println("Timer 1 finished");
-                     // house.removeItem("Item-1");
+                      //house.removeItem("Item-1");
                     });
                     break;
                   case "Item-2":
                     timer2.playFromStart();
                     timer2.setOnFinished(event -> {
                       System.out.println("Timer 2 finished");
-                  //    house.removeItem(output.getItem());
+                      //house.removeItem(output.getItem());
                     });
                     break;
                   case "Item-3":
                     timer3.playFromStart();
                     timer3.setOnFinished(event -> {
                       System.out.println("Timer 3 finished");
-                //      house.removeItem(output.getItem());
+                      //house.removeItem(output.getItem());
                     });
                     break;
                   default:
@@ -326,25 +324,20 @@ public class AuctionHouse implements Serializable
                 out.flush();
               }
             }
-            //input = null;
-
+            
             if(!output.getMessage().equals("ignore"))
             {
               System.out.println(house.name + ": Sending " + output.getMessage() + " to " + socket.toString());
               out.writeObject(output);
               out.flush();
-
-              //tried
-
+              
               System.out.println("AH sent");
 
               System.out.println("AH reading");
               input = ((Message) in.readObject());
               System.out.println("AH done reading");
             }
-            //tried
           }
-//          input = null;
           input = ((Message)in.readObject());
         }
       }

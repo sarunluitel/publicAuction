@@ -29,7 +29,6 @@ public class Agent extends Thread implements Serializable
   private InetAddress bankAddress, auctionAddress;
   public Message bankInput, bankOutput, auctionInput, auctionOutput;
 
-  //  private AgentUpdater agentUpdater;
   public String inventory;
   public int balance;
 
@@ -89,11 +88,6 @@ public class Agent extends Thread implements Serializable
     else if (input % 4 == 3) name = "[Vincent-" + getPublicID() + "]: ";
     return name;
   }
-
-//  public String getAgentPublicID()
-//  {
-//    return "[Agent-" + publicID + "]";
-//  }
 
   /**
    * @return public ID associated with agent.
@@ -184,7 +178,7 @@ public class Agent extends Thread implements Serializable
               System.out.println(this.getAgentName() + "Submitting message = " + messageText + " to auction & bank.");
 
               auctionOutput = new Message(this, this.getAgentName(), messageText, "", agentCentralKey, 0);
-              bankOutput = new Message(this, this.getAgentName(), "remove", "", agentBankKey, 500);
+              bankOutput = new Message(this, this.getAgentName(), messageText, "", agentBankKey, 500);
 
               System.out.println("A to AC");
               auctionOut.writeObject(auctionOutput);
@@ -207,19 +201,6 @@ public class Agent extends Thread implements Serializable
               System.out.println(this.getAgentName() + "Finished Reading from auction central..." + auctionInput.getSignature());
               filterAuction(auctionInput);
             }
-//            else
-//            {
-//              synchronized (this)
-//              {
-//                try
-//                {
-//                  System.out.println("A enter wait");
-//                  this.wait();
-//                }
-//                catch (InterruptedException ignored) {}
-//              }
-//              System.out.println("A exit wait");
-//            }
           }
           
           agentUpdater.setFinished(true);

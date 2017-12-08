@@ -92,18 +92,6 @@ class AuctionCentralProtocol {
     this.object = message.getSender();
   }
   
-//  public boolean hasPending() {
-//    return hasPending;
-//  }
-//
-//  public Message getPending()
-//  {
-//    Message temp = pending;
-//    pending = null;
-//    hasPending = false;
-//    return temp;
-//  }
-  
   /**
    * Handles requests as they are received from socket.
    *
@@ -155,9 +143,7 @@ class AuctionCentralProtocol {
         System.out.println(auctionHouse);
         System.out.println(auctionHouse.getInventory());
 
-//        System.out.println(houseCount);
         inventory = auctionHouse.getInventory();
-//        inventories.add(houseCount-1, inventory);
         
         message = "ignore";
         response = new Message(auctionHouse, "[AuctionCentral]: ", message, auctionHouse.getName(), request.getKey(), -1);
@@ -173,7 +159,6 @@ class AuctionCentralProtocol {
         break;
       case "repository":
         message = "";
-//        System.out.println(auctionList.size());
         for(AuctionHouse auctionHouse : auctionRepository.values())
         {
           System.out.println(auctionHouse.getInventory());
@@ -192,7 +177,6 @@ class AuctionCentralProtocol {
       case "accepted":
         message = "block";
         System.out.println(auctionList.size());
-  //"[Agent-" + request.getKey() + "] is the highest bidder on " + request.getSignature() + request.getItem() + " for an amount of " + request.getAmount()
         System.out.println(message);
   
         response = new Message(null, "[AuctionCentral]: \n", message, request.getItem(), agentKeys.get(request.getKey()), request.getAmount());
@@ -214,7 +198,6 @@ class AuctionCentralProtocol {
         message = "remove";
 
         response = new Message(null, "[AuctionCentral]: ", message, request.getItem(), agentKeys.get(request.getKey()), request.getAmount());
-        //handleTransaction()
         System.out.println("[AuctionCentral]: " + message);
         break;
       case "EXIT":
@@ -230,30 +213,4 @@ class AuctionCentralProtocol {
     }
     return response;
   }
-  
-//  /* tell bank to find agent account with ID & perform action if possible
-//     then respond according to bank confirmation to de-register auction houses,
-//     get public ID and de-register there.                                       */
-// --Commented out by Inspection START (12/4/2017 9:01 PM):
-//  /**
-//   * Mitigates transaction requests between agents and houses.
-//   *
-//   * @param agentBid
-//   * @param agentID
-//   * @param houseID
-//   * @return response to transaction request.
-//   * @throws IOException
-//   */
-//  private String handleTransaction(String agentBid, String agentID, String houseID) throws IOException
-//  {
-//    //don't allow bid if it has not yet been accepted by bank
-//    bankO.writeUTF("[AuctionCentral]: block:" + agentBid + ":" + agentID);
-//    bankO.writeUTF("[AuctionCentral]: unblock:" + agentBid + ":" + agentID);
-//    bankO.writeUTF("[AuctionCentral]: move:" + agentBid + ":" + agentID + ":" + houseID);
-//    //if item is sold check if house is empty de-register house if so.
-//    bankO.flush();
-//
-//    return bankI.readUTF();
-//  }
-// --Commented out by Inspection STOP (12/4/2017 9:01 PM)
 }

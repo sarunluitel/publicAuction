@@ -64,9 +64,8 @@ class AuctionCentralThread extends Thread
         input = ((Message) in.readObject());
 
         AuctionCentralProtocol auctionCentralProtocol = new AuctionCentralProtocol(current, input);
-//        auctionCentralProtocol.handleRequest(input);
         System.out.println("AC protocol made");
-//        sockets.put(name, current);
+        
         auctionCentralWriter.setName(auctionCentralProtocol.getCurrent());
         auctionCentralWriter.setObject(input.getSender());
         writers.add(auctionCentralWriter);
@@ -80,19 +79,13 @@ class AuctionCentralThread extends Thread
           {
             System.out.println(input.getSignature() + input.getMessage());
 
-//            if(in.available()!=0)input = ((Message) in.readObject());
             output = auctionCentralProtocol.handleRequest(input);
             
-//            auctionCentralWriter.sendMessage(output);
-//            out.writeObject(output);
-//            out.flush();
-//            out.reset();
             broadcast(output);
             System.out.println("AC sent");
             
             input = null;
           }
-//          if(in.available() != 0)
           System.out.println("AC reading");
           input = ((Message) in.readObject());
           System.out.println("AC done reading");
@@ -104,7 +97,6 @@ class AuctionCentralThread extends Thread
       }
 
       in.close();
-//      out.close();
       
       sockets.remove(name);
       
@@ -128,16 +120,12 @@ class AuctionCentralThread extends Thread
     {
       try
       {
-//        Message copy = message;
         name = client.getName();
         
         if((name.contains("Bank") || name.contains("House")) && (content.contains("Error") || content.contains("Welcome"))) continue;
         if((message.getSender() instanceof AgentUpdater) && !(client.getObject() instanceof AgentUpdater)) continue;
-//        if((name.contains("Bank") || name.contains("House")) && (content.contains("Item"))) message = new Message(message.getSender(), message.getSignature(), "update", message.getItem(), message.getKey(), message.getAmount());
-//        if(!(name.contains("Bank") || name.contains("House"))) message = copy;
-
         //        request.getSignature() + " has won the bid on " + request.getItem() + " for $" + request.getAmount() + "!";
-//        request.getSignature() + " has won the bid on " + request.getItem() + " for $" + request.getAmount() + "!";
+        //        request.getSignature() + " has won the bid on " + request.getItem() + " for $" + request.getAmount() + "!";
         System.out.println("[AuctionCentral]: Sending " + message.getMessage() + " to " + client.getSocket().toString());
         client.sendMessage(message);
       }

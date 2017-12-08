@@ -50,8 +50,6 @@ class BankThread extends Thread
         input = ((Message) in.readObject());
 
         BankProtocol bankProtocol = new BankProtocol(socket, input);
-//        out.writeObject(bankProtocol.setup);
-//        out.flush();
 
         while (true)
         {
@@ -59,7 +57,6 @@ class BankThread extends Thread
           {
             System.out.println(input.getSignature() + input.getMessage());
 
-//            if(in.available() != 0) input = ((Message) in.readObject());
             output = bankProtocol.handleRequest(input);
   
             System.out.println("[Bank]: Sending " + output.getMessage() + " to " + socket.toString());
@@ -72,13 +69,10 @@ class BankThread extends Thread
               out.reset();
               System.out.println("B sent");
             }
-            //input = null;
           }
           System.out.println("B reading");
           input = ((Message) in.readObject());
           System.out.println("B done reading");
-          // ????? : if(in.available() != 0)
-          //if(in.available() != 0) input = ((Message) in.readObject());
         }
       }
       catch (ClassNotFoundException e)

@@ -12,8 +12,6 @@ import java.net.Socket;
 public class AgentUpdater extends Thread implements Serializable
 {
   private Message auctionMessage, bankMessage;
-//  private ObjectOutputStream auctionOut, bankOut;
-//  private ObjectInputStream auctionIn, bankIn;
   private Agent agent;
   
   private InetAddress auctionAddress, bankAddress;
@@ -35,13 +33,13 @@ public class AgentUpdater extends Thread implements Serializable
     finished = flag;
   }
   
-  public String getInventory() {
-//    System.out.println(inventory);
+  public String getInventory()
+  {
     return inventory;
   }
   
-  public int getBalance() {
-//    System.out.println(balance);
+  public int getBalance()
+  {
     return balance;
   }
   

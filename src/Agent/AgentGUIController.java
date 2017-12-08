@@ -93,12 +93,9 @@ public class AgentGUIController extends Application
       input.setVisible(true);
 
       agent.setMessageText("");
-
-//      synchronized (agent)
-//      {
-//        agent.notify();
-//      }
-    } catch (UnknownHostException e)
+      
+    }
+    catch (UnknownHostException e)
     {
       e.printStackTrace();
       System.exit(-1);
@@ -119,7 +116,6 @@ public class AgentGUIController extends Application
 
         if (bankIn != null)
         {
-//          txtBankBalance.setText("Balance: $" + bankIn.getAmount() + ".00");
           history += time.format(new Date(bankIn.getTimestamp())) + " | " + bankIn.getSignature() + bankIn.getMessage() + "\n";
           agent.bankInput = null;
         }
@@ -130,23 +126,17 @@ public class AgentGUIController extends Application
         }
         bankBalance = agent.balance;
         txtBankBalance.setText("Balance: $" + agent.balance + ".00");
-
-//        if(!textArea.getText().equals(history))
-//        {
+        
         textArea.setText(history);
         textArea.setScrollTop(textArea.getText().length());
-//        }
 
         if (agent.inventory != null)
         {
           String[] list = agent.inventory.split("\\.");
           itemsComboBox.getItems().setAll(list);
         }
-
-
       }
     }.start();
-
   }
 
   /**

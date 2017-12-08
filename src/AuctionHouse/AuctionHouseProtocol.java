@@ -66,10 +66,6 @@ public class AuctionHouseProtocol
         response = new Message(house, house.getName(), message, request.getItem(), request.getKey(), request.getAmount());
         System.out.println(house.getName() + message);
         break;
-//      case "update":
-//        message = "inventory";
-//        response = new Message(house, house.getName(), message, house.getInventory(), house.getPublicID(), house.getItemsForSale().size());
-//        break;
       default:
         message = "ignore";
         response = new Message(house, house.getName(), message, "", -1, -1);
