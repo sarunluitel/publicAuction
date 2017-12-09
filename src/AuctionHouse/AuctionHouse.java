@@ -216,6 +216,7 @@ public class AuctionHouse implements Serializable
       }
     }
     inventory.remove(index);
+    System.out.println("Removed item " + itemName);
   }
   
   /**
@@ -251,7 +252,7 @@ public class AuctionHouse implements Serializable
    * @param out
    * @param itemIndex
    */
-  private static void closeBid(AuctionHouse house, ObjectOutputStream out, int itemIndex)
+  private static synchronized void closeBid(AuctionHouse house, ObjectOutputStream out, int itemIndex)
   {
     try
     {
@@ -318,6 +319,7 @@ public class AuctionHouse implements Serializable
                 {
                   if (itemList.get(i).getItemName().equalsIgnoreCase(output.getItem()))
                   {
+
                     itemIndex = i;
                     break;
                   }
@@ -344,6 +346,7 @@ public class AuctionHouse implements Serializable
                         if(count == 30)
                         {
                           System.out.println("Item 1 sold");
+                          closeBid(house, out, 1);
                           //timer1.cancel();
                           //timer1.purge();
                           return;
