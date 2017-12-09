@@ -113,12 +113,10 @@ class AuctionCentralThread extends Thread
         
         if(winner) client.sendMessage(win);
         else if(accepted) client.sendMessage(accept);
-        else
-        {
-          winner = false;
-          accepted = false;
-          client.sendMessage(message);
-        }
+        else client.sendMessage(message);
+  
+        winner = false;
+        accepted = false;
       }
       catch (IOException e)
       {
