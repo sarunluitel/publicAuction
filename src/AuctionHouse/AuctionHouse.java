@@ -286,6 +286,7 @@ public class AuctionHouse implements Serializable
     public void setOut(ObjectOutputStream out) { this.out = out; }
     public void setIndex(int itemIndex) { this.itemIndex = itemIndex; }
 
+    
     @Override
     public void run()
     {
