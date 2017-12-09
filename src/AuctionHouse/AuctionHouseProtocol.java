@@ -62,6 +62,8 @@ class AuctionHouseProtocol
             break;
           }
         }
+        System.out.println("0?" + itemHere);
+        System.out.println("1?" + house.higherBid(itemIndex, request.getAmount(), request.getKey()));
         if(house.higherBid(itemIndex, request.getAmount(), request.getKey()) && itemHere)
         {
           message = "accepted";

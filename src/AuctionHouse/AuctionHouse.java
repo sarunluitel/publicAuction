@@ -231,7 +231,7 @@ public class AuctionHouse implements Serializable
     {
       return false;
     }
-    return item.getBidAmount() < bidValue;
+    return item.getBidAmount() <= bidValue;
   }
   
   /**
@@ -282,7 +282,7 @@ public class AuctionHouse implements Serializable
       System.out.println("inside timer item");
       count++;
       System.out.println(count);
-      if(count == 5)
+      if(count == 10)
       {
         System.out.println("Item 1 sold");
 
@@ -366,10 +366,10 @@ public class AuctionHouse implements Serializable
                     ItemTask itemTask1 = new ItemTask();
                     itemTask1.setAuctionHouse(house);
                     itemTask1.setOut(out);
-                    timer1.schedule(itemTask1,0,500);
+                    timer1.schedule(itemTask1,0,1000);
                     break;
                   case "Item-2":
-                    System.out.println("Running item1");
+                    System.out.println("Running item2");
                     if(timer2running)
                     {
                       timer2.cancel();
@@ -380,7 +380,7 @@ public class AuctionHouse implements Serializable
                     ItemTask itemTask2 = new ItemTask();
                     itemTask2.setAuctionHouse(house);
                     itemTask2.setOut(out);
-                    timer2.schedule(itemTask2,0,500);
+                    timer2.schedule(itemTask2,0,1000);
                     break;
                   case "Item-3":
                     System.out.println("Running item3");
@@ -394,7 +394,7 @@ public class AuctionHouse implements Serializable
                     ItemTask itemTask3 = new ItemTask();
                     itemTask3.setAuctionHouse(house);
                     itemTask3.setOut(out);
-                    timer3.schedule(itemTask3,0,500);
+                    timer3.schedule(itemTask3,0,1000);
                     break;
                   default:
                     break;
