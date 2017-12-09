@@ -206,7 +206,7 @@ public class AuctionHouse implements Serializable
    * Removes item with given name.
    * @param itemName
    */
-  void removeItem(String itemName)
+  Item removeItem(String itemName)
   {
     int index = 0;
     for (int i = 0; i < inventory.size(); i++) {
@@ -215,9 +215,9 @@ public class AuctionHouse implements Serializable
         break;
       }
     }
-    inventory.remove(index);
+    Item removed = inventory.remove(index);
     System.out.println("Removed item " + itemName);
-
+    return removed;
   }
   
   /**
@@ -257,8 +257,8 @@ public class AuctionHouse implements Serializable
   {
     try
     {
-      Item item = house.getInventory().get(itemIndex-1);
-      house.removeItem("Item-" + itemIndex);
+      //Item item = house.getInventory().get(itemIndex-1);
+      Item item = house.removeItem("Item-" + itemIndex);
       out.writeObject(new Message(house, house.getName(), "winner", item.itemName, item.getAgent(), item.getBidAmount()));
       out.flush();
     }
@@ -420,6 +420,14 @@ public class AuctionHouse implements Serializable
               out.flush();
             }
           }
+          if(house.getInventory().isEmpty())
+          {
+            System.out.println("Gracefully exiting: " + house.getName());
+            in.close();
+            out.close();
+            socket.close();
+            System.exit(5);
+          }
           input = ((Message)in.readObject());
         }
       }
@@ -428,9 +436,7 @@ public class AuctionHouse implements Serializable
         System.err.println(e.getMessage());
       }
       
-      in.close();
-      out.close();
-      socket.close();
+
     }
     catch (IOException e)
     {

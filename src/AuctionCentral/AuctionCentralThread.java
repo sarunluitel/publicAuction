@@ -73,7 +73,7 @@ class AuctionCentralThread extends Thread
           try
           {
             input = ((Message) in.readObject());
-          } catch (SocketException e)
+          } catch (Exception e)
           {
             System.out.println(this.getName() + "Gracefully Closed");
             socket.close();
