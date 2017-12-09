@@ -62,7 +62,7 @@ class AuctionHouseProtocol
             break;
           }
         }
-        if(house.higherBid(itemIndex, request.getAmount()) && itemHere)
+        if(house.higherBid(itemIndex, request.getAmount(), request.getKey()) && itemHere)
         {
           message = "accepted";
           house.setItemBid(itemIndex, request.getAmount(), request.getKey());
