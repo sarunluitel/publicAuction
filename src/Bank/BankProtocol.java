@@ -81,7 +81,7 @@ class BankProtocol implements Serializable
         account.remove(request.getAmount());
         response = new Message(null, "[Bank]: ", message, "Funds removed", request.getKey(), account.getBalance());
         break;
-      case "EXIT":
+      case "EXIT": //git
         message = "Goodbye!";
         response = new Message(null, "[Bank]: ", message, "Goodbye!", request.getKey(), account.getBalance());
         break;
