@@ -94,9 +94,8 @@ public class AgentGUIController extends Application
       input.setVisible(true);
 
       agent.setMessageText("");
-      
-    }
-    catch (UnknownHostException e)
+
+    } catch (UnknownHostException e)
     {
       e.printStackTrace();
       System.exit(-1);
@@ -113,7 +112,9 @@ public class AgentGUIController extends Application
         if (bankIn != null)
         {
           history += time.format(new Date(bankIn.getTimestamp())) + " | " + bankIn.getSignature() + bankIn.getMessage() + "\n";
+
           agent.bankInput = null;
+
         }
         if (auctionIn != null)
         {
@@ -141,11 +142,7 @@ public class AgentGUIController extends Application
           String[] list = agent.inventory.split("\\.");
           itemsComboBox.getItems().setAll(list);
         }
-        if (!textArea.getText().equals(history))
-        {
-          textArea.setText(history);
-          textArea.setScrollTop(textArea.getText().length());
-        }
+
 
       }
     }.start();
@@ -168,22 +165,26 @@ public class AgentGUIController extends Application
   @FXML
   private void placeBid()
   {
+    if (!textArea.getText().equals(history))
+    {
+      textArea.setText(history);
+      textArea.setScrollTop(textArea.getText().length());
+    }
     if (itemsComboBox.getValue() == null) return;
     String request = input.getText();
     input.setText("");
-    
+
     int bidAmount;
     try
     {
       String temp[] = request.split("\\s+");
-      if(temp.length == 2) bidAmount = Integer.parseInt(temp[1]);
+      if (temp.length == 2) bidAmount = Integer.parseInt(temp[1]);
       else bidAmount = 0;
-    }
-    catch (NumberFormatException e)
+    } catch (NumberFormatException e)
     {
       bidAmount = 0;
     }
-  
+
     if (bidAmount > bankBalance)
     {
       history += time.format(new Date(System.currentTimeMillis())) + " | " + "Error - insufficient funds." + "\n";
@@ -191,10 +192,10 @@ public class AgentGUIController extends Application
       textArea.setScrollTop(textArea.getText().length());
       return;
     }
-  
+
     String combo = " ";
-    if(itemsComboBox.getValue() != null) combo = itemsComboBox.getValue();
-    
+    if (itemsComboBox.getValue() != null) combo = itemsComboBox.getValue();
+
     if (!request.equals("") && !request.equalsIgnoreCase("new"))
     {
       System.out.println(request + " " + combo + " " + bidAmount + "???");
@@ -211,7 +212,7 @@ public class AgentGUIController extends Application
       }
     }
   }
-  
+
   /**
    * Sets the primary stage.
    *
