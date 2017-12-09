@@ -281,7 +281,9 @@ public class AuctionHouse implements Serializable
     Timer timer1 = new Timer();
     boolean timer1running = false;
     Timer timer2 = new Timer();
+    boolean timer2running = false;
     Timer timer3 = new Timer();
+    boolean timer3running = false;
 
     System.out.println("Enter Auction Central's IP: ");
     String address = scan.nextLine();
@@ -360,10 +362,66 @@ public class AuctionHouse implements Serializable
                  //   timer1.setOnFinished(event -> closeBid(house, out, 1));
                     break;
                   case "Item-2":
+                    System.out.println("Running item1");
+                    if(timer2running)
+                    {
+                      timer2.cancel();
+                      timer2 = new Timer();
+                    }
+                    TimerTask item2task = new TimerTask()
+                    {
+                      public int count =0;
+                      @Override
+                      public void run()
+                      {
+                        System.out.println("inside timer item2");
+                        count++;
+                        System.out.println(count);
+                        if(count == 30)
+                        {
+                          System.out.println("Item 2 sold");
+                          closeBid(house, out, 2);
+                          //timer1.cancel();
+                          //timer1.purge();
+                          return;
+                        }
+                      }
+
+                    };
+                    timer2running = true;
+                    timer2.schedule(item2task,0,1000);
                  //   timer2.playFromStart();
                  //   timer2.setOnFinished(event -> closeBid(house, out, 2));
                     break;
                   case "Item-3":
+                    System.out.println("Running item3");
+                    if(timer3running)
+                    {
+                      timer3.cancel();
+                      timer3 = new Timer();
+                    }
+                    TimerTask item3task = new TimerTask()
+                    {
+                      public int count =0;
+                      @Override
+                      public void run()
+                      {
+                        System.out.println("inside timer item1");
+                        count++;
+                        System.out.println(count);
+                        if(count == 30)
+                        {
+                          System.out.println("Item 3 sold");
+                          closeBid(house, out, 3);
+                          //timer1.cancel();
+                          //timer1.purge();
+                          return;
+                        }
+                      }
+
+                    };
+                    timer3running = true;
+                    timer3.schedule(item3task,0,1000);
                 //    timer3.playFromStart();
                 //    timer3.setOnFinished(event -> closeBid(house, out, 3));
                     break;
