@@ -80,7 +80,7 @@ class AuctionCentralProtocol {
         message = new StringBuilder("Welcome!");
         response = new Message(null, "[AuctionCentral]: ", message.toString(), "Initialized", request.getKey(), 0);
         break;
-      case "register":
+      case "register": // runs when auction house joins.
         int ID = (int)(Math.random() * 1000000);
         current = "[House-" + houseCount + "]: ";
         
@@ -107,6 +107,7 @@ class AuctionCentralProtocol {
         response = new Message(null, "[AuctionCentral]: ", message.toString(), auctionHouse.getName(), request.getKey(), auctionRepository.size());
         break;
       case "repository":
+        //TODO this block need to get a new reference to auction house. items sold are not being reflected on the GUI.
         message = new StringBuilder();
         for(AuctionHouse auctionHouse : auctionRepository.values())
         {

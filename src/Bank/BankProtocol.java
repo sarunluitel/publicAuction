@@ -47,7 +47,7 @@ class BankProtocol implements Serializable
         
         System.out.println("[Bank]: Creating new account for " + name + ".");
 
-        account = new BankAccount(name, request.getKey(), 500);
+        account = new BankAccount(name, request.getKey(), 1000);
         Bank.addAccounts(account);
         
         accounts.put(request.getKey(), account);
