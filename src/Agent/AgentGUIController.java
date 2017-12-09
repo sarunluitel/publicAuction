@@ -50,7 +50,8 @@ public class AgentGUIController extends Application
 
   private Agent agent;
   private String history = "";
-  private int bankBalance = 0;
+  private int bankBalance = 0, bidCount = 0;
+
 
   /**
    * Initializes state of GUI components.
@@ -122,8 +123,10 @@ public class AgentGUIController extends Application
 
         if (bankBalance != agent.balance)
         {
+          if (bankBalance != 0) bidCount++;
           bankBalance = agent.balance;
           txtBankBalance.setText("Balance: $" + agent.balance + ".00");
+          txtTotalBidPlaced.setText("Bid : \n" + bidCount);
         }
 
         if (!textArea.getText().equals(history))
@@ -158,6 +161,7 @@ public class AgentGUIController extends Application
   @FXML
   private void placeBid()
   {
+    if (itemsComboBox.getValue() == null) return;
     String request = input.getText();
     input.setText("");
     
