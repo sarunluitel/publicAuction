@@ -37,7 +37,7 @@ Agents will display a GUI - in this GUI, there will be two textfields to input y
 
 # Auction Central's list of commands:
 * "repository" - Refreshes latest listings of auction houses manually. <br>
-* "bid <<amount>>" - Submits bid on item in Auction House - make sure to have item selected in combobox. <br>
+* "bid <amount<amount>>" - Submits bid on item in Auction House - make sure to have item selected in combobox. <br>
 * Note: additional internal commands passed automatically between houses & bank. <br>
 
 # Auction House's list of commands:
