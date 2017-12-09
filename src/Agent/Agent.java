@@ -279,4 +279,7 @@ public class Agent extends Thread implements Serializable
         break;
     }
   }
+  void close(){
+
+  }
 }

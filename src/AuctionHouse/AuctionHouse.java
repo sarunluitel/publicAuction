@@ -217,6 +217,7 @@ public class AuctionHouse implements Serializable
     }
     inventory.remove(index);
     System.out.println("Removed item " + itemName);
+
   }
   
   /**
@@ -272,9 +273,16 @@ public class AuctionHouse implements Serializable
     public AuctionHouse house;
     public ObjectOutputStream out;
     public int count = 0;
+    public final int itemIndex;
+
+    public ItemTask(int index)
+    {
+      itemIndex = index;
+    }
 
     public void setAuctionHouse(AuctionHouse house) { this.house = house; }
     public void setOut(ObjectOutputStream out) { this.out = out; }
+
 
     @Override
     public void run()
@@ -284,10 +292,10 @@ public class AuctionHouse implements Serializable
       System.out.println(count);
       if(count == 10)
       {
-        System.out.println("Item 1 sold");
+        System.out.println("Item " + itemIndex + " sold");
 
         System.out.println(house + " " + out);
-        closeBid(house, out, 1);
+        closeBid(house, out, itemIndex);
         this.cancel();
       }
     }
@@ -312,7 +320,7 @@ public class AuctionHouse implements Serializable
 
     System.out.println("Enter Auction Central's IP: ");
     String address = scan.nextLine();
-    
+
     Socket socket = new Socket(InetAddress.getByName(address), 1111);
     try
     {
@@ -363,7 +371,7 @@ public class AuctionHouse implements Serializable
                     }
 
                     timer1running = true;
-                    ItemTask itemTask1 = new ItemTask();
+                    ItemTask itemTask1 = new ItemTask(1);
                     itemTask1.setAuctionHouse(house);
                     itemTask1.setOut(out);
                     timer1.schedule(itemTask1,0,1000);
@@ -377,7 +385,7 @@ public class AuctionHouse implements Serializable
                     }
 
                     timer2running = true;
-                    ItemTask itemTask2 = new ItemTask();
+                    ItemTask itemTask2 = new ItemTask(2);
                     itemTask2.setAuctionHouse(house);
                     itemTask2.setOut(out);
                     timer2.schedule(itemTask2,0,1000);
@@ -391,7 +399,7 @@ public class AuctionHouse implements Serializable
                     }
 
                     timer3running = true;
-                    ItemTask itemTask3 = new ItemTask();
+                    ItemTask itemTask3 = new ItemTask(3);
                     itemTask3.setAuctionHouse(house);
                     itemTask3.setOut(out);
                     timer3.schedule(itemTask3,0,1000);
