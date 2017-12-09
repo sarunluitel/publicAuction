@@ -292,7 +292,7 @@ public class AuctionHouse implements Serializable
       System.out.println("inside timer item");
       count++;
       System.out.println(count);
-      if(count == 30)
+      if(count == 10)
       {
         System.out.println("Item 1 sold");
 
@@ -377,7 +377,7 @@ public class AuctionHouse implements Serializable
                     itemTask1.setAuctionHouse(house);
                     itemTask1.setOut(out);
                     itemTask1.setIndex(1);
-                    timer1.schedule(itemTask1,0,3000);
+                    timer1.schedule(itemTask1,0,1000);
                     break;
                   case "Item-2":
                     System.out.println("Running item2");
@@ -392,7 +392,7 @@ public class AuctionHouse implements Serializable
                     itemTask2.setAuctionHouse(house);
                     itemTask2.setOut(out);
                     itemTask2.setIndex(2);
-                    timer2.schedule(itemTask2,0,3000);
+                    timer2.schedule(itemTask2,0,1000);
                     break;
                   case "Item-3":
                     System.out.println("Running item3");
@@ -407,7 +407,7 @@ public class AuctionHouse implements Serializable
                     itemTask3.setAuctionHouse(house);
                     itemTask3.setOut(out);
                     itemTask3.setIndex(3);
-                    timer3.schedule(itemTask3,0,3000);
+                    timer3.schedule(itemTask3,0,1000);
                     break;
                   default:
                     break;
