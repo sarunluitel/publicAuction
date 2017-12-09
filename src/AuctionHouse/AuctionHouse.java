@@ -271,9 +271,9 @@ public class AuctionHouse implements Serializable
     AuctionHouse house = new AuctionHouse();
     Scanner scan = new Scanner(System.in);
 
-    PauseTransition timer1 = new PauseTransition(Duration.seconds(30));
-    PauseTransition timer2 = new PauseTransition(Duration.seconds(30));
-    PauseTransition timer3 = new PauseTransition(Duration.seconds(30));
+    PauseTransition timer1 = new PauseTransition(Duration.seconds(3));
+    PauseTransition timer2 = new PauseTransition(Duration.seconds(3));
+    PauseTransition timer3 = new PauseTransition(Duration.seconds(3));
     
     System.out.println("Enter Auction Central's IP: ");
     String address = scan.nextLine();
@@ -299,6 +299,7 @@ public class AuctionHouse implements Serializable
         {
           if (input != null)
           {
+            System.out.println("TIMER !!");
             System.out.println(input.getSignature() + input.getMessage());
             output = auctionHouseProtocol.handleRequest(input);
             if(output.getMessage().equalsIgnoreCase("accepted"))

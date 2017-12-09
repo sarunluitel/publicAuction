@@ -50,7 +50,7 @@ public class AgentGUIController extends Application
 
   private Agent agent;
   private String history = "";
-  private int bankBalance = 500;
+  private int bankBalance = 0;
 
   /**
    * Initializes state of GUI components.
@@ -216,6 +216,7 @@ public class AgentGUIController extends Application
     {
       if (agent != null) agent.setMessageText("EXIT");
       Platform.exit();
+      System.exit(0);
     });
   }
 }
