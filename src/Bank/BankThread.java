@@ -12,6 +12,7 @@ import Message.Message;
 
 import java.io.*;
 import java.net.Socket;
+import java.net.SocketException;
 
 class BankThread extends Thread
 {
@@ -60,7 +61,16 @@ class BankThread extends Thread
               out.flush();
             }
           }
-          input = ((Message) in.readObject());
+          try
+          {
+            input = ((Message) in.readObject());
+          } catch (SocketException e)
+          {
+            System.out.println(this.getName() + "Gracefully Closed from bank");
+            socket.close();
+            return;
+            //this.isAlive();
+          }
         }
       }
       catch (ClassNotFoundException e)
