@@ -123,8 +123,6 @@ class AuctionCentralThread extends Thread
         deadClients.add(client);
       }
     }
-    
     writers.removeAll(deadClients);
   }
-  
 }
