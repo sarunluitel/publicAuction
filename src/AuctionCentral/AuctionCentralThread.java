@@ -88,8 +88,8 @@ class AuctionCentralThread extends Thread
   
   private synchronized void broadcast(Message message)
   {
-    Message win = new Message(message.getSender(), message.getSignature(), (message.getSignature() + " has won the bid on " + message.getItem() + " for $" + message.getAmount() + "!"), "", 0, 0);
-    Message accept = new Message(message.getSender(), message.getSignature(), message.getSignature() + " is the highest bidder on " + message.getItem() + " for $" + message.getAmount() + "!", "", 0, 0);
+    Message win = new Message(message.getSender(), message.getSignature(),"has won the bid on " + message.getItem() + " for $" + message.getAmount() + "!", "", 0, 0);
+    Message accept = new Message(message.getSender(), message.getSignature(), "is the highest bidder on " + message.getItem() + " for $" + message.getAmount() + "!", "", 0, 0);
     
     boolean winner = false;
     boolean accepted = false;
