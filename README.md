@@ -11,7 +11,7 @@ Agents are created/cleared dynamically as users connect/disconnect to the server
 
 # Versions:
 <b>Version 1: Initial GUI </b><br>
-Version 1 contains the initial GUI. In this version, all connections are made and Agents & Auction Houses can be created dynamically. Messages need some work as they occasionally cause hold-ups. <br>
+Version 1 contains the initial GUI. In this version, all connections are made and Agents & Auction Houses can be created dynamically. Messages need some work as they occasionally cause hold-ups. <br><br>
 <b>Version 2: Enhanced GUI & Auction </b><br>
 Version 2 builds off of Version 1 by fixing bugs, major UI overhauls, and automated updates. Messages now send and are handled properly on server end, UI provides additional information such as balance, bids, timestamps, and current listings with up-to-date pricing. Automated updaters have been added in the agent class to eliminate the need for manual updates with agent. Automated updates poll for changes from server periodically and update on the agent display. <br>
 
@@ -37,7 +37,7 @@ Agents will display a GUI - in this GUI, there will be two textfields to input y
 
 # Auction Central's list of commands:
 * "repository" - Refreshes latest listings of auction houses manually. <br>
-* "bid <amount>" - Submits bid on item in Auction House - make sure to have item selected in combobox. <br>
+* "bid <amount<amount>>" - Submits bid on item in Auction House - make sure to have item selected in combobox. <br>
 * Note: additional internal commands passed automatically between houses & bank. <br>
 
 # Auction House's list of commands:
