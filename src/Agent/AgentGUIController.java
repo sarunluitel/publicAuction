@@ -141,6 +141,12 @@ public class AgentGUIController extends Application
           String[] list = agent.inventory.split("\\.");
           itemsComboBox.getItems().setAll(list);
         }
+        if (!textArea.getText().equals(history))
+        {
+          textArea.setText(history);
+          textArea.setScrollTop(textArea.getText().length());
+        }
+
       }
     }.start();
   }
