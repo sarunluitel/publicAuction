@@ -57,5 +57,5 @@ class Bank
       System.err.println("[Bank]: Error connecting...");
       System.exit(-1);
     }
-  }// to update bank code
+  }
 }

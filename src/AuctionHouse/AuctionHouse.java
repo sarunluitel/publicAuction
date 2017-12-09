@@ -20,6 +20,8 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.util.LinkedList;
 import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class AuctionHouse implements Serializable
 {
@@ -271,10 +273,10 @@ public class AuctionHouse implements Serializable
     AuctionHouse house = new AuctionHouse();
     Scanner scan = new Scanner(System.in);
 
-    PauseTransition timer1 = new PauseTransition(Duration.seconds(30));
-    PauseTransition timer2 = new PauseTransition(Duration.seconds(30));
-    PauseTransition timer3 = new PauseTransition(Duration.seconds(30));
-    
+    Timer timer1 = new Timer();
+    Timer timer2 = new Timer();
+    Timer timer3 = new Timer();
+
     System.out.println("Enter Auction Central's IP: ");
     String address = scan.nextLine();
     
@@ -318,16 +320,35 @@ public class AuctionHouse implements Serializable
                 switch(output.getItem())
                 {
                   case "Item-1":
-                    timer1.playFromStart();
-                    timer1.setOnFinished(event -> closeBid(house, out, 1));
+                    System.out.println("Running item1");
+                    TimerTask item1task = new TimerTask()
+                    {
+                      int count =0;
+                      @Override
+                      public void run()
+                      {
+                        System.out.println("inside timer item1");
+                        count++;
+                        System.out.println(count);
+                        if(count ==30)
+                        {
+                          timer1.cancel();
+                          timer1.purge();
+                          return;
+                        }
+                      }
+                    };
+                    timer1.schedule(item1task,0,1000);
+                    //timer1.playFromStart();
+                 //   timer1.setOnFinished(event -> closeBid(house, out, 1));
                     break;
                   case "Item-2":
-                    timer2.playFromStart();
-                    timer2.setOnFinished(event -> closeBid(house, out, 2));
+                 //   timer2.playFromStart();
+                 //   timer2.setOnFinished(event -> closeBid(house, out, 2));
                     break;
                   case "Item-3":
-                    timer3.playFromStart();
-                    timer3.setOnFinished(event -> closeBid(house, out, 3));
+                //    timer3.playFromStart();
+                //    timer3.setOnFinished(event -> closeBid(house, out, 3));
                     break;
                   default:
                     break;
