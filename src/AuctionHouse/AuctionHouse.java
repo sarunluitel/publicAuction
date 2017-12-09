@@ -223,9 +223,13 @@ public class AuctionHouse implements Serializable
    * @param bidValue
    * @return whether a higher bid is in place.
    */
-  boolean higherBid(int itemIndex, int bidValue)
+  boolean higherBid(int itemIndex, int bidValue, int agentKey)
   {
     Item item = inventory.get(itemIndex);
+    if(item.getAgent() == agentKey)
+    {
+      return false;
+    }
     return item.getBidAmount() < bidValue;
   }
   
@@ -274,6 +278,7 @@ public class AuctionHouse implements Serializable
     Scanner scan = new Scanner(System.in);
 
     Timer timer1 = new Timer();
+    boolean timer1running = false;
     Timer timer2 = new Timer();
     Timer timer3 = new Timer();
 
@@ -322,23 +327,31 @@ public class AuctionHouse implements Serializable
                   //just to push
                   case "Item-1":
                     System.out.println("Running item1");
+                    if(timer1running)
+                    {
+                      timer1.cancel();
+                      timer1 = new Timer();
+                    }
                     TimerTask item1task = new TimerTask()
                     {
-                      int count =0;
+                      public int count =0;
                       @Override
                       public void run()
                       {
                         System.out.println("inside timer item1");
                         count++;
                         System.out.println(count);
-                        if(count ==30)
+                        if(count == 30)
                         {
-                          timer1.cancel();
-                          timer1.purge();
+                          System.out.println("Item 1 sold");
+                          //timer1.cancel();
+                          //timer1.purge();
                           return;
                         }
                       }
+
                     };
+                    timer1running = true;
                     timer1.schedule(item1task,0,1000);
                     //timer1.playFromStart();
                  //   timer1.setOnFinished(event -> closeBid(house, out, 1));
