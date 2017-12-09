@@ -15,6 +15,7 @@ import Message.Message;
 import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.LinkedList;
 import java.util.Random;
 
 public class Agent extends Thread implements Serializable

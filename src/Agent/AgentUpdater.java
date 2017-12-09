@@ -21,15 +21,15 @@ public class AgentUpdater extends Thread implements Serializable
 {
   private Message auctionMessage, bankMessage;
   private final Agent agent;
-  
+
   private final InetAddress auctionAddress;
   private final InetAddress bankAddress;
-  
+
   private int balance;
   private String inventory;
-  
+
   private boolean finished = false;
-  
+
   /**
    * Default constructor.
    *
@@ -43,7 +43,7 @@ public class AgentUpdater extends Thread implements Serializable
     this.auctionAddress = auctionAddress;
     this.bankAddress = bankAddress;
   }
-  
+
   /**
    * Sets thread to finish executing.
    *
@@ -53,7 +53,7 @@ public class AgentUpdater extends Thread implements Serializable
   {
     finished = flag;
   }
-  
+
   /**
    * @return updated inventory.
    */
@@ -61,7 +61,7 @@ public class AgentUpdater extends Thread implements Serializable
   {
     return inventory;
   }
-  
+
   /**
    * @return updated balance.
    */
@@ -69,7 +69,7 @@ public class AgentUpdater extends Thread implements Serializable
   {
     return balance;
   }
-  
+
   /**
    * Run method for updater.
    */
@@ -80,44 +80,51 @@ public class AgentUpdater extends Thread implements Serializable
     {
       Socket auction = new Socket(auctionAddress, 1111);
       Socket bank = new Socket(bankAddress, 2222);
-    
+
       ObjectOutputStream auctionOut = new ObjectOutputStream(auction.getOutputStream());
       auctionOut.flush();
-    
+
       ObjectOutputStream bankOut = new ObjectOutputStream(bank.getOutputStream());
       bankOut.flush();
-    
+
       ObjectInputStream auctionIn = new ObjectInputStream(auction.getInputStream());
       ObjectInputStream bankIn = new ObjectInputStream(bank.getInputStream());
-    while(!finished)
-    {
-      try { sleep(1000); } catch(InterruptedException ignored) {}
-      try {
-        auctionOut.writeObject(new Message(this, "Updater+"+agent.getAgentName(), "repository", "", agent.getAgentCentralKey(), agent.getAgentBankKey()));
-        auctionOut.flush();
-        bankOut.writeObject(new Message(this, "Updater+"+agent.getAgentName(), "balance", "", agent.getAgentBankKey(), -1));
-        bankOut.flush();
-  
+      while (!finished)
+      {
         try
         {
-          auctionMessage = ((Message) auctionIn.readObject());
-          bankMessage = ((Message) bankIn.readObject());
-          
-          inventory = auctionMessage.getMessage();
-          balance = bankMessage.getAmount();
+          sleep(1000);
         }
-        catch(ClassNotFoundException e)
+        catch (InterruptedException ignored)
+        {
+        }
+        try
+        {
+          auctionOut.writeObject(new Message(this, "Updater+" + agent.getAgentName(), "repository", "", agent.getAgentCentralKey(), agent.getAgentBankKey()));
+          auctionOut.flush();
+          bankOut.writeObject(new Message(this, "Updater+" + agent.getAgentName(), "balance", "", agent.getAgentBankKey(), -1));
+          bankOut.flush();
+
+          try
+          {
+            auctionMessage = ((Message) auctionIn.readObject());
+            bankMessage = ((Message) bankIn.readObject());
+
+            inventory = auctionMessage.getMessage();
+            balance = bankMessage.getAmount();
+          }
+          catch (ClassNotFoundException e)
+          {
+            e.printStackTrace();
+          }
+        }
+        catch (IOException e)
         {
           e.printStackTrace();
         }
       }
-      catch(IOException e)
-      {
-        e.printStackTrace();
-      }
     }
-    }
-    catch(IOException e)
+    catch (IOException e)
     {
       e.printStackTrace();
     }

@@ -266,7 +266,32 @@ public class AuctionHouse implements Serializable
       e.printStackTrace();
     }
   }
-  
+
+  static class ItemTask extends TimerTask {
+
+    public AuctionHouse house;
+    public ObjectOutputStream out;
+    public int count = 0;
+
+    public void setAuctionHouse(AuctionHouse house) { this.house = house; }
+    public void setOut(ObjectOutputStream out) { this.out = out; }
+
+    @Override
+    public void run()
+    {
+      System.out.println("inside timer item1 ??");
+      count++;
+      System.out.println(count);
+      if(count == 5)
+      {
+        System.out.println("Item 1 sold");
+
+        System.out.println(house + " " + out);
+        closeBid(house, out, 1);
+        this.cancel();
+      }
+    }
+  }
   /**
    * Main method for auction house.
    *
@@ -321,7 +346,6 @@ public class AuctionHouse implements Serializable
                 {
                   if (itemList.get(i).getItemName().equalsIgnoreCase(output.getItem()))
                   {
-
                     itemIndex = i;
                     break;
                   }
@@ -331,35 +355,18 @@ public class AuctionHouse implements Serializable
                   //just to push
                   case "Item-1":
                     System.out.println("Running item1");
+
                     if(timer1running)
                     {
                       timer1.cancel();
                       timer1 = new Timer();
                     }
-                    TimerTask item1task = new TimerTask()
-                    {
-                      public int count =0;
-                      @Override
-                      public void run()
-                      {
-                        System.out.println("inside timer item1");
-                        count++;
-                        System.out.println(count);
-                        if(count == 30)
-                        {
-                          System.out.println("Item 1 sold");
-                          closeBid(house, out, 1);
-                          //timer1.cancel();
-                          //timer1.purge();
-                          return;
-                        }
-                      }
 
-                    };
                     timer1running = true;
-                    timer1.schedule(item1task,0,1000);
-                    //timer1.playFromStart();
-                 //   timer1.setOnFinished(event -> closeBid(house, out, 1));
+                    ItemTask itemTask1 = new ItemTask();
+                    itemTask1.setAuctionHouse(house);
+                    itemTask1.setOut(out);
+                    timer1.schedule(itemTask1,0,500);
                     break;
                   case "Item-2":
                     System.out.println("Running item1");
@@ -368,30 +375,12 @@ public class AuctionHouse implements Serializable
                       timer2.cancel();
                       timer2 = new Timer();
                     }
-                    TimerTask item2task = new TimerTask()
-                    {
-                      public int count =0;
-                      @Override
-                      public void run()
-                      {
-                        System.out.println("inside timer item2");
-                        count++;
-                        System.out.println(count);
-                        if(count == 30)
-                        {
-                          System.out.println("Item 2 sold");
-                          closeBid(house, out, 2);
-                          //timer1.cancel();
-                          //timer1.purge();
-                          return;
-                        }
-                      }
 
-                    };
                     timer2running = true;
-                    timer2.schedule(item2task,0,1000);
-                 //   timer2.playFromStart();
-                 //   timer2.setOnFinished(event -> closeBid(house, out, 2));
+                    ItemTask itemTask2 = new ItemTask();
+                    itemTask2.setAuctionHouse(house);
+                    itemTask2.setOut(out);
+                    timer2.schedule(itemTask2,0,500);
                     break;
                   case "Item-3":
                     System.out.println("Running item3");
@@ -400,30 +389,12 @@ public class AuctionHouse implements Serializable
                       timer3.cancel();
                       timer3 = new Timer();
                     }
-                    TimerTask item3task = new TimerTask()
-                    {
-                      public int count =0;
-                      @Override
-                      public void run()
-                      {
-                        System.out.println("inside timer item1");
-                        count++;
-                        System.out.println(count);
-                        if(count == 30)
-                        {
-                          System.out.println("Item 3 sold");
-                          closeBid(house, out, 3);
-                          //timer1.cancel();
-                          //timer1.purge();
-                          return;
-                        }
-                      }
 
-                    };
                     timer3running = true;
-                    timer3.schedule(item3task,0,1000);
-                //    timer3.playFromStart();
-                //    timer3.setOnFinished(event -> closeBid(house, out, 3));
+                    ItemTask itemTask3 = new ItemTask();
+                    itemTask3.setAuctionHouse(house);
+                    itemTask3.setOut(out);
+                    timer3.schedule(itemTask3,0,500);
                     break;
                   default:
                     break;
