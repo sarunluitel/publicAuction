@@ -61,7 +61,7 @@ class BankAccount
    */
   public void addHold(int amount)
   {
-    this.balance -= amount;
+//    this.balance -= amount;
     holds.add(amount);
   }
   
@@ -71,8 +71,12 @@ class BankAccount
    */
   public void removeHold(int amount)
   {
-    this.balance += amount;
-    if(holds.size() > 0) holds.remove(amount);
+//    this.balance += amount;
+    if(holds.size() > 0)
+    {
+      int idx = holds.indexOf(amount);
+      holds.remove(idx);
+    }
   }
   
   /**
@@ -83,7 +87,7 @@ class BankAccount
   public void remove(int amount)
   {
     this.balance -= amount;
-    if(holds.size() > 0) this.balance += holds.remove(amount);
+//    if(holds.size() > 0) this.balance += holds.remove(amount);
     if(this.balance < 0) this.balance = 0;
   }
 }

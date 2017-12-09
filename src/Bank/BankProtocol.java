@@ -78,6 +78,9 @@ class BankProtocol implements Serializable
       case "remove":
         message = "ignore";
         account = accounts.get(request.getKey());
+        System.out.println("hi? " + request.getSignature());
+        System.out.println("hi " + account);
+
         account.remove(request.getAmount());
         response = new Message(null, "[Bank]: ", message, "Funds removed", request.getKey(), account.getBalance());
         break;

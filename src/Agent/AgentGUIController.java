@@ -123,6 +123,7 @@ public class AgentGUIController extends Application
 
         if (bankBalance != agent.balance)
         {
+          System.out.println(bankBalance + " " + agent.balance + " ????");
           if (bankBalance != 0) bidCount++;
           bankBalance = agent.balance;
           txtBankBalance.setText("Balance: $" + agent.balance + ".00");
@@ -190,6 +191,7 @@ public class AgentGUIController extends Application
     
     if (!request.equals("") && !request.equalsIgnoreCase("new"))
     {
+      System.out.println(request + " " + combo + " " + bidAmount + "???");
       agent.setMessageText(request);
       agent.setCombo(combo);
       agent.setBidAmount(bidAmount);

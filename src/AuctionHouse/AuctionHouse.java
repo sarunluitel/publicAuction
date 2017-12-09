@@ -256,10 +256,18 @@ public class AuctionHouse implements Serializable
   {
     try
     {
-      Item item = house.getInventory().get(itemIndex-1);
-      house.removeItem("Item-" + itemIndex);
+      Item item = house.getInventory().get(0);
+      for(int i = 0; i < house.getInventory().size(); i++)
+      {
+        if (house.getInventory().get(i).itemName.substring
+                (house.getInventory().get(i).itemName.length()-1).equals(Integer.toString(itemIndex)))
+          item = house.getInventory().get(i);
+      }
+//      Item item = house.getInventory().get(itemIndex-1);
+      System.out.println(item.itemName + " " + item.getAgent() + "closeBId!!");
       out.writeObject(new Message(house, house.getName(), "winner", item.itemName, item.getAgent(), item.getBidAmount()));
       out.flush();
+      house.removeItem("Item-" + itemIndex);
     }
     catch(IOException e)
     {
@@ -271,10 +279,12 @@ public class AuctionHouse implements Serializable
 
     public AuctionHouse house;
     public ObjectOutputStream out;
+    public int itemIndex;
     public int count = 0;
 
     public void setAuctionHouse(AuctionHouse house) { this.house = house; }
     public void setOut(ObjectOutputStream out) { this.out = out; }
+    public void setIndex(int itemIndex) { this.itemIndex = itemIndex; }
 
     @Override
     public void run()
@@ -287,7 +297,7 @@ public class AuctionHouse implements Serializable
         System.out.println("Item 1 sold");
 
         System.out.println(house + " " + out);
-        closeBid(house, out, 1);
+        closeBid(house, out, itemIndex);
         this.cancel();
       }
     }
@@ -366,6 +376,7 @@ public class AuctionHouse implements Serializable
                     ItemTask itemTask1 = new ItemTask();
                     itemTask1.setAuctionHouse(house);
                     itemTask1.setOut(out);
+                    itemTask1.setIndex(1);
                     timer1.schedule(itemTask1,0,1000);
                     break;
                   case "Item-2":
@@ -380,6 +391,7 @@ public class AuctionHouse implements Serializable
                     ItemTask itemTask2 = new ItemTask();
                     itemTask2.setAuctionHouse(house);
                     itemTask2.setOut(out);
+                    itemTask2.setIndex(2);
                     timer2.schedule(itemTask2,0,1000);
                     break;
                   case "Item-3":
@@ -394,6 +406,7 @@ public class AuctionHouse implements Serializable
                     ItemTask itemTask3 = new ItemTask();
                     itemTask3.setAuctionHouse(house);
                     itemTask3.setOut(out);
+                    itemTask3.setIndex(3);
                     timer3.schedule(itemTask3,0,1000);
                     break;
                   default:
