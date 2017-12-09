@@ -123,18 +123,18 @@ class AuctionCentralProtocol {
       case "accepted":
         message = new StringBuilder("block");
   
-        response = new Message(null, "[AuctionCentral]: ", message.toString(), request.getItem(), agentKeys.get(request.getKey()), request.getAmount());
+        response = new Message(null, "[AuctionCentral]: ", message.toString(), request.getItem(), request.getKey(), request.getAmount());
         break;
       case "declined":
         message = new StringBuilder(request.getSignature() + "declined bid on " + request.getItem() + " for an amount of " + request.getAmount() + ".");
         response = new Message(null, "[AuctionCentral]: ", message.toString(), request.getItem(), request.getKey(), request.getAmount());
         break;
       case "unblock":
-        response = new Message(null, "[AuctionCentral]: ", request.getMessage(), request.getItem(), agentKeys.get(request.getKey()), request.getAmount());
+        response = new Message(null, "[AuctionCentral]: ", request.getMessage(), request.getItem(), request.getKey(), request.getAmount());
         break;
       case "winner":
         message = new StringBuilder("remove");
-        response = new Message(null, "[AuctionCentral]: ", message.toString(), request.getItem(), agentKeys.get(request.getKey()), request.getAmount());
+        response = new Message(null, "[AuctionCentral]: ", message.toString(), request.getItem(), request.getKey(), request.getAmount());
         break;
       case "EXIT":
         message = new StringBuilder("Goodbye!");
